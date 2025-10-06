@@ -28,7 +28,7 @@ export default function Auth() {
 
   // Redirect if already logged in
   if (user) {
-    navigate("/");
+    navigate("/dashboard");
     return null;
   }
 
@@ -56,7 +56,7 @@ export default function Auth() {
         toast.error(error.message);
       } else {
         toast.success(isSignUp ? "Account created! Welcome!" : "Welcome back!");
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");

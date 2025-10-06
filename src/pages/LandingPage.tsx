@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { 
+import { useAuth } from "@/contexts/AuthContext";
+import {
   Sparkles, 
   Zap, 
   Target, 
@@ -19,6 +20,13 @@ import {
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Redirect logged-in users to dashboard
+  if (user) {
+    navigate("/dashboard");
+    return null;
+  }
 
   const features = [
     {
