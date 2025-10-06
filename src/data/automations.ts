@@ -22,7 +22,7 @@ export const automations: AutomationTool[] = [
     emoji: "🎬",
     category: "Content",
     description: "Generate viral scripts for faceless TikTok pages",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "niche", label: "Niche", type: "text", placeholder: "e.g., luxury lifestyle, motivation" },
       { id: "tone", label: "Tone", type: "select", options: ["motivational", "luxury", "relatable"] }
@@ -48,7 +48,7 @@ export const automations: AutomationTool[] = [
     emoji: "📦",
     category: "Store",
     description: "Trending products that actually sell",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "niche", label: "Niche", type: "text", placeholder: "e.g., fitness, beauty, tech" }
     ],
@@ -60,7 +60,7 @@ export const automations: AutomationTool[] = [
     emoji: "✨",
     category: "Ads",
     description: "Make ads hit different",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "product", label: "Product/Service", type: "text", placeholder: "e.g., productivity app" },
       { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., busy entrepreneurs" }
@@ -73,7 +73,7 @@ export const automations: AutomationTool[] = [
     emoji: "🚀",
     category: "Ads",
     description: "Complete funnel from scroll-stop to sale",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "product", label: "Product/Service", type: "text", placeholder: "Your offer" },
       { id: "audience", label: "Audience", type: "text", placeholder: "Who you're targeting" },
@@ -88,7 +88,7 @@ export const automations: AutomationTool[] = [
     emoji: "🪝",
     category: "Content",
     description: "Scroll-stopping first lines that convert",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "topic", label: "Niche or Topic", type: "text", placeholder: "e.g., money mindset" }
     ],
@@ -100,7 +100,7 @@ export const automations: AutomationTool[] = [
     emoji: "🎁",
     category: "Hustle",
     description: "Craft irresistible offers people can't ignore",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "product", label: "Product/Service", type: "text", placeholder: "What you're selling" }
     ],
@@ -112,7 +112,7 @@ export const automations: AutomationTool[] = [
     emoji: "📱",
     category: "Brand",
     description: "Full brand setup from username to content pillars",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Store", "Funnel"] }
     ],
@@ -124,7 +124,7 @@ export const automations: AutomationTool[] = [
     emoji: "⚡",
     category: "Brand",
     description: "Catchy brand names that sound Gen-Z-approved",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "niche", label: "Niche or Product Type", type: "text", placeholder: "e.g., skincare, coaching" }
     ],
@@ -136,7 +136,7 @@ export const automations: AutomationTool[] = [
     emoji: "💰",
     category: "Hustle",
     description: "Content ideas that entertain AND sell",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "niche", label: "Niche or Audience", type: "text", placeholder: "e.g., fitness beginners" }
     ],
@@ -148,7 +148,7 @@ export const automations: AutomationTool[] = [
     emoji: "📋",
     category: "Productivity",
     description: "3 daily tasks to level up your hustle",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "goal", label: "Goal Type", type: "select", options: ["Money", "Audience", "Skill"] }
     ],
