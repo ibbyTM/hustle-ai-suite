@@ -19,7 +19,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const isActive = (path: string) => location.pathname === path;
   
   const navItems = [
-    { path: "/", icon: Grid3x3, label: "Dashboard" },
+    { path: "/dashboard", icon: Grid3x3, label: "Dashboard" },
     { path: "/my-hustles", icon: TrendingUp, label: "My Hustles" },
     { path: "/affiliate", icon: DollarSign, label: "Affiliate" },
   ];
