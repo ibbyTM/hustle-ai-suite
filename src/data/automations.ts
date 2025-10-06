@@ -143,9 +143,13 @@ export const automations: AutomationTool[] = [
     description: "Content ideas that entertain AND sell",
     isPro: false,
     inputs: [
-      { id: "niche", label: "Niche or Audience", type: "text", placeholder: "e.g., fitness beginners" }
+      { id: "niche", label: "Niche or Audience", type: "text", placeholder: "e.g., fitness beginners, luxury buyers" },
+      { id: "product", label: "Product or Service", type: "text", placeholder: "What you're selling or promoting" },
+      { id: "goal", label: "Goal", type: "select", options: ["Brand awareness", "Drive sales", "Build trust", "Grow followers"] },
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "YouTube Shorts", "Instagram Reels"] },
+      { id: "tone", label: "Tone", type: "select", options: ["Professional", "Relatable", "Funny", "Luxury", "Motivational"] }
     ],
-    promptTemplate: "Give 5 content ideas for {niche} that both entertain and sell. For each, include video concept, hook, and monetisation angle."
+    promptTemplate: "Here are 5 content ideas for {product}, targeting {niche} on {platform}, written in a {tone} tone with the goal to {goal}.\n\nFor each content idea, use this exact structure:\n\n**Idea Title**\nProvide a short, creative title for the content piece.\n\n**Concept:**\nWrite a 2-3 line description of what the content shows or demonstrates.\n\n**Hook Example:**\nProvide 1 strong opening line that would start the video.\n\n**Format Suggestion:**\nSpecify the content type (e.g., skit, testimonial, voiceover montage, vlog, behind the scenes, before/after).\n\n**Monetisation Angle:**\nExplain how this content drives revenue, conversions, or engagement with {product}.\n\nRepeat this structure for all 5 ideas.\n\nDo not use slang or emojis. Keep it creative but professional—like a content strategist's brief ready to hand off to a creator or editor."
   },
   {
     id: "daily-planner",
