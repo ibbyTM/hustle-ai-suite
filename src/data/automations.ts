@@ -65,7 +65,7 @@ export const automations: AutomationTool[] = [
       { id: "product", label: "Product/Service", type: "text", placeholder: "e.g., productivity app" },
       { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., busy entrepreneurs" }
     ],
-    promptTemplate: "Write 3 ad copy variations for {product} targeting {audience}. Include headline, short caption, and creative idea (visual concept)."
+    promptTemplate: "Here are 3 ad copy variations for {product} targeting {audience}. Each includes a headline, caption, creative idea, and CTA suggestion.\n\nFor each variation, use this exact structure:\n\nAd Concept Title – A short, descriptive title (e.g., 'The Time Saver,' 'The Pain Point Fix').\nHeadline – Write a direct, catchy headline in 5-8 words.\nCaption – Write 2-3 lines following this flow: problem → solution → benefit.\nCreative Concept – Provide 1-2 sentences describing the visual approach or ad angle.\nCTA Example – Write a single actionable line (e.g., 'Start your free trial today' or 'Automate your posts now').\n\nDo not use emojis. Do not use conversational filler like 'Alright,' 'OMG,' 'Let's go,' etc. Use clear, strategic language—think ad strategist, not social media influencer. Format with bold section headers and proper line spacing for readability."
   },
   {
     id: "ad-funnel",
