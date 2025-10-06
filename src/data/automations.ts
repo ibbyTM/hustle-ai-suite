@@ -27,7 +27,7 @@ export const automations: AutomationTool[] = [
       { id: "niche", label: "Niche", type: "text", placeholder: "e.g., luxury lifestyle, motivation" },
       { id: "tone", label: "Tone", type: "select", options: ["motivational", "luxury", "relatable"] }
     ],
-    promptTemplate: "Generate 3 viral TikTok scripts for a faceless page in the {niche} niche using a {tone} tone. Include timestamps, narration, and caption."
+    promptTemplate: "Here are 3 faceless TikTok script ideas for the {niche} niche, written in a {tone} tone.\n\nFor each script, use this exact structure:\n\nScript Title\nConcept – A short 1-2 line explanation of the video concept.\nNarration – Write the full voiceover script as it would be spoken.\nVisuals – Provide a bullet list describing each scene or visual element.\nCTA – Include an example closing call-to-action or hook.\n\nDo not use emojis. Do not use casual slang like 'boujee,' 'fire,' 'lit,' etc. Keep the tone minimal, clean, and confident—like it was written by a professional creator strategist. Use clear headings and proper formatting."
   },
   {
     id: "biz-idea",
