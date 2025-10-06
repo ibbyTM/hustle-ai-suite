@@ -212,14 +212,23 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
               {output && (
                 <div className="flex gap-2">
                   <Button onClick={handleCopy} variant="outline" size="sm">
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy
                   </Button>
                   <Button onClick={handleSave} variant="outline" size="sm">
-                    <Download className="h-4 w-4" />
+                    <Download className="h-4 w-4 mr-2" />
+                    Download
                   </Button>
                 </div>
               )}
             </div>
+            
+            {output && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="text-green-500">✓</span>
+                <span>Saved to My Hustles</span>
+              </div>
+            )}
             
             {output ? (
               <div className="bg-secondary border border-border rounded-lg p-4 min-h-[400px] whitespace-pre-wrap">
