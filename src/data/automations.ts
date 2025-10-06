@@ -129,9 +129,11 @@ export const automations: AutomationTool[] = [
     description: "Catchy brand names that sound Gen-Z-approved",
     isPro: false,
     inputs: [
-      { id: "niche", label: "Niche or Product Type", type: "text", placeholder: "e.g., skincare, coaching" }
+      { id: "productType", label: "Product or Brand Type", type: "select", options: ["SaaS", "E-commerce", "Agency", "Personal Brand", "Course", "App", "Coaching", "Content Brand"] },
+      { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., Gen Z creators, small businesses, professionals" },
+      { id: "tone", label: "Tone Preference", type: "select", options: ["Playful", "Premium", "Modern", "Minimal", "Bold"] }
     ],
-    promptTemplate: "Generate 5 catchy, memorable brand or product names in the {niche} space that sound modern and Gen-Z-friendly."
+    promptTemplate: "Here are 5 brand name ideas for a {productType} targeting {audience}, written in a {tone} tone. Each name includes a short explanation and tagline suggestion.\n\nUse this exact structure for each name:\n\n**Name #[number] – [Name]**\n\n**Meaning / Concept:** Write 1-2 sentences explaining the name origin, word play, or concept.\n\n**Tagline Suggestion:** Provide one catchy phrase that complements the name.\n\n**Why It Works:** Write a short reasoning explaining how this name aligns with the {tone} tone and appeals to {audience}.\n\nRepeat this structure for all 5 names.\n\nDo not use slang or emojis. Write in a confident, brand-consultant style—think naming agency deliverable. End with this line:\n\n'Each of these names can be adapted for domain or social handles.'"
   },
   {
     id: "content-to-cash",
