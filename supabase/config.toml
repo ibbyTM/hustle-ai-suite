@@ -1,1 +1,4 @@
 project_id = "lorblyshdfiebxgxgtgv"
+
+[functions.generate-hustle]
+verify_jwt = false

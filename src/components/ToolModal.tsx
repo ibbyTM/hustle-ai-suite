@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AutomationTool } from "@/types/automation";
 import { CategoryBadge } from "./CategoryBadge";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ToolModalProps {
   tool: AutomationTool | null;
@@ -27,19 +28,46 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
   const handleGenerate = async () => {
     setIsGenerating(true);
     
-    // Simulate AI generation delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    let prompt = tool.promptTemplate;
-    Object.entries(inputs).forEach(([key, value]) => {
-      prompt = prompt.replace(`{${key}}`, value);
-    });
-    
-    // Mock AI output
-    const mockOutput = generateMockOutput(tool, inputs);
-    setOutput(mockOutput);
-    setIsGenerating(false);
-    toast.success("Generated! ✨");
+    try {
+      // Build the prompt from the template
+      let prompt = tool.promptTemplate;
+      Object.entries(inputs).forEach(([key, value]) => {
+        prompt = prompt.replace(`{${key}}`, value);
+      });
+      
+      // Call the edge function
+      const { data, error } = await supabase.functions.invoke('generate-hustle', {
+        body: { 
+          prompt,
+          toolTitle: tool.title 
+        }
+      });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to generate content');
+      }
+
+      if (!data?.generatedText) {
+        throw new Error('No content received from AI');
+      }
+
+      setOutput(data.generatedText);
+      toast.success("Generated! ✨");
+    } catch (error) {
+      console.error('Generation error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate content';
+      
+      if (errorMessage.includes('Rate limit')) {
+        toast.error("Rate limit reached. Please wait a moment and try again.");
+      } else if (errorMessage.includes('credits')) {
+        toast.error("AI credits exhausted. Please add credits to continue.");
+      } else {
+        toast.error(`Error: ${errorMessage}`);
+      }
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleCopy = () => {
@@ -73,6 +101,7 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
               </div>
             </div>
           </div>
+          <p className="sr-only">Generate AI content using {tool.title}</p>
         </DialogHeader>
 
         <div className="grid md:grid-cols-2 gap-6 mt-6">
@@ -96,7 +125,7 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
                   )}
                   {field.type === "select" && (
                     <Select
-                      value={inputs[field.id]}
+                      value={inputs[field.id] || ""}
                       onValueChange={(value) => setInputs({ ...inputs, [field.id]: value })}
                     >
                       <SelectTrigger className="bg-secondary border-border">
@@ -182,55 +211,3 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
     </Dialog>
   );
 };
-
-function generateMockOutput(tool: AutomationTool, inputs: Record<string, string>): string {
-  const examples: Record<string, string> = {
-    "trend-finder": `🔥 **5 TikTok Trends Blowing Up Right Now**
-
-1️⃣ **"Get Ready With Me" Luxury Edition**
-Niche: Lifestyle / Fashion
-Hook: "POV: You're getting ready for a date that could change your life"
-Caption: "The fit had to hit different ✨ #GRWM #LuxuryLifestyle"
-
-2️⃣ **AI Side Hustle Showcases**
-Niche: Business / Tech
-Hook: "I made £2,000 this month using AI. Here's how:"
-Caption: "This changed the game for me 🚀 #AIHustle #PassiveIncome"
-
-3️⃣ **Motivation + Luxury B-Roll**
-Niche: Motivation
-Hook: "You're one decision away from a completely different life"
-Caption: "Time to level up. 💪 #Motivation #Success"
-
-4️⃣ **"Things I Wish I Knew at 20"**
-Niche: Personal Growth
-Hook: "If I could go back and tell my 20-year-old self one thing..."
-Caption: "Save this. Trust me. 📌 #LifeLessons #Growth"
-
-5️⃣ **Mini Vlogs with Aesthetic Vibes**
-Niche: Lifestyle
-Hook: "A quiet morning in my life"
-Caption: "Romanticizing my life one coffee at a time ☕ #Aesthetic #Vlog"`,
-
-    "biz-idea": `💡 **3 Business Ideas for ${inputs.vibe || 'Online'} Hustlers**
-
-**1. AI-Powered Content Agency**
-📌 Concept: Offer faceless TikTok management using AI tools
-💰 How to Start: Learn AI tools (ChatGPT, Midjourney), create sample accounts
-🚀 Monetisation: £500-2000/month per client
-
-**2. Digital Product Store**
-📌 Concept: Sell Notion templates, Canva presets, or guides
-💰 How to Start: Create 3-5 products, sell on Gumroad/Etsy
-🚀 Monetisation: £10-50 per product, passive income
-
-**3. Affiliate Content Creation**
-📌 Concept: Review products on TikTok with affiliate links
-💰 How to Start: Join Amazon Associates, create honest reviews
-🚀 Monetisation: 5-10% commission per sale
-
-👉 Want more ideas? Upgrade to unlock all tools.`,
-  };
-
-  return examples[tool.id] || `✨ **Generated Output for ${tool.title}**\n\nYour personalized content would appear here based on your inputs.\n\n👉 This is a demo output. Connect to real AI for actual generation!`;
-}
