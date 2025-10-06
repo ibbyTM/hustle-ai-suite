@@ -37,9 +37,10 @@ export const automations: AutomationTool[] = [
     description: "Find your next £10K side hustle",
     isPro: false,
     inputs: [
-      { id: "vibe", label: "Vibe", type: "select", options: ["Online", "AI", "Low-Budget", "For Students", "For Mums"] }
+      { id: "vibe", label: "Vibe", type: "select", options: ["Online", "AI-Powered", "Low-Budget", "For Students", "For Mums", "Content Creation", "E-commerce", "Freelancing", "Coaching/Consulting", "Creative/Design", "Service-Based", "Physical Products", "Other (custom)"] },
+      { id: "customVibe", label: "Custom Vibe (if Other selected)", type: "text", placeholder: "Describe your ideal hustle style..." }
     ],
-    promptTemplate: "Generate 3 unique business ideas for {vibe} hustlers. For each idea, include: Concept, How to Start, Monetisation Path."
+    promptTemplate: "Generate 3 unique business ideas for {customVibe|vibe} hustlers. For each idea, include: Concept, How to Start, Monetisation Path."
   },
   {
     id: "dropship-goldmine",

@@ -31,8 +31,15 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
     try {
       // Build the prompt from the template
       let prompt = tool.promptTemplate;
+      
+      // Handle fallback patterns like {customVibe|vibe}
+      prompt = prompt.replace(/\{([^}|]+)\|([^}]+)\}/g, (match, primary, fallback) => {
+        return inputs[primary]?.trim() || inputs[fallback] || match;
+      });
+      
+      // Handle regular patterns like {niche}
       Object.entries(inputs).forEach(([key, value]) => {
-        prompt = prompt.replace(`{${key}}`, value);
+        prompt = prompt.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
       });
       
       // Call the edge function
