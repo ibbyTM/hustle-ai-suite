@@ -2,32 +2,18 @@ import { useState } from "react";
 import { AutomationCard } from "@/components/AutomationCard";
 import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
-import { AutomationTool, SavedHustle } from "@/types/automation";
+import { AutomationTool } from "@/types/automation";
 
 export default function Dashboard() {
   const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userTier] = useState<"Free" | "Pro" | "Partner">("Free");
-  const [savedHustles, setSavedHustles] = useState<SavedHustle[]>([]);
 
   const handleToolClick = (tool: AutomationTool) => {
     const isLocked = tool.isPro && userTier === "Free";
     if (!isLocked) {
       setSelectedTool(tool);
       setIsModalOpen(true);
-    }
-  };
-
-  const handleSaveOutput = (output: string) => {
-    if (selectedTool) {
-      const newHustle: SavedHustle = {
-        id: Date.now().toString(),
-        toolId: selectedTool.id,
-        toolTitle: selectedTool.title,
-        output,
-        createdAt: new Date(),
-      };
-      setSavedHustles([newHustle, ...savedHustles]);
     }
   };
 
@@ -57,7 +43,6 @@ export default function Dashboard() {
         tool={selectedTool}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveOutput}
       />
     </div>
   );

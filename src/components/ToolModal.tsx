@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Copy, Download, Sparkles } from "lucide-react";
+import { X, Copy, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +16,9 @@ interface ToolModalProps {
   tool: AutomationTool | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (output: string) => void;
 }
 
-export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => {
+export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -108,12 +107,6 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
     toast.success("Copied to clipboard!");
   };
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(output);
-      toast.success("Saved to My Hustles!");
-    }
-  };
 
   const handleClose = () => {
     setInputs({});
@@ -210,16 +203,10 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-lg">Output</h3>
               {output && (
-                <div className="flex gap-2">
-                  <Button onClick={handleCopy} variant="outline" size="sm">
-                    <Copy className="h-4 w-4 mr-2" />
-                    Copy
-                  </Button>
-                  <Button onClick={handleSave} variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                </div>
+                <Button onClick={handleCopy} variant="outline" size="sm">
+                  <Copy className="h-4 w-4 mr-2" />
+                  Copy
+                </Button>
               )}
             </div>
             
