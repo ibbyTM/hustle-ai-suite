@@ -8,8 +8,13 @@ export const automations: AutomationTool[] = [
     category: "Content",
     description: "Discover what's blowing up on TikTok & IG right now",
     isPro: false,
-    inputs: [],
-    promptTemplate: "List 5 TikTok or Instagram trends blowing up this week for creators under 30. Include the niche, example hook, and caption."
+    inputs: [
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "YouTube Shorts", "All Platforms"] },
+      { id: "niche", label: "Niche", type: "text", placeholder: "e.g., fitness, finance, lifestyle, gaming" },
+      { id: "goal", label: "Content Goal", type: "select", options: ["Grow Followers", "Drive Sales", "Build Brand", "Increase Engagement"] },
+      { id: "tone", label: "Tone", type: "select", options: ["Professional", "Relatable", "Bold", "Casual", "Inspirational"] }
+    ],
+    promptTemplate: "List 5 trending content ideas for {platform} in the {niche} niche. The goal is to {goal} with a {tone} tone. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Do not use any emojis in the output."
   },
   {
     id: "faceless-script",

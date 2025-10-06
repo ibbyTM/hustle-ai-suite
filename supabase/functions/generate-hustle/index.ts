@@ -42,9 +42,10 @@ serve(async (req) => {
 Your outputs should be:
 - Actionable and practical
 - Written in a casual, motivational tone
-- Formatted with clear headings using emojis
+- Formatted with clear headings (use ## for headings in markdown)
 - Structured with bullet points and numbered lists
 - Around 300-500 words unless more detail is needed
+- IMPORTANT: If the user prompt specifically asks for no emojis, do not include any emojis in your response
 
 Always end with a short motivational line about taking action.` 
           },
