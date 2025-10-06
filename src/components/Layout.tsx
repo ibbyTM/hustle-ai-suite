@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, TrendingUp, DollarSign, Grid3x3 } from "lucide-react";
+import { TrendingUp, DollarSign, Grid3x3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import hustleHubLogo from "@/assets/hustlehub-logo.png";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -18,16 +19,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="bg-gradient-primary p-2 rounded-xl animate-glow-pulse">
-                <Zap className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  HustleHub 2.0
-                </h1>
-                <p className="text-xs text-muted-foreground">Automate your hustle</p>
-              </div>
+            <Link to="/" className="flex items-center gap-3 group">
+              <img 
+                src={hustleHubLogo} 
+                alt="HustleHub Logo" 
+                className="h-12 w-auto"
+              />
             </Link>
 
             <nav className="flex items-center gap-6">
