@@ -1,16 +1,91 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Trash2, Copy, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SavedHustle } from "@/types/automation";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
+interface Generation {
+  id: string;
+  tool_id: string;
+  tool_title: string;
+  tool_emoji: string;
+  inputs: any;
+  output: string;
+  created_at: string;
+}
+
 export default function MyHustles() {
-  const [hustles] = useState<SavedHustle[]>([]);
+  const [generations, setGenerations] = useState<Generation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    fetchGenerations();
+  }, [user, navigate]);
+
+  const fetchGenerations = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("generations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      setGenerations(data || []);
+    } catch (error: any) {
+      console.error("Error fetching generations:", error);
+      toast.error("Failed to load your hustles");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCopy = (output: string) => {
     navigator.clipboard.writeText(output);
     toast.success("Copied to clipboard!");
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("generations")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      setGenerations(generations.filter((gen) => gen.id !== id));
+      toast.success("Hustle deleted");
+    } catch (error: any) {
+      console.error("Error deleting generation:", error);
+      toast.error("Failed to delete");
+    }
+  };
+
+  if (!user) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto animate-fade-in">
+        <div className="text-center py-12">
+          <div className="text-muted-foreground">Loading your hustles...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto animate-fade-in">
@@ -21,50 +96,71 @@ export default function MyHustles() {
         </p>
       </div>
 
-      {hustles.length === 0 ? (
+      {generations.length === 0 ? (
         <div className="bg-gradient-card border border-border rounded-2xl p-12 text-center">
           <div className="max-w-md mx-auto">
             <div className="text-6xl mb-4">📋</div>
             <h2 className="text-2xl font-bold mb-2">No hustles saved yet</h2>
             <p className="text-muted-foreground mb-6">
-              Generate some content with our tools and save your favorites here!
+              Generate some content with our tools and your history will appear here!
             </p>
-            <Button variant="gradient">
+            <Button variant="gradient" onClick={() => navigate("/")}>
               Browse Tools
             </Button>
           </div>
         </div>
       ) : (
         <div className="space-y-4">
-          {hustles.map((hustle) => (
+          {generations.map((gen) => (
             <div
-              key={hustle.id}
+              key={gen.id}
               className="bg-gradient-card border border-border rounded-2xl p-6 hover:shadow-glow transition-all"
             >
               <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-xl font-bold mb-1">{hustle.toolTitle}</h3>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(hustle.createdAt).toLocaleDateString()}
+                <div className="flex items-start gap-3">
+                  <div className="text-3xl">{gen.tool_emoji}</div>
+                  <div>
+                    <h3 className="text-xl font-bold mb-1">{gen.tool_title}</h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4" />
+                      {new Date(gen.created_at).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleCopy(hustle.output)}
+                    onClick={() => handleCopy(gen.output)}
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleDelete(gen.id)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               
+              {Object.keys(gen.inputs).length > 0 && (
+                <div className="mb-3 p-3 bg-secondary/30 rounded-lg">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Inputs Used:</div>
+                  <div className="space-y-1">
+                    {Object.entries(gen.inputs).map(([key, value]) => (
+                      <div key={key} className="text-sm">
+                        <span className="font-medium capitalize">{key}:</span>{" "}
+                        <span className="text-muted-foreground">{String(value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               <div className="bg-secondary/50 border border-border rounded-lg p-4 text-sm whitespace-pre-wrap max-h-64 overflow-y-auto">
-                {hustle.output}
+                {gen.output}
               </div>
             </div>
           ))}

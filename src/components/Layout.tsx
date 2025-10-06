@@ -1,10 +1,20 @@
-import { Link, useLocation } from "react-router-dom";
-import { TrendingUp, DollarSign, Grid3x3 } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { TrendingUp, DollarSign, Grid3x3, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 import hustleHubLogo from "@/assets/hustlehub-logo.png";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Signed out successfully");
+    navigate("/auth");
+  };
   
   const isActive = (path: string) => location.pathname === path;
   
@@ -42,6 +52,25 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   <span className="font-medium">{item.label}</span>
                 </Link>
               ))}
+
+              {user ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignOut}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </Button>
+              ) : (
+                <Link to="/auth">
+                  <Button variant="outline" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+
               <Link to="/pricing">
                 <Button variant="gradient" className="font-semibold">
                   Upgrade

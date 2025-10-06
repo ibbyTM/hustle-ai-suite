@@ -10,6 +10,7 @@ import { AutomationTool } from "@/types/automation";
 import { CategoryBadge } from "./CategoryBadge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ToolModalProps {
   tool: AutomationTool | null;
@@ -22,10 +23,16 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const { user } = useAuth();
 
   if (!tool) return null;
 
   const handleGenerate = async () => {
+    if (!user) {
+      toast.error("Please sign in to generate content");
+      return;
+    }
+
     setIsGenerating(true);
     
     try {
@@ -59,8 +66,27 @@ export const ToolModal = ({ tool, isOpen, onClose, onSave }: ToolModalProps) => 
         throw new Error('No content received from AI');
       }
 
-      setOutput(data.generatedText);
-      toast.success("Generated! ✨");
+      const generatedOutput = data.generatedText;
+      setOutput(generatedOutput);
+
+      // Auto-save to database
+      const { error: saveError } = await supabase
+        .from("generations")
+        .insert({
+          user_id: user.id,
+          tool_id: tool.id,
+          tool_title: tool.title,
+          tool_emoji: tool.emoji,
+          inputs: inputs,
+          output: generatedOutput,
+        });
+
+      if (saveError) {
+        console.error("Save error:", saveError);
+        toast.success("Generated! ✨ (Failed to save to history)");
+      } else {
+        toast.success("Generated and saved! ✨");
+      }
     } catch (error) {
       console.error('Generation error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate content';
