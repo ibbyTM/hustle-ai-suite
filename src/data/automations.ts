@@ -159,8 +159,10 @@ export const automations: AutomationTool[] = [
     description: "3 daily tasks to level up your hustle",
     isPro: false,
     inputs: [
-      { id: "goal", label: "Goal Type", type: "select", options: ["Money", "Audience", "Skill"] }
+      { id: "goal", label: "Goal Type", type: "select", options: ["Money", "Audience", "Skill"] },
+      { id: "industry", label: "Industry or Hustle Type", type: "text", placeholder: "e.g., ecommerce, agency, content creation, freelancing" },
+      { id: "difficulty", label: "Preferred Difficulty", type: "select", options: ["Easy", "Moderate", "Aggressive"] }
     ],
-    promptTemplate: "Generate 3 actionable daily tasks to grow your {goal}, add one motivational quote, and a quick reflection question."
+    promptTemplate: "Here's a personalized 3-task plan for daily growth in your {goal} goal, tailored to the {industry} niche and difficulty level: {difficulty}. Each task is concise, actionable, and designed for measurable progress.\n\nFor each of the 3 tasks, use this exact structure:\n\n**Task #[number] – [Task Headline]**\n\n**Objective:**\nWrite 1-2 lines explaining what success looks like for this task.\n\n**Steps:**\nProvide 2-3 actionable bullet points that break down how to complete the task.\n\n**Time Required:**\nGive a rough time estimate (e.g., 15 mins, 1 hour, 30 mins).\n\nAfter all 3 tasks, include:\n\n**Daily Motivation Quote:**\nProvide 1 short motivational quote relevant to the {goal} goal.\n\n**Reflection Prompt:**\nWrite 1 short self-question for accountability (e.g., 'What's one thing I did today that moved me closer to my goal?').\n\nDo not use emojis or slang like 'Yo,' 'stackin',' 'let's get it,' etc. Use short, precise sentences—sound like a focused productivity coach. Keep formatting clean with clear headers and bullet lists."
   }
 ];
