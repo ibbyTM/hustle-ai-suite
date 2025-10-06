@@ -52,7 +52,7 @@ export const automations: AutomationTool[] = [
     inputs: [
       { id: "niche", label: "Niche", type: "text", placeholder: "e.g., fitness, beauty, tech" }
     ],
-    promptTemplate: "List 5 trending dropshipping products in the {niche} niche. For each, explain why it's hot right now, best TikTok hook, and content idea to sell it."
+    promptTemplate: "Here are 5 trending products in the {niche} niche that are performing well right now, along with ideas for how to market each.\n\nFor each product, use this exact structure:\n\nProduct Name\nWhy it's trending: Provide 2-3 sentences explaining the trend or consumer behaviour driving demand.\nAd Hook Idea: Write 1 short viral-style line suitable for TikTok or Reels.\nContent Angle: Describe in 1-2 sentences what type of video or ad works best for this product.\nPositioning Tip: Write 1 line explaining what emotion or benefit to highlight when selling this product.\n\nKeep each product description under 120 words. Do not use emojis. Do not use casual slang like 'fam,' 'fire,' 'lit,' 'tryna,' etc. Keep the tone professional and strategic."
   },
   {
     id: "ad-copy-lab",
