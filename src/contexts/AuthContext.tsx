@@ -37,13 +37,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl
       }
     });
+
+    // Handle referral tracking after successful signup
+    if (data.user && !error) {
+      const referralCode = localStorage.getItem('referralCode');
+      
+      if (referralCode) {
+        // Find the referrer's user_id from their referral code
+        const { data: referrerProfile } = await supabase
+          .from('profiles')
+          .select('user_id')
+          .eq('referral_code', referralCode)
+          .single();
+
+        if (referrerProfile) {
+          // Create referral record
+          await supabase.from('referrals').insert({
+            referrer_id: referrerProfile.user_id,
+            referred_id: data.user.id,
+            status: 'pending'
+          });
+
+          // Update referrer's stats
+          await supabase.rpc('update_affiliate_stats', {
+            user_id_param: referrerProfile.user_id
+          });
+        }
+
+        // Clear referral code from localStorage
+        localStorage.removeItem('referralCode');
+      }
+    }
+    
     return { error };
   };
 

@@ -2,20 +2,75 @@ import { Copy, TrendingUp, Users, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function Affiliate() {
-  const referralLink = "https://hustlehub.app/ref/yourcode";
-  
-  const stats = [
-    { label: "Total Referrals", value: "0", icon: Users, color: "text-category-content" },
-    { label: "Active Subscribers", value: "0", icon: TrendingUp, color: "text-category-hustle" },
-    { label: "Earnings This Month", value: "£0", icon: DollarSign, color: "text-category-store" },
-  ];
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const leaderboard = [
-    { rank: 1, name: "Alex M.", earnings: "£2,847", referrals: 23 },
-    { rank: 2, name: "Jordan P.", earnings: "£1,923", referrals: 18 },
-    { rank: 3, name: "Taylor R.", earnings: "£1,456", referrals: 14 },
+  // Fetch user's profile with referral code
+  const { data: profile } = useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data } = await supabase
+        .from('profiles')
+        .select('referral_code')
+        .eq('user_id', user.id)
+        .single();
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  // Fetch affiliate stats
+  const { data: stats } = useQuery({
+    queryKey: ['affiliate-stats', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data } = await supabase
+        .from('affiliate_stats')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  // Fetch leaderboard
+  const { data: leaderboard } = useQuery({
+    queryKey: ['affiliate-leaderboard'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('affiliate_stats')
+        .select('user_id, lifetime_earnings, total_referrals')
+        .order('lifetime_earnings', { ascending: false })
+        .limit(10);
+      return data || [];
+    },
+  });
+
+  if (!user) {
+    return (
+      <div className="max-w-6xl mx-auto animate-fade-in text-center py-12">
+        <h2 className="text-2xl font-bold mb-4">Sign in to access the Affiliate Program</h2>
+        <Button onClick={() => navigate('/auth')}>Sign In</Button>
+      </div>
+    );
+  }
+
+  const referralLink = profile?.referral_code 
+    ? `${window.location.origin}/?ref=${profile.referral_code}`
+    : "Loading...";
+  
+  const statsDisplay = [
+    { label: "Total Referrals", value: stats?.total_referrals?.toString() || "0", icon: Users, color: "text-category-content" },
+    { label: "Active Subscribers", value: stats?.active_subscribers?.toString() || "0", icon: TrendingUp, color: "text-category-hustle" },
+    { label: "Earnings This Month", value: `£${stats?.earnings_this_month?.toFixed(2) || "0.00"}`, icon: DollarSign, color: "text-category-store" },
   ];
 
   const handleCopyLink = () => {
@@ -33,7 +88,7 @@ export default function Affiliate() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
-        {stats.map((stat) => (
+        {statsDisplay.map((stat) => (
           <div key={stat.label} className="bg-gradient-card border border-border rounded-2xl p-6">
             <div className="flex items-center justify-between mb-2">
               <stat.icon className={`h-8 w-8 ${stat.color}`} />
@@ -65,31 +120,31 @@ export default function Affiliate() {
       <div className="bg-gradient-card border border-border rounded-2xl p-8">
         <h2 className="text-2xl font-bold mb-6">Top Affiliates This Month</h2>
         
-        {leaderboard.length === 0 ? (
+        {!leaderboard || leaderboard.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-muted-foreground">No data yet. Be the first!</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {leaderboard.map((person) => (
+            {leaderboard.map((person, index) => (
               <div
-                key={person.rank}
+                key={person.user_id}
                 className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-border"
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                    person.rank === 1 ? "bg-gradient-primary text-white" : "bg-muted"
+                    index === 0 ? "bg-gradient-primary text-white" : "bg-muted"
                   }`}>
-                    {person.rank}
+                    {index + 1}
                   </div>
                   <div>
-                    <p className="font-semibold">{person.name}</p>
-                    <p className="text-sm text-muted-foreground">{person.referrals} referrals</p>
+                    <p className="font-semibold">User {person.user_id.slice(0, 8)}</p>
+                    <p className="text-sm text-muted-foreground">{person.total_referrals} referrals</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-bold text-category-hustle">{person.earnings}</p>
-                  <p className="text-xs text-muted-foreground">this month</p>
+                  <p className="text-xl font-bold text-category-hustle">£{person.lifetime_earnings.toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground">lifetime</p>
                 </div>
               </div>
             ))}
