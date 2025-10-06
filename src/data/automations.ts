@@ -92,7 +92,7 @@ export const automations: AutomationTool[] = [
     inputs: [
       { id: "topic", label: "Niche or Topic", type: "text", placeholder: "e.g., money mindset" }
     ],
-    promptTemplate: "Generate 10 viral hook lines (max 8 words) for {topic}. Each should sound like something you'd hear in a viral TikTok or ad."
+    promptTemplate: "Here are 10 short viral hook ideas for {topic}, designed to capture attention in under 3 seconds.\n\nFormat as a clean numbered list. Each hook should be 6-10 words maximum.\n\nOptionally, you may divide the hooks into sub-sections such as:\n- Problem Hooks (addressing pain points)\n- Benefit Hooks (highlighting outcomes)\n- Curiosity Hooks (creating intrigue)\n\nDo not use emojis. Do not use casual phrases like 'Alright fam,' 'sick,' 'let's get it,' 'Now go forth,' etc. Do not include any outro text. End cleanly after the final hook. Keep the tone concise, persuasive, and ad-style—like a conversion copywriter's deliverable."
   },
   {
     id: "offer-builder",
