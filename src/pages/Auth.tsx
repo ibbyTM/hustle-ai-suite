@@ -55,7 +55,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="h-screen flex items-center justify-center px-4 overflow-hidden">
       <Card className="w-full max-w-md p-8 bg-gradient-card border-border">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
