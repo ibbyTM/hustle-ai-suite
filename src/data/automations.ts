@@ -114,9 +114,12 @@ export const automations: AutomationTool[] = [
     description: "Full brand setup from username to content pillars",
     isPro: false,
     inputs: [
-      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Store", "Funnel"] }
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "YouTube", "Twitter/X", "LinkedIn"] },
+      { id: "brandType", label: "Brand Type", type: "select", options: ["Personal brand", "Business", "Theme page", "Ecom brand"] },
+      { id: "niche", label: "Niche", type: "text", placeholder: "e.g., fitness, luxury, education, fashion" },
+      { id: "tone", label: "Tone", type: "select", options: ["Professional", "Relatable", "Funny", "Bold"] }
     ],
-    promptTemplate: "Generate a full profile setup for a {platform} brand. Include username ideas, bio, tone of voice, posting pillars, and content schedule."
+    promptTemplate: "Here's a full profile setup for a {brandType} on {platform} in the {niche} niche, written in a {tone} tone.\n\nUse this exact structure:\n\n**Username Ideas**\nProvide 3-5 relevant and memorable username suggestions.\n\n**Bio Examples**\nWrite 2-3 bio options formatted and optimized for {platform}. Keep within character limits and include relevant keywords.\n\n**Tone & Personality Notes**\nProvide 1-2 lines describing how the brand should sound, engage, and present itself.\n\n**Content Pillars**\nList 3 main content categories this brand should focus on. Each should align with the niche and audience.\n\n**Posting Strategy**\nOutline the best posting frequency, content format types (e.g., Reels, carousels, Stories), and engagement approach for {platform}.\n\nDo not use emojis. Do not use filler words like 'poppin',' 'grind,' 'let's go,' etc. Keep the tone simple, confident, and structured—like a brand strategist building a content guide. Format with bold headers and proper spacing."
   },
   {
     id: "name-forge",
