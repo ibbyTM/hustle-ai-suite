@@ -104,7 +104,7 @@ export const automations: AutomationTool[] = [
     inputs: [
       { id: "product", label: "Product/Service", type: "text", placeholder: "What you're selling" }
     ],
-    promptTemplate: "Create an irresistible offer for {product}. Include name, bonus ideas, urgency line, and one-sentence positioning angle."
+    promptTemplate: "Here's an irresistible offer breakdown for {product}, written to maximize conversions through clear value stacking.\n\nUse this exact structure:\n\n**Offer Name**\nProvide a short, catchy, brandable name for the offer.\n\n**Positioning Angle**\nWrite 1 sentence defining what makes this offer unique or transformative.\n\n**What's Included (Main Offer)**\nList 3-5 bullet points focused on benefits, not features. Emphasize outcomes and value.\n\n**Bonus Add-Ons**\nSuggest optional extras that amplify perceived value and make the offer feel more complete.\n\n**Urgency Line / Scarcity Prompt**\nWrite one short sentence encouraging immediate action.\n\nDo not use emojis. Do not use conversational slang like 'Alright fam,' 'let's cook up,' 'sprinkle of FOMO,' etc. Keep the tone confident, clean, and persuasive—think marketing strategist or landing page copywriter, not social media hype. Format with bold headers and proper spacing for clean readability."
   },
   {
     id: "page-builder",
