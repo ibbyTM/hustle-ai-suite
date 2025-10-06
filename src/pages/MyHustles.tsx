@@ -82,10 +82,31 @@ export default function MyHustles() {
 
     return categoryOrder
       .filter((category) => grouped[category].length > 0)
-      .map((category) => ({
-        category,
-        generations: grouped[category],
-      }));
+      .map((category) => {
+        // Group generations by tool within this category
+        const toolGroups: Record<string, Generation[]> = {};
+        
+        grouped[category].forEach((gen) => {
+          if (!toolGroups[gen.tool_id]) {
+            toolGroups[gen.tool_id] = [];
+          }
+          toolGroups[gen.tool_id].push(gen);
+        });
+
+        // Convert to array format with tool metadata
+        const tools = Object.entries(toolGroups).map(([toolId, gens]) => ({
+          toolId,
+          toolTitle: gens[0].tool_title,
+          toolEmoji: gens[0].tool_emoji,
+          generations: gens,
+        }));
+
+        return {
+          category,
+          tools,
+          totalCount: grouped[category].length,
+        };
+      });
   };
 
   const handleCardClick = (generation: Generation) => {
@@ -159,26 +180,40 @@ export default function MyHustles() {
         </div>
       ) : (
         <>
-          <div className="space-y-8">
-            {groupedGenerations().map(({ category, generations: categoryGens }) => (
-              <div key={category} className="space-y-4">
-                <div className="flex items-center gap-3 mb-4">
+          <div className="space-y-12">
+            {groupedGenerations().map(({ category, tools, totalCount }) => (
+              <div key={category} className="space-y-6">
+                <div className="flex items-center gap-3">
                   <CategoryBadge category={category} />
                   <span className="text-muted-foreground text-sm">
-                    {categoryGens.length} {categoryGens.length === 1 ? "hustle" : "hustles"}
+                    {totalCount} {totalCount === 1 ? "hustle" : "hustles"}
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {categoryGens.map((gen) => (
-                    <GenerationCard
-                      key={gen.id}
-                      emoji={gen.tool_emoji}
-                      title={gen.tool_title}
-                      createdAt={gen.created_at}
-                      outputPreview={gen.output}
-                      onClick={() => handleCardClick(gen)}
-                    />
+                <div className="space-y-8">
+                  {tools.map(({ toolId, toolTitle, toolEmoji, generations: toolGens }) => (
+                    <div key={toolId} className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{toolEmoji}</span>
+                        <h3 className="text-lg font-semibold">{toolTitle}</h3>
+                        <span className="text-muted-foreground text-sm">
+                          ({toolGens.length})
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {toolGens.map((gen) => (
+                          <GenerationCard
+                            key={gen.id}
+                            emoji={gen.tool_emoji}
+                            title={gen.tool_title}
+                            createdAt={gen.created_at}
+                            outputPreview={gen.output}
+                            onClick={() => handleCardClick(gen)}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
