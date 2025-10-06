@@ -80,7 +80,7 @@ export const automations: AutomationTool[] = [
       { id: "goal", label: "Goal", type: "select", options: ["Sell", "Leads", "Followers"] },
       { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Facebook"] }
     ],
-    promptTemplate: "Create a complete ad funnel for {product} targeting {audience} with goal = {goal}. Include: 1) Hook ideas, 2) Ad copy, 3) Creative scenes, 4) Landing page copy, 5) Offer/bonus idea."
+    promptTemplate: "Here's a complete ad funnel framework for {product}, targeting {audience} on {platform}, with the goal to {goal}.\n\nUse this exact structure:\n\nGoal Summary\nWrite 1-2 lines describing the funnel objective and target outcome.\n\nHook Ideas (Top of Funnel)\nProvide 3-5 strong opening lines designed for the ad. Each should sound like a real viral opener that stops the scroll.\n\nAd Copy (Middle of Funnel)\nWrite 1-2 paragraph options focused on this flow: problem → solution → result. Keep it persuasive and benefit-driven.\n\nCreative Direction\nProvide 2-3 ideas for what the ad should visually show. Format as short bullets.\n\nLanding Page Copy (Bottom of Funnel)\n- Headline: Write a clear, compelling headline.\n- Subheadline: Write a supporting subheadline that adds context or urgency.\n- Bullet Points: List 3-5 key features or benefits.\n- CTA Line: Write a clear, urgent call-to-action.\n\nDo not use emojis. Do not use casual phrases like 'Alright,' 'We're gonna,' 'hyped up,' 'Let's go,' etc. Keep the writing clean, persuasive, and formatted for quick reading—like it's going straight into a client pitch deck or funnel document. The tone should feel confident and conversion-focused."
   },
   {
     id: "hook-factory",
