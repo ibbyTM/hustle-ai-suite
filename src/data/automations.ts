@@ -14,7 +14,7 @@ export const automations: AutomationTool[] = [
       { id: "goal", label: "Content Goal", type: "select", options: ["Grow Followers", "Drive Sales", "Build Brand", "Increase Engagement"] },
       { id: "tone", label: "Tone", type: "select", options: ["Professional", "Relatable", "Bold", "Casual", "Inspirational"] }
     ],
-    promptTemplate: "List 5 trending content ideas for {platform} in the {niche} niche. The goal is to {goal} with a {tone} tone. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Do not use any emojis in the output."
+    promptTemplate: "List 5 trending content ideas for {platform}. If niche is specified: focus on the {niche} niche. If niche is empty or not specified: cover trends across multiple popular niches (fitness, finance, lifestyle, tech, entertainment). The goal is to {goal} with a {tone} tone. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Do not use any emojis in the output."
   },
   {
     id: "faceless-script",
