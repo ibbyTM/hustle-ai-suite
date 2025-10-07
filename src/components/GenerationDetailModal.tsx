@@ -70,8 +70,8 @@ export const GenerationDetailModal = ({
     try {
       const sections = parseSections(output);
       const titleSection = sections[0];
-      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
-      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
       const ebookTitle = titleMatch ? titleMatch[1].trim() : inputs.topic || "Ebook";
       const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
 
@@ -153,8 +153,8 @@ export const GenerationDetailModal = ({
     try {
       const sections = parseSections(output);
       const titleSection = sections[0];
-      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
-      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
       const ebookTitle = titleMatch ? titleMatch[1].trim() : inputs.topic || "Ebook";
       const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
 
