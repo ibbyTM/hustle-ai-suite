@@ -23,6 +23,11 @@ interface ToolModalProps {
 }
 
 export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
+  // Use specialized modal for Authority Builder - check BEFORE any hooks
+  if (tool?.id === "authority-builder") {
+    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
+  }
+
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -31,11 +36,6 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   const [attachedKB, setAttachedKB] = useState<KnowledgeBase | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  // Use specialized modal for Authority Builder
-  if (tool?.id === "authority-builder") {
-    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
-  }
 
   useEffect(() => {
     if (isOpen && user) {
