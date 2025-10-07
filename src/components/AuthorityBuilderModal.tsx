@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, Packer } from "docx";
 import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
 
 interface Section {
   type: string;
@@ -271,45 +272,95 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
     }
   };
 
-  const exportAsTxt = () => {
+  const exportAsPdf = () => {
     if (sections.length === 0) {
       toast.error("No content to export");
       return;
     }
 
-    // Extract title and subtitle
-    const titleSection = sections[0];
-    const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
-    const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
-    const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
-    const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
+    try {
+      // Extract title and subtitle
+      const titleSection = sections[0];
+      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
+      const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
 
-    // Build clean ebook text
-    let fullText = `${ebookTitle}\n`;
-    if (ebookSubtitle) {
-      fullText += `${ebookSubtitle}\n`;
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const maxWidth = pageWidth - (2 * margin);
+      let yPosition = 40;
+
+      // Title page
+      pdf.setFontSize(24);
+      pdf.setFont("helvetica", "bold");
+      const titleLines = pdf.splitTextToSize(ebookTitle, maxWidth);
+      titleLines.forEach((line: string) => {
+        pdf.text(line, pageWidth / 2, yPosition, { align: "center" });
+        yPosition += 10;
+      });
+
+      if (ebookSubtitle) {
+        yPosition += 10;
+        pdf.setFontSize(16);
+        pdf.setFont("helvetica", "normal");
+        const subtitleLines = pdf.splitTextToSize(ebookSubtitle, maxWidth);
+        subtitleLines.forEach((line: string) => {
+          pdf.text(line, pageWidth / 2, yPosition, { align: "center" });
+          yPosition += 8;
+        });
+      }
+
+      // Process sections
+      sections.slice(1).forEach((section, index) => {
+        // Add new page for each section
+        pdf.addPage();
+        yPosition = margin;
+
+        // Section heading
+        pdf.setFontSize(18);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(section.title, margin, yPosition);
+        yPosition += 12;
+
+        // Section content
+        pdf.setFontSize(12);
+        pdf.setFont("helvetica", "normal");
+        const cleanedContent = cleanContent(section.content);
+        const paragraphs = cleanedContent.split('\n\n');
+
+        paragraphs.forEach((paragraph) => {
+          if (paragraph.trim() === '') return;
+
+          const lines = pdf.splitTextToSize(paragraph, maxWidth);
+          lines.forEach((line: string) => {
+            if (yPosition > pageHeight - margin) {
+              pdf.addPage();
+              yPosition = margin;
+            }
+            pdf.text(line, margin, yPosition);
+            yPosition += 7;
+          });
+          yPosition += 5; // Extra space between paragraphs
+        });
+      });
+
+      // Footer on last page
+      pdf.addPage();
+      yPosition = pageHeight / 2;
+      pdf.setFontSize(12);
+      pdf.setFont("helvetica", "italic");
+      pdf.text("Built in the HustleHub Lab — where AI meets ambition.", pageWidth / 2, yPosition, { align: "center" });
+
+      // Save PDF
+      pdf.save(`${topic.slice(0, 30).replace(/[^a-z0-9]/gi, '-')}-ebook.pdf`);
+      toast.success("Exported as .pdf!");
+    } catch (error) {
+      console.error('PDF export error:', error);
+      toast.error("Export failed");
     }
-    fullText += '\n\n';
-
-    // Add cleaned sections
-    sections.slice(1).forEach(section => {
-      const cleanedContent = cleanContent(section.content);
-      fullText += `${section.title}\n\n${cleanedContent}\n\n\n`;
-    });
-
-    // Add footer
-    fullText += 'Built in the HustleHub Lab — where AI meets ambition.';
-
-    const blob = new Blob([fullText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${topic.slice(0, 30).replace(/[^a-z0-9]/gi, '-')}-ebook.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success("Exported as .txt!");
   };
 
   const toggleSection = (index: number) => {
@@ -440,9 +491,9 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
                   <FileText className="h-4 w-4 mr-2" />
                   Export .docx
                 </Button>
-                <Button onClick={exportAsTxt} variant="outline" size="sm" className="flex-1">
+                <Button onClick={exportAsPdf} variant="outline" size="sm" className="flex-1">
                   <Download className="h-4 w-4 mr-2" />
-                  Export .txt
+                  Export .pdf
                 </Button>
               </div>
             )}
