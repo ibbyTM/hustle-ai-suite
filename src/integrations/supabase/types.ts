@@ -313,6 +313,10 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: undefined
       }
+      validate_referral_code_exists: {
+        Args: { code: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "free" | "pro" | "partner" | "admin"

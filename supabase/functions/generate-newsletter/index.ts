@@ -1,9 +1,24 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const InputSchema = z.object({
+  issue_topic: z.string().min(1).max(500),
+  audience_segment: z.string().max(200).optional(),
+  goal: z.string().max(500),
+  tone: z.string().max(100),
+  subject_count: z.number().min(1).max(10),
+  cta_button_text: z.string().max(100).optional(),
+  cta_url: z.string().url().max(500).optional(),
+  utm_campaign: z.string().max(100),
+  length_target: z.string().max(100),
+  personalization: z.boolean().optional(),
+  ab_test_enabled: z.boolean().optional(),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,7 +26,21 @@ serve(async (req) => {
   }
 
   try {
-    const inputs = await req.json();
+    const requestBody = await req.json();
+    const validationResult = InputSchema.safeParse(requestBody);
+    
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(JSON.stringify({ 
+        error: "Invalid input parameters",
+        details: validationResult.error.issues
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const inputs = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
 

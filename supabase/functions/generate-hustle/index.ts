@@ -1,9 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const InputSchema = z.object({
+  prompt: z.string().min(1).max(10000),
+  toolTitle: z.string().max(100).optional(),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,14 +17,21 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, toolTitle } = await req.json();
+    const requestBody = await req.json();
+    const validationResult = InputSchema.safeParse(requestBody);
     
-    if (!prompt) {
-      return new Response(
-        JSON.stringify({ error: 'Prompt is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    if (!validationResult.success) {
+      console.error("Validation error:", validationResult.error);
+      return new Response(JSON.stringify({ 
+        error: "Invalid input parameters",
+        details: validationResult.error.issues
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
+
+    const { prompt, toolTitle } = validationResult.data;
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {

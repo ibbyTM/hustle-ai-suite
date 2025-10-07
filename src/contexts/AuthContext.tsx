@@ -50,24 +50,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const referralCode = localStorage.getItem('referralCode');
       
       if (referralCode) {
-        // Find the referrer's user_id from their referral code
-        const { data: referrerProfile } = await supabase
-          .from('profiles')
-          .select('user_id')
-          .eq('referral_code', referralCode)
-          .single();
+        // Validate referral code using secure edge function
+        const { data: validationResult } = await supabase.functions.invoke('validate-referral-code', {
+          body: { referralCode }
+        });
 
-        if (referrerProfile) {
-          // Create referral record
-          await supabase.from('referrals').insert({
-            referrer_id: referrerProfile.user_id,
-            referred_id: data.user.id,
-            status: 'pending'
-          });
-
-          // Update referrer's stats
-          await supabase.rpc('update_affiliate_stats', {
-            user_id_param: referrerProfile.user_id
+        if (validationResult?.valid) {
+          // Store referral code in user metadata for webhook to process
+          await supabase.auth.updateUser({
+            data: { referral_code: referralCode }
           });
         }
 
