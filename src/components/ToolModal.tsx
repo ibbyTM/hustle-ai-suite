@@ -14,6 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { KnowledgeBase } from "@/types/knowledgeBase";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { AuthorityBuilderModal } from "./AuthorityBuilderModal";
 
 interface ToolModalProps {
   tool: AutomationTool | null;
@@ -30,6 +31,11 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   const [attachedKB, setAttachedKB] = useState<KnowledgeBase | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Use specialized modal for Authority Builder
+  if (tool?.id === "authority-builder") {
+    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
+  }
 
   useEffect(() => {
     if (isOpen && user) {

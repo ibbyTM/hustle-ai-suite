@@ -203,17 +203,15 @@ export const automations: AutomationTool[] = [
     title: "Authority Builder",
     emoji: "📚",
     category: "Brand",
-    description: "Generate 10,000-word ebooks that build authority",
+    description: "Generate 10,000+ word ebooks automatically",
     isPro: false,
     inputs: [
-      { id: "topic", label: "Topic", type: "text", placeholder: "Your ebook subject" },
-      { id: "audience", label: "Audience", type: "text", placeholder: "Who this is for" },
-      { id: "length", label: "Target Length", type: "select", options: ["10,000+ words", "15,000+ words", "20,000+ words"] },
-      { id: "voice", label: "Voice", type: "select", options: ["Expert/Authoritative", "Friendly/Accessible", "Academic", "Conversational"] },
-      { id: "includeCTA", label: "Include CTA", type: "select", options: ["Yes", "No"] },
-      { id: "chapterCount", label: "Chapter Count", type: "select", options: ["8", "10", "12"] }
+      { id: "topic", label: "Ebook Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses" },
+      { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., small business owners, freelancers, agency builders" },
+      { id: "voice", label: "Tone / Voice", type: "select", options: ["Authoritative", "Educational", "Conversational", "Inspirational"] },
+      { id: "includeCTA", label: "Include Call-to-Action?", type: "select", options: ["Yes", "No"] }
     ],
-    promptTemplate: "Create a comprehensive {length} ebook about {topic}, written for {audience} in a {voice} voice, with {chapterCount} chapters.\n\nUse this exact structure:\n\n**📖 Title**\nProvide a compelling, authoritative title.\n\n**📝 Subtitle**\nWrite a supporting subtitle that clarifies the value proposition.\n\n**🎯 Introduction (500 words)**\nWrite an engaging intro that establishes credibility, addresses the reader's pain points, and previews what they'll learn.\n\n**📚 Chapters**\nGenerate {chapterCount} chapters, each approximately 1,000-1,200 words. For each chapter:\n\n**Chapter [number]: [Title]**\n- Opening: Set context and hook the reader\n- Main Content: Deliver actionable insights, frameworks, or lessons\n- Key Takeaways: Summarize 2-3 main points\n- Transition: Bridge to the next chapter\n\n**🎬 Conclusion (400-500 words)**\nSummarize key lessons, reinforce transformation, and inspire action.\n\n{includeCTA|**🚀 Call to Action**\nInclude a natural pitch for your product, service, or next step. Keep it value-focused and non-pushy.}\n\nDo not use casual slang or excessive emojis. Write in a polished, professional style—like a published author or thought leader. Use proper chapter structure, subheadings, and formatting throughout. This should read like a legitimate ebook ready for download."
+    promptTemplate: "SECTION_TYPE: {sectionType}\n\nGenerate {sectionType} for an ebook about {topic}, targeting {audience}, in a {voice} tone.\n\n{sectionInstructions}"
   },
   {
     id: "hustle-sprint",
