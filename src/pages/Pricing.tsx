@@ -1,10 +1,48 @@
 import { Check, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSubscription, TIER_CONFIG } from "@/hooks/useSubscription";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Pricing() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { tier, createCheckout, openCustomerPortal, isLoading } = useSubscription();
+
+  const handleUpgrade = async (priceId?: string) => {
+    if (!user) {
+      toast.error("Please sign in to upgrade");
+      navigate("/auth");
+      return;
+    }
+
+    if (!priceId) {
+      toast.info("You're already on the free plan");
+      return;
+    }
+
+    try {
+      await createCheckout(priceId);
+    } catch (error) {
+      toast.error("Failed to start checkout");
+      console.error(error);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      await openCustomerPortal();
+    } catch (error) {
+      toast.error("Failed to open subscription management");
+      console.error(error);
+    }
+  };
+
   const tiers = [
     {
       name: "Free",
+      tierKey: "free" as const,
       price: "£0",
       period: "forever",
       description: "Get started with basic tools",
@@ -14,12 +52,12 @@ export default function Pricing() {
         "Save up to 5 hustles",
         "Community support",
       ],
-      cta: "Current Plan",
-      gradient: false,
+      priceId: undefined,
     },
     {
       name: "Pro",
-      price: "£19",
+      tierKey: "pro" as const,
+      price: "£20",
       period: "per month",
       description: "Unlock all the tools you need",
       features: [
@@ -29,13 +67,13 @@ export default function Pricing() {
         "Export to Notion",
         "Early access to new tools",
       ],
-      cta: "Upgrade to Pro",
-      gradient: true,
+      priceId: TIER_CONFIG.pro.priceId,
       popular: true,
     },
     {
       name: "Partner",
-      price: "£39",
+      tierKey: "partner" as const,
+      price: "£49",
       period: "per month",
       description: "Pro + earn commissions",
       features: [
@@ -45,8 +83,7 @@ export default function Pricing() {
         "Exclusive partner community",
         "Monthly bonus contests",
       ],
-      cta: "Become a Partner",
-      gradient: true,
+      priceId: TIER_CONFIG.partner.priceId,
     },
   ];
 
@@ -62,47 +99,71 @@ export default function Pricing() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8 mb-16">
-        {tiers.map((tier) => (
-          <div
-            key={tier.name}
-            className={`relative bg-gradient-card border rounded-2xl p-8 ${
-              tier.popular ? "border-primary shadow-glow scale-105" : "border-border"
-            }`}
-          >
-            {tier.popular && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-primary px-4 py-1 rounded-full text-sm font-semibold text-white">
-                  Most Popular
-                </span>
-              </div>
-            )}
-
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2">{tier.name}</h3>
-              <div className="flex items-baseline justify-center gap-1 mb-2">
-                <span className="text-5xl font-bold">{tier.price}</span>
-                <span className="text-muted-foreground">/{tier.period}</span>
-              </div>
-              <p className="text-muted-foreground text-sm">{tier.description}</p>
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {tier.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Button
-              className={`w-full`}
-              variant={tier.gradient ? "gradient" : "secondary"}
+        {tiers.map((tierData) => {
+          const isCurrentPlan = tier === tierData.tierKey;
+          
+          return (
+            <div
+              key={tierData.name}
+              className={`relative bg-gradient-card border rounded-2xl p-8 ${
+                tierData.popular ? "border-primary shadow-glow scale-105" : "border-border"
+              } ${isCurrentPlan ? "ring-2 ring-primary" : ""}`}
             >
-              {tier.cta}
-            </Button>
-          </div>
-        ))}
+              {tierData.popular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="bg-gradient-primary px-4 py-1 rounded-full text-sm font-semibold text-white">
+                    Most Popular
+                  </span>
+                </div>
+              )}
+              {isCurrentPlan && (
+                <div className="absolute -top-4 right-4">
+                  <span className="bg-secondary border border-primary px-3 py-1 rounded-full text-xs font-semibold text-primary">
+                    Your Plan
+                  </span>
+                </div>
+              )}
+
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold mb-2">{tierData.name}</h3>
+                <div className="flex items-baseline justify-center gap-1 mb-2">
+                  <span className="text-5xl font-bold">{tierData.price}</span>
+                  <span className="text-muted-foreground">/{tierData.period}</span>
+                </div>
+                <p className="text-muted-foreground text-sm">{tierData.description}</p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                {tierData.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {isCurrentPlan && tierData.tierKey !== "free" ? (
+                <Button
+                  className="w-full"
+                  variant="secondary"
+                  onClick={handleManageSubscription}
+                  disabled={isLoading}
+                >
+                  Manage Subscription
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  variant={tierData.priceId ? "gradient" : "secondary"}
+                  onClick={() => handleUpgrade(tierData.priceId)}
+                  disabled={isLoading || isCurrentPlan}
+                >
+                  {isCurrentPlan ? "Current Plan" : tierData.priceId ? `Upgrade to ${tierData.name}` : "Free Forever"}
+                </Button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="bg-gradient-card border border-border rounded-2xl p-8 text-center">
@@ -113,8 +174,13 @@ export default function Pricing() {
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
           Join thousands of hustlers automating their way to £10K months. No fluff, just tools that actually work.
         </p>
-        <Button variant="gradient" size="lg">
-          Start Your Free Trial
+        <Button 
+          variant="gradient" 
+          size="lg"
+          onClick={() => user ? handleUpgrade(TIER_CONFIG.pro.priceId) : navigate("/auth")}
+          disabled={isLoading}
+        >
+          {user ? "Upgrade Now" : "Get Started Free"}
         </Button>
       </div>
     </div>

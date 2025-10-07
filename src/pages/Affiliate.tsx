@@ -1,4 +1,4 @@
-import { Copy, TrendingUp, Users, DollarSign } from "lucide-react";
+import { Copy, TrendingUp, Users, DollarSign, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -6,10 +6,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useSubscription } from "@/hooks/useSubscription";
 
 export default function Affiliate() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { hasPartnerAccess, isLoading: subscriptionLoading } = useSubscription();
 
   // Fetch user's profile with referral code
   const { data: profile } = useQuery({
@@ -59,6 +61,21 @@ export default function Affiliate() {
       <div className="max-w-6xl mx-auto animate-fade-in text-center py-12">
         <h2 className="text-2xl font-bold mb-4">Sign in to access the Affiliate Program</h2>
         <Button onClick={() => navigate('/auth')}>Sign In</Button>
+      </div>
+    );
+  }
+
+  if (!subscriptionLoading && !hasPartnerAccess) {
+    return (
+      <div className="max-w-6xl mx-auto animate-fade-in text-center py-12">
+        <Lock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+        <h2 className="text-2xl font-bold mb-4">Partner Tier Required</h2>
+        <p className="text-muted-foreground mb-6">
+          The affiliate program is exclusive to Partner tier members. Upgrade to start earning 40% commissions!
+        </p>
+        <Button onClick={() => navigate('/pricing')} variant="gradient">
+          Upgrade to Partner
+        </Button>
       </div>
     );
   }
