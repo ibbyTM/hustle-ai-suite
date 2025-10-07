@@ -43,7 +43,7 @@ serve(async (req) => {
       throw new Error("Invalid price ID format");
     }
 
-    // Sanitize referralCode if provided
+    // Sanitize referralCode - use from request OR from user metadata (signup referral)
     let sanitizedReferralCode;
     if (referralCode) {
       if (typeof referralCode !== 'string' || referralCode.length > 20) {
@@ -53,6 +53,10 @@ serve(async (req) => {
       if (!/^[A-Z0-9]+$/.test(sanitizedReferralCode)) {
         throw new Error("Referral code contains invalid characters");
       }
+    } else if (user.user_metadata?.referral_code) {
+      // Use referral code from signup if not provided directly
+      sanitizedReferralCode = String(user.user_metadata.referral_code).trim().toUpperCase();
+      logStep("Using referral code from user metadata", { referralCode: sanitizedReferralCode });
     }
 
     logStep("Creating checkout session", { priceId, referralCode: sanitizedReferralCode });

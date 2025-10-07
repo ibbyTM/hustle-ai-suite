@@ -81,7 +81,7 @@ export default function Pricing() {
       features: [
         "Everything in Plus",
         "Affiliate dashboard access",
-        "40% commission on referrals",
+        "35% commission on referrals",
         "Partner badge & recognition",
         "Early beta access",
         "Co-creation opportunities",

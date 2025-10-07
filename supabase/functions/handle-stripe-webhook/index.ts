@@ -124,9 +124,9 @@ serve(async (req) => {
               status: "active",
             });
 
-            // Calculate initial commission (40% of first payment)
+            // Calculate initial commission (35% of first payment)
             const amount = subscription.items.data[0].price.unit_amount! / 100;
-            const commission = amount * 0.4;
+            const commission = amount * 0.35;
             
             await supabaseAdmin.rpc("add_affiliate_earnings", {
               _referrer_id: referrer.user_id,
@@ -165,7 +165,7 @@ serve(async (req) => {
 
         if (referral) {
           const amount = invoice.amount_paid / 100;
-          const commission = amount * 0.4;
+        const commission = amount * 0.35;
 
           logStep("Adding recurring commission", { referrerId: referral.referrer_id, commission });
 

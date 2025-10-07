@@ -71,7 +71,7 @@ export default function Affiliate() {
         <Lock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
         <h2 className="text-2xl font-bold mb-4">Partner Tier Required</h2>
         <p className="text-muted-foreground mb-6">
-          The affiliate program is exclusive to Partner tier members. Upgrade to start earning 40% commissions!
+          The affiliate program is exclusive to Partner tier members. Upgrade to start earning 35% commissions!
         </p>
         <Button onClick={() => navigate('/pricing')} variant="gradient">
           Upgrade to Partner
@@ -108,7 +108,7 @@ export default function Affiliate() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Affiliate Program</h1>
         <p className="text-muted-foreground text-lg">
-          Earn 40% monthly commissions when your friends join Hustle Lab
+          Earn 35% monthly commissions when your friends join Hustle Lab
         </p>
       </div>
 
@@ -138,7 +138,7 @@ export default function Affiliate() {
           </Button>
         </div>
         <p className="text-sm text-muted-foreground mt-4">
-          Share this link with your audience and earn 40% of their subscription fee every month they stay subscribed.
+          Share this link with your audience and earn 35% of their subscription fee every month they stay subscribed.
         </p>
       </div>
 
