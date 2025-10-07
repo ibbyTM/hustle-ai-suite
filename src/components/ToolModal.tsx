@@ -19,6 +19,7 @@ import { KnowledgeBase } from "@/types/knowledgeBase";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { AuthorityBuilderModal } from "./AuthorityBuilderModal";
+import { NewsletterInputPanel } from "./NewsletterInputPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
