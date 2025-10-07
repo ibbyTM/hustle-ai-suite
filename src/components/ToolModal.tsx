@@ -23,6 +23,15 @@ import { NewsletterInputPanel } from "./NewsletterInputPanel";
 import { TrendFinderPanel } from "./agent/TrendFinderPanel";
 import { AdCopyLabPanel } from "./agent/AdCopyLabPanel";
 import { HookFactoryPanel } from "./agent/HookFactoryPanel";
+import { FacelessScriptPanel } from "./agent/FacelessScriptPanel";
+import { BizIdeaPanel } from "./agent/BizIdeaPanel";
+import { DropshipPanel } from "./agent/DropshipPanel";
+import { AdFunnelPanel } from "./agent/AdFunnelPanel";
+import { OfferBuilderPanel } from "./agent/OfferBuilderPanel";
+import { PageBuilderPanel } from "./agent/PageBuilderPanel";
+import { NameForgePanel } from "./agent/NameForgePanel";
+import { ContentToCashPanel } from "./agent/ContentToCashPanel";
+import { DailyPlannerPanel } from "./agent/DailyPlannerPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -53,6 +62,42 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
 
   if (tool?.id === "hook-factory") {
     return <HookFactoryPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "faceless-script") {
+    return <FacelessScriptPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "biz-idea") {
+    return <BizIdeaPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "dropship-goldmine") {
+    return <DropshipPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "ad-funnel") {
+    return <AdFunnelPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "offer-builder") {
+    return <OfferBuilderPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "page-builder") {
+    return <PageBuilderPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "name-forge") {
+    return <NameForgePanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "content-to-cash") {
+    return <ContentToCashPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "daily-planner") {
+    return <DailyPlannerPanel isOpen={isOpen} onClose={onClose} />;
   }
 
   // Now safe to use hooks
