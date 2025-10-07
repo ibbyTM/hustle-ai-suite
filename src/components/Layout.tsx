@@ -25,11 +25,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     { path: "/affiliate", icon: DollarSign, label: "Affiliate" },
   ];
 
-  const isLandingPage = location.pathname === '/';
+  const shouldHideHeader = location.pathname === '/' || location.pathname === '/auth';
 
   return (
     <div className="min-h-screen bg-background">
-      {!isLandingPage && (
+      {!shouldHideHeader && (
         <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
@@ -86,7 +86,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </header>
       )}
 
-      <main className={isLandingPage ? "" : "container mx-auto px-4 py-8"}>
+      <main className={shouldHideHeader ? "" : "container mx-auto px-4 py-8"}>
         {children}
       </main>
     </div>
