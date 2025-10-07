@@ -12,6 +12,8 @@ import Affiliate from "./pages/Affiliate";
 import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import KnowledgeBases from "./pages/KnowledgeBases";
+import KnowledgeBaseEditor from "./pages/KnowledgeBaseEditor";
 
 // Component to handle /ref/:code redirects
 const RefRedirect = () => {
@@ -33,6 +35,8 @@ const App = () => (
               <Route path="/" element={<LandingPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/my-hustles" element={<MyHustles />} />
+              <Route path="/knowledge-bases" element={<KnowledgeBases />} />
+              <Route path="/knowledge-bases/:id" element={<KnowledgeBaseEditor />} />
               <Route path="/affiliate" element={<Affiliate />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/auth" element={<Auth />} />

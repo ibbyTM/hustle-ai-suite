@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { X, Copy, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, Copy, Sparkles, Link2, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,9 @@ import { CategoryBadge } from "./CategoryBadge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { KnowledgeBase } from "@/types/knowledgeBase";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 interface ToolModalProps {
   tool: AutomationTool | null;
@@ -22,7 +25,122 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
+  const [selectedKB, setSelectedKB] = useState<string | null>(null);
+  const [attachedKB, setAttachedKB] = useState<KnowledgeBase | null>(null);
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isOpen && user) {
+      loadKnowledgeBases();
+      loadAttachment();
+    }
+  }, [isOpen, user, tool]);
+
+  const loadKnowledgeBases = async () => {
+    const { data, error } = await supabase
+      .from("knowledge_bases")
+      .select("*")
+      .order("updated_at", { ascending: false });
+    
+    if (!error && data) {
+      setKnowledgeBases(data.map(kb => ({
+        ...kb,
+        brand_voice: kb.brand_voice as any,
+        products: kb.products as any,
+        audience: kb.audience as any,
+        offers: kb.offers as any,
+        faqs: kb.faqs as any,
+      })));
+    }
+  };
+
+  const loadAttachment = async () => {
+    if (!tool) return;
+    
+    const { data, error } = await supabase
+      .from("tool_attachments")
+      .select("knowledge_base_id")
+      .eq("tool_id", tool.id)
+      .maybeSingle();
+    
+    if (data) {
+      setSelectedKB(data.knowledge_base_id);
+      const kb = knowledgeBases.find(k => k.id === data.knowledge_base_id);
+      if (kb) setAttachedKB(kb);
+    }
+  };
+
+  const handleAttachKB = async (kbId: string | null) => {
+    if (!tool || !user) return;
+    
+    try {
+      if (kbId) {
+        await supabase
+          .from("tool_attachments")
+          .upsert({
+            user_id: user.id,
+            tool_id: tool.id,
+            knowledge_base_id: kbId
+          });
+        
+        const kb = knowledgeBases.find(k => k.id === kbId);
+        setAttachedKB(kb || null);
+        toast.success("Knowledge base attached");
+      } else {
+        await supabase
+          .from("tool_attachments")
+          .delete()
+          .eq("tool_id", tool.id);
+        
+        setAttachedKB(null);
+        toast.success("Knowledge base detached");
+      }
+      setSelectedKB(kbId);
+    } catch (error: any) {
+      toast.error("Failed to update attachment");
+    }
+  };
+
+  const buildKBContext = () => {
+    if (!attachedKB) return "";
+    
+    let context = "\n\nKNOWLEDGE BASE CONTEXT:\n";
+    
+    if (attachedKB.brand_voice?.tone) {
+      context += `\nBrand Tone: ${attachedKB.brand_voice.tone}`;
+    }
+    if (attachedKB.brand_voice?.style) {
+      context += `\nBrand Style: ${attachedKB.brand_voice.style}`;
+    }
+    if (attachedKB.brand_voice?.dos && attachedKB.brand_voice.dos.length > 0) {
+      context += `\nDo's: ${attachedKB.brand_voice.dos.join(", ")}`;
+    }
+    if (attachedKB.brand_voice?.donts && attachedKB.brand_voice.donts.length > 0) {
+      context += `\nDon'ts: ${attachedKB.brand_voice.donts.join(", ")}`;
+    }
+    
+    if (attachedKB.products && attachedKB.products.length > 0) {
+      const product = attachedKB.products[0];
+      if (product.name) context += `\nProduct: ${product.name}`;
+      if (product.features && product.features.length > 0) {
+        context += `\nFeatures: ${product.features.join(", ")}`;
+      }
+      if (product.benefits && product.benefits.length > 0) {
+        context += `\nBenefits: ${product.benefits.join(", ")}`;
+      }
+    }
+    
+    if (attachedKB.audience?.icp) {
+      context += `\nTarget Audience: ${attachedKB.audience.icp}`;
+    }
+    if (attachedKB.audience?.pains && attachedKB.audience.pains.length > 0) {
+      context += `\nAudience Pain Points: ${attachedKB.audience.pains.join(", ")}`;
+    }
+    
+    return context;
+  };
 
   if (!tool) return null;
 
@@ -47,6 +165,11 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
       Object.entries(inputs).forEach(([key, value]) => {
         prompt = prompt.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
       });
+      
+      // Add knowledge base context if attached
+      if (attachedKB) {
+        prompt += buildKBContext();
+      }
       
       // Call the edge function
       const { data, error } = await supabase.functions.invoke('generate-hustle', {
@@ -129,6 +252,57 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
           </div>
           <p className="sr-only">Generate AI content using {tool.title}</p>
         </DialogHeader>
+
+        <div className="mb-4 p-4 border border-border rounded-lg bg-secondary/30">
+          <Label className="text-sm font-medium mb-2 block">Knowledge Base</Label>
+          <div className="flex flex-col gap-2">
+            <Select
+              value={selectedKB || "none"}
+              onValueChange={(value) => handleAttachKB(value === "none" ? null : value)}
+            >
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Use without KB" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Use without KB</SelectItem>
+                {knowledgeBases.map((kb) => (
+                  <SelectItem key={kb.id} value={kb.id}>
+                    {kb.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            {attachedKB && (
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="gap-1">
+                  <Link2 className="h-3 w-3" />
+                  Using: {attachedKB.name}
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate(`/knowledge-bases/${attachedKB.id}`)}
+                  className="h-7 gap-1"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Edit
+                </Button>
+              </div>
+            )}
+            
+            {!knowledgeBases.length && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/knowledge-bases/new")}
+                className="w-full"
+              >
+                Create Knowledge Base
+              </Button>
+            )}
+          </div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6 mt-6">
           <div className="space-y-4">

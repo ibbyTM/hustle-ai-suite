@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TrendingUp, DollarSign, Grid3x3, LogOut } from "lucide-react";
+import { TrendingUp, DollarSign, Grid3x3, LogOut, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const navItems = [
     { path: "/dashboard", icon: Grid3x3, label: "Dashboard" },
     { path: "/my-hustles", icon: TrendingUp, label: "My Hustles" },
+    { path: "/knowledge-bases", icon: Database, label: "Knowledge Bases" },
     { path: "/affiliate", icon: DollarSign, label: "Affiliate" },
   ];
 
