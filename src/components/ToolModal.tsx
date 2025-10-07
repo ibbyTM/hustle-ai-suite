@@ -20,6 +20,9 @@ import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { AuthorityBuilderModal } from "./AuthorityBuilderModal";
 import { NewsletterInputPanel } from "./NewsletterInputPanel";
+import { TrendFinderPanel } from "./agent/TrendFinderPanel";
+import { AdCopyLabPanel } from "./agent/AdCopyLabPanel";
+import { HookFactoryPanel } from "./agent/HookFactoryPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -37,6 +40,19 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
 
   if (tool?.id === "inbox-influence") {
     return <NewsletterInputPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  // New unified agent panels
+  if (tool?.id === "trend-finder") {
+    return <TrendFinderPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "ad-copy-lab") {
+    return <AdCopyLabPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "hook-factory") {
+    return <HookFactoryPanel isOpen={isOpen} onClose={onClose} />;
   }
 
   // Now safe to use hooks
