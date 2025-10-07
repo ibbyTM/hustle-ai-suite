@@ -15,7 +15,7 @@ export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps)
     <button
       onClick={onClick}
       disabled={isLocked}
-      className={`group relative bg-gradient-card border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 h-[200px] flex flex-col ${
+      className={`group relative bg-gradient-card border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 h-[280px] flex flex-col ${
         isLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
       }`}
       title={isBookForge ? "Creates a full 10K+ word ebook chapter-by-chapter, formatted and export-ready." : undefined}
@@ -45,7 +45,7 @@ export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps)
         )}
       </h3>
       
-      <p className="text-muted-foreground text-sm line-clamp-3 flex-1">
+      <p className="text-muted-foreground text-sm line-clamp-4 flex-1">
         {tool.description}
       </p>
     </button>
