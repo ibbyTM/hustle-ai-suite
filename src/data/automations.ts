@@ -264,7 +264,82 @@ export const automations: AutomationTool[] = [
       { id: "subjectLineOptions", label: "Subject Line Options", type: "number", placeholder: "3", defaultValue: 3, required: false, min: 1, max: 10 },
       { id: "ctaURL", label: "CTA URL", type: "url", placeholder: "Optional CTA link", required: false }
     ],
-    promptTemplate: "Newsletter issue about {issueTopic}, audience: {audienceSegment}, goal: {goal}, tone: {tone}, generate {subjectLineOptions} subject lines, CTA: {ctaURL}.\n\nProvide:\n- {subjectLineOptions} Subject Line Options\n- Opening Hook\n- Main Content (3 sections)\n- CTA Section\n- Sign-off\n\nDo not use excessive emojis. Keep professional and engaging."
+    promptTemplate: `You are HustleHub's Inbox Influence engine. Generate a newsletter that meets the following standards:
+
+PURPOSE & AUDIENCE
+Issue Topic: {issueTopic}
+Audience Segment: {audienceSegment}
+Goal: {goal}
+Tone: {tone}
+CTA URL: {ctaURL}
+
+If a Knowledge Base is attached, automatically surface 2–3 brand/product facts from the KB and use them naturally in the copy.
+
+OUTPUTS REQUIRED (deliver all in one response):
+1. {subjectLineOptions} subject line options (30–60 characters preferred)
+2. 1 preheader (30–120 characters)
+3. Plain-text email body with:
+   - Short Title line
+   - Opening Hook (1–2 lines)
+   - 3 content sections (each 2–4 short paragraphs or 3–5 bullets)
+   - One short, direct CTA line that can be used as button text
+   - A P.S. with urgency or secondary CTA
+   - Professional sign-off
+4. HTML snippet (simple, responsive, single-column) with H1/H2, paragraphs, button markup for CTA (include UTM parameters: ?utm_source=newsletter&utm_medium=email&utm_campaign={{campaign_slug}})
+5. 3 subject A/B test pairs (subject A vs subject B with rationale)
+6. Suggested send time(s) for audience (e.g., Tue/Thu 9–11am) with reason
+7. 1 quick metric to track (CTR/CTO/Reply rate) with target
+8. Short follow-up plan (2 follow-up email subjects + purpose)
+
+LENGTH & TONE
+Total body: 220–500 words. Tone must match {tone}. No fluff.
+
+STRUCTURE RULES (mandatory):
+- Include at least one mini-proof: case study, stat, or testimonial
+- Use personalization tokens: {{{{first_name}}}}, {{{{company}}}}, {{{{kb.brand_name}}}} in at least 2 places
+- Provide button text variants (3–5 words) and full CTA URL with UTM parameters
+- Add preheader that complements subject lines
+- End with PS line adding urgency or free offer
+
+CONVERSION DETAILS:
+- When Goal = Sell: include value stack (price, bonuses, guarantee, scarcity)
+- When Goal = Educate/Nurture: include one actionable checklist item
+- Always include clear, trackable CTA and alternate action (reply for more info)
+
+A/B TESTING:
+- Output at least two subject variants (Curiosity vs Urgency; Social Proof vs Benefit)
+- Provide simple A/B test plan (10–20% seed, KPI: CTR, 24–48h test)
+
+DELIVERABLE FORMAT (JSON object):
+{{
+  "subject_options": [str,...],
+  "preheader": str,
+  "plain_text": str,
+  "html_snippet": str,
+  "cta_button_text_options": [str,...],
+  "cta_full_url": str,
+  "ab_test_pairs": [{{"a": str, "b": str, "reason": str}}, ...],
+  "send_time_suggestion": str,
+  "metric_to_track": str,
+  "follow_up_plan": [{{"delay_days": int, "subject": str, "purpose": str}}, ...],
+  "used_kb_facts": [str,...],
+  "generation_notes": str
+}}
+
+QUALITY CONTROLS:
+- Remove filler words and AI disclaimers
+- No emojis in subject lines unless Tone requests
+- No Markdown tokens (**, #) in final outputs
+- Verify CTA URL in both plain_text and html_snippet
+
+ACCEPTANCE TESTS:
+- Word count 220–500
+- Exactly {subjectLineOptions} subject options
+- Preheader 30–120 chars
+- cta_full_url contains utm_source=newsletter
+- follow_up_plan has at least 2 follow-ups
+
+If KB not attached and critical facts missing, use {{{{placeholder}}}} tokens and note in generation_notes.`
   },
   {
     id: "hustle-sprint",
