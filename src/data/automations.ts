@@ -6,7 +6,7 @@ export const automations: AutomationTool[] = [
     title: "BookForge (Authority Builder)",
     emoji: "📖",
     category: "Brand",
-    description: "Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by HustleHub AI.",
+    description: "Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by Hustle Lab AI.",
     isPro: false,
     kbRequirement: "recommended",
     inputs: [

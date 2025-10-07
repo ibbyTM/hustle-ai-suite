@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import hustleHubLogo from "@/assets/hustlehub-logo.png";
+import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import {
   Sparkles, 
   Zap, 
@@ -90,7 +90,7 @@ export default function LandingPage() {
     {
       name: "Alex Rivera",
       handle: "@alexbuilds",
-      quote: "HustleHub saved me 20+ hours a week. My content game is on autopilot now.",
+      quote: "Hustle Lab saved me 20+ hours a week. My content game is on autopilot now.",
       avatar: "A"
     },
     {
@@ -156,8 +156,8 @@ export default function LandingPage() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
               <img 
-                src={hustleHubLogo} 
-                alt="HustleHub Logo" 
+                src={hustleLabLogo} 
+                alt="Hustle Lab Logo" 
                 className="h-10 w-auto"
               />
             </Link>
@@ -199,7 +199,7 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-              HustleHub gives you ready-to-use automations and AI tools to grow faster — without code.
+              Hustle Lab gives you ready-to-use automations and AI tools to grow faster — without code.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -332,7 +332,7 @@ export default function LandingPage() {
               Don't Just Take Our Word
             </h2>
             <p className="text-xl text-muted-foreground">
-              See what hustlers are saying about HustleHub
+              See what hustlers are saying about Hustle Lab
             </p>
           </div>
 
@@ -444,7 +444,7 @@ export default function LandingPage() {
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <p className="text-sm text-white/70 mt-6">
-            Join 10,000+ creators already building with HustleHub
+            Join 10,000+ creators already building with Hustle Lab
           </p>
         </div>
       </section>

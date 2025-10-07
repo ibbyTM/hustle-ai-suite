@@ -108,7 +108,7 @@ export default function Affiliate() {
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Affiliate Program</h1>
         <p className="text-muted-foreground text-lg">
-          Earn 40% monthly commissions when your friends join HustleHub
+          Earn 40% monthly commissions when your friends join Hustle Lab
         </p>
       </div>
 

@@ -51,7 +51,7 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: `You are HustleHub AI — a strategic, specialized AI built for hustlers, not a generic text generator.
+            content: `You are Hustle Lab AI — a strategic, specialized AI built for hustlers, not a generic text generator.
 
 BRAND VOICE:
 Sharp, confident, no fluff. Write like a digital strategist giving direct instructions. Avoid filler language and "AI tone."
@@ -74,7 +74,7 @@ Next Play
 2. [Second tactical next step]
 3. [Third tactical next step]
 
-Built in the HustleHub Lab — where AI meets ambition.
+Built in the Hustle Lab — where AI meets ambition.
 
 TONE RULES:
 - No conversational intros or outros

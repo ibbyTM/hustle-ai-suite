@@ -3,7 +3,7 @@ import { TrendingUp, DollarSign, Grid3x3, LogOut, Database } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import hustleHubLogo from "@/assets/hustlehub-logo.png";
+import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -35,8 +35,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex items-center justify-between">
               <Link to="/dashboard" className="flex items-center gap-3 group">
                 <img 
-                  src={hustleHubLogo} 
-                  alt="HustleHub Logo" 
+                  src={hustleLabLogo} 
+                  alt="Hustle Lab Logo" 
                   className="h-12 w-auto"
                 />
               </Link>

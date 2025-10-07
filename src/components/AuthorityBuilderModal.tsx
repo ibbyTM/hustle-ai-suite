@@ -181,7 +181,7 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       .replace(/The Formula\s*\n[\s\S]*?(?=Your Output|$)/gi, '')
       .replace(/Your Output\s*\n/gi, '')
       .replace(/Next Play\s*\n[\s\S]*?(?=Built in the HustleHub Lab|$)/gi, '')
-      .replace(/Built in the HustleHub Lab — where AI meets ambition\./gi, '');
+      .replace(/Built in the Hustle Lab — where AI meets ambition\./gi, '');
     
     // Remove markdown formatting
     cleaned = cleaned
@@ -255,7 +255,7 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
               spacing: { before: 400 }
             }),
             new Paragraph({
-              children: [new TextRun({ text: "Built in the HustleHub Lab — where AI meets ambition.", italics: true })],
+              children: [new TextRun({ text: "Built in the Hustle Lab — where AI meets ambition.", italics: true })],
               alignment: AlignmentType.CENTER,
               spacing: { before: 200 }
             })
@@ -352,7 +352,7 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       yPosition = pageHeight / 2;
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "italic");
-      pdf.text("Built in the HustleHub Lab — where AI meets ambition.", pageWidth / 2, yPosition, { align: "center" });
+      pdf.text("Built in the Hustle Lab — where AI meets ambition.", pageWidth / 2, yPosition, { align: "center" });
 
       // Save PDF
       pdf.save(`${topic.slice(0, 30).replace(/[^a-z0-9]/gi, '-')}-ebook.pdf`);
@@ -395,7 +395,7 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
             <span className="text-5xl">📖</span>
             <div>
               <DialogTitle className="text-2xl font-bold">BookForge</DialogTitle>
-              <p className="text-sm text-muted-foreground">Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by HustleHub AI.</p>
+              <p className="text-sm text-muted-foreground">Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by Hustle Lab AI.</p>
             </div>
           </div>
         </DialogHeader>

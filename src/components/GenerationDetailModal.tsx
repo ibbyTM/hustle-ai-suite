@@ -114,7 +114,7 @@ export const GenerationDetailModal = ({
       .replace(/The Formula\s*\n[\s\S]*?(?=Your Output|$)/gi, '')
       .replace(/Your Output\s*\n/gi, '')
       .replace(/Next Play\s*\n[\s\S]*?(?=Built in the HustleHub Lab|$)/gi, '')
-      .replace(/Built in the HustleHub Lab — where AI meets ambition\./gi, '');
+      .replace(/Built in the Hustle Lab — where AI meets ambition\./gi, '');
     
     cleaned = cleaned
       .replace(/\*\*/g, '')
@@ -212,7 +212,7 @@ export const GenerationDetailModal = ({
       yPosition = pageHeight / 2;
       pdf.setFontSize(12);
       pdf.setFont("helvetica", "italic");
-      pdf.text("Built in the HustleHub Lab — where AI meets ambition.", pageWidth / 2, yPosition, { align: "center" });
+      pdf.text("Built in the Hustle Lab — where AI meets ambition.", pageWidth / 2, yPosition, { align: "center" });
 
       pdf.save(`${ebookTitle.slice(0, 30).replace(/[^a-z0-9]/gi, '-')}-ebook.pdf`);
       toast.success("Exported as .pdf!");
@@ -273,7 +273,7 @@ export const GenerationDetailModal = ({
               spacing: { before: 400 }
             }),
             new Paragraph({
-              children: [new TextRun({ text: "Built in the HustleHub Lab — where AI meets ambition.", italics: true })],
+              children: [new TextRun({ text: "Built in the Hustle Lab — where AI meets ambition.", italics: true })],
               alignment: AlignmentType.CENTER,
               spacing: { before: 200 }
             })

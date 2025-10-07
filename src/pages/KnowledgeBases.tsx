@@ -77,7 +77,7 @@ export default function KnowledgeBases() {
           Train your hustle once. Reuse it across every tool.
         </p>
         <p className="text-muted-foreground mt-1">
-          Centralize brand voice, product facts, offers, and FAQs—then plug it into any HustleHub generator.
+          Centralize brand voice, product facts, offers, and FAQs—then plug it into any Hustle Lab generator.
         </p>
       </div>
 

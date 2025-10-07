@@ -25,7 +25,7 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `hustlehub-output-${Date.now()}.txt`;
+    a.download = `hustlelab-output-${Date.now()}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
