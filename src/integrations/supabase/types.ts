@@ -44,6 +44,33 @@ export type Database = {
         }
         Relationships: []
       }
+      earnings_history: {
+        Row: {
+          created_at: string | null
+          earnings: number
+          id: string
+          month: string
+          referrals_count: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          earnings?: number
+          id?: string
+          month: string
+          referrals_count?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          earnings?: number
+          id?: string
+          month?: string
+          referrals_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       generations: {
         Row: {
           created_at: string
@@ -150,6 +177,7 @@ export type Database = {
           referred_id: string
           referrer_id: string
           status: string
+          subscription_id: string | null
         }
         Insert: {
           created_at?: string
@@ -157,6 +185,7 @@ export type Database = {
           referred_id: string
           referrer_id: string
           status?: string
+          subscription_id?: string | null
         }
         Update: {
           created_at?: string
@@ -164,6 +193,46 @@ export type Database = {
           referred_id?: string
           referrer_id?: string
           status?: string
+          subscription_id?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: Database["public"]["Enums"]["app_role"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -199,14 +268,46 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      add_affiliate_earnings: {
+        Args: { _amount: number; _referrer_id: string }
+        Returns: undefined
+      }
       generate_referral_code: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
       }
       update_affiliate_stats: {
         Args: { user_id_param: string }
@@ -214,7 +315,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "free" | "pro" | "partner" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -341,6 +442,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["free", "pro", "partner", "admin"],
+    },
   },
 } as const
