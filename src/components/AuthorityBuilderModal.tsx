@@ -173,6 +173,29 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
     }
   };
 
+  const cleanContent = (text: string): string => {
+    // Remove technical blocks: "Hustle Breakdown", "The Formula", "Your Output", "Next Play"
+    let cleaned = text
+      .replace(/Hustle Breakdown\s*\n[\s\S]*?(?=The Formula|$)/gi, '')
+      .replace(/The Formula\s*\n[\s\S]*?(?=Your Output|$)/gi, '')
+      .replace(/Your Output\s*\n/gi, '')
+      .replace(/Next Play\s*\n[\s\S]*?(?=Built in the HustleHub Lab|$)/gi, '')
+      .replace(/Built in the HustleHub Lab — where AI meets ambition\./gi, '');
+    
+    // Remove markdown formatting
+    cleaned = cleaned
+      .replace(/\*\*/g, '') // Remove bold markers
+      .replace(/#{1,6}\s/g, '') // Remove heading markers
+      .replace(/^\s*[-*]\s/gm, '• '); // Convert markdown lists to bullet points
+    
+    // Clean up excessive whitespace while preserving paragraph breaks
+    cleaned = cleaned
+      .replace(/\n{3,}/g, '\n\n') // Max 2 consecutive newlines
+      .trim();
+    
+    return cleaned;
+  };
+
   const exportAsDocx = async () => {
     if (sections.length === 0) {
       toast.error("No content to export");
@@ -180,30 +203,61 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
     }
 
     try {
+      // Extract title and subtitle from first section
+      const titleSection = sections[0];
+      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
+      const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
+
       const doc = new Document({
         sections: [{
           properties: {},
           children: [
-            // Cover page
+            // Title page
             new Paragraph({
-              text: "Built in the HustleHub Lab",
-              heading: HeadingLevel.HEADING_1,
+              children: [new TextRun({ text: ebookTitle, bold: true, size: 48 })],
               alignment: AlignmentType.CENTER,
-              spacing: { after: 400 }
+              spacing: { after: 200 }
             }),
-            ...sections.flatMap(section => [
-              new Paragraph({
-                text: section.title,
-                heading: HeadingLevel.HEADING_2,
-                spacing: { before: 400, after: 200 }
-              }),
-              ...section.content.split('\n').map(line => 
+            ...(ebookSubtitle ? [new Paragraph({
+              children: [new TextRun({ text: ebookSubtitle, size: 32 })],
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 600 }
+            })] : []),
+            
+            // Process each section with cleaned content
+            ...sections.slice(1).flatMap(section => {
+              const cleanedContent = cleanContent(section.content);
+              const lines = cleanedContent.split('\n');
+              
+              return [
+                // Section heading
                 new Paragraph({
-                  children: [new TextRun(line)],
-                  spacing: { after: 100 }
-                })
-              )
-            ])
+                  children: [new TextRun({ text: section.title, bold: true, size: 32 })],
+                  heading: HeadingLevel.HEADING_1,
+                  spacing: { before: 400, after: 200 }
+                }),
+                // Content paragraphs
+                ...lines.map(line => 
+                  new Paragraph({
+                    children: [new TextRun(line)],
+                    spacing: { after: line.trim() === '' ? 0 : 100 }
+                  })
+                )
+              ];
+            }),
+            
+            // Footer signature
+            new Paragraph({
+              children: [new TextRun({ text: "", size: 24 })],
+              spacing: { before: 400 }
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: "Built in the HustleHub Lab — where AI meets ambition.", italics: true })],
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 200 }
+            })
           ]
         }]
       });
@@ -223,7 +277,29 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       return;
     }
 
-    const fullText = sections.map(s => `${s.title}\n\n${s.content}`).join("\n\n---\n\n");
+    // Extract title and subtitle
+    const titleSection = sections[0];
+    const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
+    const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+    const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
+    const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
+
+    // Build clean ebook text
+    let fullText = `${ebookTitle}\n`;
+    if (ebookSubtitle) {
+      fullText += `${ebookSubtitle}\n`;
+    }
+    fullText += '\n\n';
+
+    // Add cleaned sections
+    sections.slice(1).forEach(section => {
+      const cleanedContent = cleanContent(section.content);
+      fullText += `${section.title}\n\n${cleanedContent}\n\n\n`;
+    });
+
+    // Add footer
+    fullText += 'Built in the HustleHub Lab — where AI meets ambition.';
+
     const blob = new Blob([fullText], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
