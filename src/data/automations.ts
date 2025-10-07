@@ -204,7 +204,7 @@ export const automations: AutomationTool[] = [
     emoji: "📚",
     category: "Brand",
     description: "Generate 10,000-word ebooks that build authority",
-    isPro: true,
+    isPro: false,
     inputs: [
       { id: "topic", label: "Topic", type: "text", placeholder: "Your ebook subject" },
       { id: "audience", label: "Audience", type: "text", placeholder: "Who this is for" },
