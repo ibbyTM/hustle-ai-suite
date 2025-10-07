@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import hustleHubLogo from "@/assets/hustlehub-logo.png";
 import {
   Sparkles, 
   Zap, 
@@ -149,8 +150,40 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Fixed Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border/50 animate-fade-in">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center gap-3">
+              <img 
+                src={hustleHubLogo} 
+                alt="HustleHub Logo" 
+                className="h-10 w-auto"
+              />
+            </Link>
+            
+            <div className="flex items-center gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/auth')}
+                className="border-primary/30 hover:bg-primary/10"
+              >
+                Sign In
+              </Button>
+              <Button 
+                variant="gradient"
+                onClick={() => navigate('/auth')}
+                className="font-semibold"
+              >
+                Sign Up Free
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative px-4 py-20 md:py-32 overflow-hidden">
+      <section className="relative px-4 py-20 md:py-32 overflow-hidden mt-16">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.15),transparent_50%)]" />
         
