@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Copy, Sparkles, Link2, ExternalLink } from "lucide-react";
+import { X, Copy, Sparkles, Link2, ExternalLink, Download } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -230,6 +230,21 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     toast.success("Copied to clipboard!");
   };
 
+  const handleDownload = (format: 'txt') => {
+    const blob = new Blob([output], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${tool?.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${Date.now()}.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success(`Downloaded as ${format.toUpperCase()}!`);
+  };
+
+  const isDownloadableTool = tool?.id === 'authority-builder' || tool?.id === 'hustle-sprint';
+
 
   const handleClose = () => {
     setInputs({});
@@ -377,10 +392,18 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-lg">Output</h3>
               {output && (
-                <Button onClick={handleCopy} variant="outline" size="sm">
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy
-                </Button>
+                <div className="flex gap-2">
+                  <Button onClick={handleCopy} variant="outline" size="sm">
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy
+                  </Button>
+                  {isDownloadableTool && (
+                    <Button onClick={() => handleDownload('txt')} variant="outline" size="sm">
+                      <Download className="h-4 w-4 mr-2" />
+                      Download
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
             

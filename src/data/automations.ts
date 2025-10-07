@@ -164,5 +164,70 @@ export const automations: AutomationTool[] = [
       { id: "difficulty", label: "Preferred Difficulty", type: "select", options: ["Easy", "Moderate", "Aggressive"] }
     ],
     promptTemplate: "Here's a personalized 3-task plan for daily growth in your {goal} goal, tailored to the {industry} niche and difficulty level: {difficulty}. Each task is concise, actionable, and designed for measurable progress.\n\nFor each of the 3 tasks, use this exact structure:\n\n**Task #[number] – [Task Headline]**\n\n**Objective:**\nWrite 1-2 lines explaining what success looks like for this task.\n\n**Steps:**\nProvide 2-3 actionable bullet points that break down how to complete the task.\n\n**Time Required:**\nGive a rough time estimate (e.g., 15 mins, 1 hour, 30 mins).\n\nAfter all 3 tasks, include:\n\n**Daily Motivation Quote:**\nProvide 1 short motivational quote relevant to the {goal} goal.\n\n**Reflection Prompt:**\nWrite 1 short self-question for accountability (e.g., 'What's one thing I did today that moved me closer to my goal?').\n\nDo not use emojis or slang like 'Yo,' 'stackin',' 'let's get it,' etc. Use short, precise sentences—sound like a focused productivity coach. Keep formatting clean with clear headers and bullet lists."
+  },
+  {
+    id: "property-profiteer",
+    title: "Property Profiteer",
+    emoji: "🏠",
+    category: "Hustle",
+    description: "Analyse, pitch, and profit from any property deal",
+    isPro: false,
+    inputs: [
+      { id: "objective", label: "Objective", type: "select", options: ["Buy to Let", "Flip", "Long-term Hold", "Commercial", "Development"] },
+      { id: "propertyType", label: "Property Type", type: "text", placeholder: "e.g., 2-bed flat, commercial unit" },
+      { id: "location", label: "Location", type: "text", placeholder: "City or area" },
+      { id: "budget", label: "Budget Range", type: "text", placeholder: "e.g., £150k-£200k" },
+      { id: "targetROI", label: "Target ROI", type: "text", placeholder: "e.g., 8% annual return" },
+      { id: "extraContext", label: "Extra Context", type: "textarea", placeholder: "Any additional details about the deal..." }
+    ],
+    promptTemplate: "Here's a comprehensive property analysis for a {objective} strategy targeting {propertyType} in {location}, with a budget of {budget} and target ROI of {targetROI}.\n\nAdditional context: {extraContext}\n\nUse this exact structure:\n\n📊 **Property Summary**\nProvide a 2-3 sentence overview of the opportunity, location benefits, and property type.\n\n💰 **Financial Breakdown**\n- Purchase Price Range: Estimate based on {budget}\n- Expected Monthly Rental Income: Provide realistic figure\n- Annual Yield: Calculate percentage\n- Total Investment Required: Include purchase price, fees, and renovation costs\n- Break-Even Timeline: Estimate months/years to ROI\n\n🎯 **Deal Hooks**\nList 3-5 compelling selling points for this deal (e.g., location growth, rental demand, renovation potential).\n\n⚠️ **Risk Factors**\nIdentify 2-3 potential challenges or risks to consider.\n\n✅ **Next Steps**\nProvide 3-4 actionable steps to move forward with this deal.\n\nDo not use casual slang. Keep the tone professional and data-driven—like a property investment analyst's report. Format with clear emoji headers and bullet points for easy scanning."
+  },
+  {
+    id: "inbox-influence",
+    title: "Inbox Influence",
+    emoji: "📧",
+    category: "Content",
+    description: "Turn your ideas into addictive newsletters",
+    isPro: false,
+    inputs: [
+      { id: "topic", label: "Topic", type: "text", placeholder: "This week's newsletter topic" },
+      { id: "audience", label: "Audience", type: "text", placeholder: "Who you're writing for" },
+      { id: "goal", label: "Goal", type: "select", options: ["Educate", "Entertain", "Sell", "Build Trust", "Drive Traffic"] },
+      { id: "tone", label: "Tone", type: "select", options: ["Professional", "Conversational", "Humorous", "Inspirational", "Direct"] },
+      { id: "ctaLink", label: "CTA Link (optional)", type: "text", placeholder: "Where should readers go?" }
+    ],
+    promptTemplate: "Here's a complete newsletter draft about {topic}, written for {audience} with the goal to {goal}, using a {tone} tone.\n\nUse this exact structure:\n\n**📬 Subject Line**\nWrite 3 compelling subject line options (under 50 characters each).\n\n**🪝 Hook Line**\nProvide a 1-2 sentence opening that immediately grabs attention.\n\n**📖 Opening**\nWrite a 2-3 paragraph intro that connects with the reader and sets up the topic.\n\n**💡 Main Section**\nDeliver the core content in 3-5 structured points, tips, or insights. Keep it scannable with subheadings and short paragraphs.\n\n**🎯 Call to Action**\nWrite a persuasive CTA that directs readers to {ctaLink}. Keep it natural and benefit-focused.\n\n**✨ P.S.**\nAdd a personal touch or bonus insight that leaves a lasting impression.\n\nDo not use excessive emojis within the body text. Keep the writing tight, engaging, and formatted for email—think newsletter pro, not blog post. Use clear sections with spacing for readability."
+  },
+  {
+    id: "authority-builder",
+    title: "Authority Builder",
+    emoji: "📚",
+    category: "Brand",
+    description: "Generate 10,000-word ebooks that build authority",
+    isPro: true,
+    inputs: [
+      { id: "topic", label: "Topic", type: "text", placeholder: "Your ebook subject" },
+      { id: "audience", label: "Audience", type: "text", placeholder: "Who this is for" },
+      { id: "length", label: "Target Length", type: "select", options: ["10,000+ words", "15,000+ words", "20,000+ words"] },
+      { id: "voice", label: "Voice", type: "select", options: ["Expert/Authoritative", "Friendly/Accessible", "Academic", "Conversational"] },
+      { id: "includeCTA", label: "Include CTA", type: "select", options: ["Yes", "No"] },
+      { id: "chapterCount", label: "Chapter Count", type: "select", options: ["8", "10", "12"] }
+    ],
+    promptTemplate: "Create a comprehensive {length} ebook about {topic}, written for {audience} in a {voice} voice, with {chapterCount} chapters.\n\nUse this exact structure:\n\n**📖 Title**\nProvide a compelling, authoritative title.\n\n**📝 Subtitle**\nWrite a supporting subtitle that clarifies the value proposition.\n\n**🎯 Introduction (500 words)**\nWrite an engaging intro that establishes credibility, addresses the reader's pain points, and previews what they'll learn.\n\n**📚 Chapters**\nGenerate {chapterCount} chapters, each approximately 1,000-1,200 words. For each chapter:\n\n**Chapter [number]: [Title]**\n- Opening: Set context and hook the reader\n- Main Content: Deliver actionable insights, frameworks, or lessons\n- Key Takeaways: Summarize 2-3 main points\n- Transition: Bridge to the next chapter\n\n**🎬 Conclusion (400-500 words)**\nSummarize key lessons, reinforce transformation, and inspire action.\n\n{includeCTA|**🚀 Call to Action**\nInclude a natural pitch for your product, service, or next step. Keep it value-focused and non-pushy.}\n\nDo not use casual slang or excessive emojis. Write in a polished, professional style—like a published author or thought leader. Use proper chapter structure, subheadings, and formatting throughout. This should read like a legitimate ebook ready for download."
+  },
+  {
+    id: "hustle-sprint",
+    title: "30-Day Hustle Sprint",
+    emoji: "🏃",
+    category: "Productivity",
+    description: "Your personalized 30-day action plan to grow any hustle",
+    isPro: false,
+    inputs: [
+      { id: "goal", label: "Goal", type: "text", placeholder: "What you want to achieve" },
+      { id: "skillLevel", label: "Skill Level", type: "select", options: ["Beginner", "Intermediate", "Advanced"] },
+      { id: "timeCommitment", label: "Time Commitment", type: "select", options: ["1 hour/day", "2-3 hours/day", "4+ hours/day"] },
+      { id: "focusArea", label: "Focus Area", type: "select", options: ["Content Creation", "Sales/Revenue", "Audience Growth", "Skill Building", "Product Launch"] }
+    ],
+    promptTemplate: "Here's a detailed 30-day action plan to achieve: {goal}. Designed for {skillLevel} level, with {timeCommitment} daily commitment, focusing on {focusArea}.\n\nUse this exact structure:\n\n**🎯 Overview**\nWrite 2-3 paragraphs explaining the strategy, expected outcomes, and success metrics for this 30-day sprint.\n\n**📅 Weekly Breakdown**\n\n**Week 1: Foundation**\nFocus: [Theme]\nObjective: [What to achieve this week]\nDaily Tasks:\n- Day 1: [Specific task] - Goal: [Measurable outcome]\n- Day 2: [Specific task] - Goal: [Measurable outcome]\n- Day 3: [Specific task] - Goal: [Measurable outcome]\n- Day 4: [Specific task] - Goal: [Measurable outcome]\n- Day 5: [Specific task] - Goal: [Measurable outcome]\n- Day 6: [Specific task] - Goal: [Measurable outcome]\n- Day 7: [Review/reflection task]\nKey KPIs: [Metrics to track]\n\n**Week 2: Momentum**\n[Same structure as Week 1]\n\n**Week 3: Scale**\n[Same structure as Week 1]\n\n**Week 4: Optimization**\n[Same structure as Week 1]\n\n**📊 Success Metrics**\nDefine 3-5 clear KPIs to measure progress throughout the 30 days.\n\n**🎉 Final Summary**\nWrite 2-3 paragraphs about expected transformation, lessons learned, and next steps after completing the sprint.\n\nDo not use emojis within task descriptions. Keep language direct and action-oriented—think productivity coach meets business strategist. Format with clear weekly sections and daily breakdowns for easy tracking."
   }
 ];
