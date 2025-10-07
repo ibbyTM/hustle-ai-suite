@@ -206,8 +206,8 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
     try {
       // Extract title and subtitle from first section
       const titleSection = sections[0];
-      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
-      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
       const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
       const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
 
@@ -281,8 +281,8 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
     try {
       // Extract title and subtitle
       const titleSection = sections[0];
-      const titleMatch = titleSection.content.match(/Title[:\s]*\n*(.+?)(?:\n|$)/i);
-      const subtitleMatch = titleSection.content.match(/Subtitle[:\s]*\n*(.+?)(?:\n|$)/i);
+      const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
       const ebookTitle = titleMatch ? titleMatch[1].trim() : topic;
       const ebookSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
 
