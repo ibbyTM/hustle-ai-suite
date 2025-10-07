@@ -1,11 +1,14 @@
-import { Copy, Trash2, Calendar, X, FileText, Download } from "lucide-react";
+import { Copy, Trash2, Calendar, X, FileText, Download, Edit, Save } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, Packer } from "docx";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GenerationDetailModalProps {
   isOpen: boolean;
@@ -18,6 +21,8 @@ interface GenerationDetailModalProps {
   onCopy: () => void;
   onDelete: () => void;
   toolId?: string;
+  generationId?: string;
+  onSave?: () => void;
 }
 
 export const GenerationDetailModal = ({
@@ -31,8 +36,77 @@ export const GenerationDetailModal = ({
   onCopy,
   onDelete,
   toolId,
+  generationId,
+  onSave,
 }: GenerationDetailModalProps) => {
   const isBookForge = toolId === "bookforge";
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(output);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (!generationId) return;
+    
+    setIsSaving(true);
+    try {
+      const { error } = await supabase
+        .from("generations")
+        .update({ output: editedContent })
+        .eq("id", generationId);
+
+      if (error) throw error;
+
+      toast.success("Changes saved!");
+      setIsEditing(false);
+      onSave?.();
+    } catch (error: any) {
+      console.error("Error saving:", error);
+      toast.error("Failed to save changes");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedContent(output);
+    setIsEditing(false);
+  };
+
+  const formatContent = (text: string) => {
+    const lines = text.split('\n');
+    return lines.map((line, index) => {
+      // Headings
+      if (line.startsWith('### ')) {
+        return <h3 key={index} className="text-lg font-bold mt-4 mb-2">{line.replace('### ', '')}</h3>;
+      }
+      if (line.startsWith('## ')) {
+        return <h2 key={index} className="text-xl font-bold mt-6 mb-3">{line.replace('## ', '')}</h2>;
+      }
+      if (line.startsWith('# ')) {
+        return <h1 key={index} className="text-2xl font-bold mt-8 mb-4">{line.replace('# ', '')}</h1>;
+      }
+
+      // Bold text
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      const parts = line.split(boldRegex);
+      const formatted = parts.map((part, i) => 
+        i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+      );
+
+      // Empty lines
+      if (line.trim() === '') {
+        return <div key={index} className="h-2" />;
+      }
+
+      // Bullet points
+      if (line.trim().startsWith('- ')) {
+        return <li key={index} className="ml-4">{line.replace(/^- /, '')}</li>;
+      }
+
+      // Regular paragraphs
+      return <p key={index} className="mb-2">{formatted}</p>;
+    });
+  };
 
   const cleanContent = (text: string): string => {
     let cleaned = text
@@ -68,7 +142,8 @@ export const GenerationDetailModal = ({
     if (!isBookForge) return;
 
     try {
-      const sections = parseSections(output);
+      const currentOutput = isEditing ? editedContent : output;
+      const sections = parseSections(currentOutput);
       const titleSection = sections[0];
       const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
       const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
@@ -151,7 +226,8 @@ export const GenerationDetailModal = ({
     if (!isBookForge) return;
 
     try {
-      const sections = parseSections(output);
+      const currentOutput = isEditing ? editedContent : output;
+      const sections = parseSections(currentOutput);
       const titleSection = sections[0];
       const titleMatch = titleSection.content.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
       const subtitleMatch = titleSection.content.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
@@ -229,6 +305,12 @@ export const GenerationDetailModal = ({
                 </div>
               </div>
             </div>
+            {!isEditing && generationId && (
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            )}
           </div>
         </DialogHeader>
 
@@ -250,34 +332,57 @@ export const GenerationDetailModal = ({
 
             <div>
               <div className="text-sm font-semibold text-muted-foreground mb-3">Output:</div>
-              <div className="bg-secondary/50 border border-border rounded-lg p-4 text-sm whitespace-pre-wrap">
-                {output}
-              </div>
+              {isEditing ? (
+                <Textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  className="min-h-[400px] font-mono text-sm"
+                  placeholder="Edit your content..."
+                />
+              ) : (
+                <div className="bg-secondary/50 border border-border rounded-lg p-6 text-sm prose prose-sm max-w-none dark:prose-invert">
+                  {formatContent(output)}
+                </div>
+              )}
             </div>
           </div>
         </ScrollArea>
 
         <div className="flex items-center gap-2 justify-end pt-4 border-t">
-          {isBookForge && (
+          {isEditing ? (
             <>
-              <Button variant="outline" size="sm" onClick={exportAsDocx}>
-                <FileText className="h-4 w-4 mr-2" />
-                Export .docx
+              <Button variant="outline" size="sm" onClick={handleCancel}>
+                Cancel
               </Button>
-              <Button variant="outline" size="sm" onClick={exportAsPdf}>
-                <Download className="h-4 w-4 mr-2" />
-                Export .pdf
+              <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving}>
+                <Save className="h-4 w-4 mr-2" />
+                {isSaving ? "Saving..." : "Save Changes"}
+              </Button>
+            </>
+          ) : (
+            <>
+              {isBookForge && (
+                <>
+                  <Button variant="outline" size="sm" onClick={exportAsDocx}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export .docx
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={exportAsPdf}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Export .pdf
+                  </Button>
+                </>
+              )}
+              <Button variant="outline" size="sm" onClick={onCopy}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copy
+              </Button>
+              <Button variant="outline" size="sm" onClick={onDelete}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
               </Button>
             </>
           )}
-          <Button variant="outline" size="sm" onClick={onCopy}>
-            <Copy className="h-4 w-4 mr-2" />
-            Copy
-          </Button>
-          <Button variant="outline" size="sm" onClick={onDelete}>
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
-          </Button>
         </div>
       </DialogContent>
     </Dialog>

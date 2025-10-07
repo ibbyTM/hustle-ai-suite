@@ -232,6 +232,8 @@ export default function MyHustles() {
               onCopy={handleCopy}
               onDelete={handleDelete}
               toolId={selectedGeneration.tool_id}
+              generationId={selectedGeneration.id}
+              onSave={fetchGenerations}
             />
           )}
         </>
