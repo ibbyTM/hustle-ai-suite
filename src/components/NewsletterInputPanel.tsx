@@ -138,7 +138,16 @@ export function NewsletterInputPanel({ isOpen, onClose }: NewsletterInputPanelPr
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setKnowledgeBases(data || []);
+      if (data) {
+        setKnowledgeBases(data.map(kb => ({
+          ...kb,
+          brand_voice: kb.brand_voice as any,
+          products: kb.products as any,
+          audience: kb.audience as any,
+          offers: kb.offers as any,
+          faqs: kb.faqs as any,
+        })));
+      }
     } catch (error) {
       console.error("Error loading knowledge bases:", error);
     }

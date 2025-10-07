@@ -30,11 +30,6 @@ interface ToolModalProps {
 }
 
 export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
-  // Use specialized modal for BookForge - check BEFORE any hooks
-  if (tool?.id === "bookforge") {
-    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
-  }
-
   const [inputs, setInputs] = useState<Record<string, any>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -43,6 +38,15 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   const [attachedKB, setAttachedKB] = useState<KnowledgeBase | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Use specialized modals for special tools
+  if (tool?.id === "bookforge") {
+    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "inbox-influence") {
+    return <NewsletterInputPanel isOpen={isOpen} onClose={onClose} />;
+  }
 
   useEffect(() => {
     if (isOpen && user) {
