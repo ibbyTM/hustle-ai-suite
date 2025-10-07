@@ -243,6 +243,16 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     toast.success(`Downloaded as ${format.toUpperCase()}!`);
   };
 
+  // Tools that don't benefit from KB context (discovery/research tools)
+  const toolsWithoutKB = [
+    'trend-finder',
+    'biz-idea',
+    'dropship-goldmine',
+    'content-to-cash',
+    'daily-planner'
+  ];
+  
+  const needsKB = !tool || !toolsWithoutKB.includes(tool.id);
   const isDownloadableTool = tool?.id === 'authority-builder' || tool?.id === 'hustle-sprint';
 
 
@@ -268,56 +278,58 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
           <p className="sr-only">Generate AI content using {tool.title}</p>
         </DialogHeader>
 
-        <div className="mb-4 p-4 border border-border rounded-lg bg-secondary/30">
-          <Label className="text-sm font-medium mb-2 block">Knowledge Base</Label>
-          <div className="flex flex-col gap-2">
-            <Select
-              value={selectedKB || "none"}
-              onValueChange={(value) => handleAttachKB(value === "none" ? null : value)}
-            >
-              <SelectTrigger className="bg-background">
-                <SelectValue placeholder="Use without KB" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Use without KB</SelectItem>
-                {knowledgeBases.map((kb) => (
-                  <SelectItem key={kb.id} value={kb.id}>
-                    {kb.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            {attachedKB && (
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
-                  <Link2 className="h-3 w-3" />
-                  Using: {attachedKB.name}
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate(`/knowledge-bases/${attachedKB.id}`)}
-                  className="h-7 gap-1"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Edit
-                </Button>
-              </div>
-            )}
-            
-            {!knowledgeBases.length && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate("/knowledge-bases/new")}
-                className="w-full"
+        {needsKB && (
+          <div className="mb-4 p-4 border border-border rounded-lg bg-secondary/30">
+            <Label className="text-sm font-medium mb-2 block">Knowledge Base</Label>
+            <div className="flex flex-col gap-2">
+              <Select
+                value={selectedKB || "none"}
+                onValueChange={(value) => handleAttachKB(value === "none" ? null : value)}
               >
-                Create Knowledge Base
-              </Button>
-            )}
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Use without KB" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Use without KB</SelectItem>
+                  {knowledgeBases.map((kb) => (
+                    <SelectItem key={kb.id} value={kb.id}>
+                      {kb.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              {attachedKB && (
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="gap-1">
+                    <Link2 className="h-3 w-3" />
+                    Using: {attachedKB.name}
+                  </Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate(`/knowledge-bases/${attachedKB.id}`)}
+                    className="h-7 gap-1"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    Edit
+                  </Button>
+                </div>
+              )}
+              
+              {!knowledgeBases.length && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/knowledge-bases/new")}
+                  className="w-full"
+                >
+                  Create Knowledge Base
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-6 mt-6">
           <div className="space-y-4">
