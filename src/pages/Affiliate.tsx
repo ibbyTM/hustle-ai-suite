@@ -14,7 +14,7 @@ export default function Affiliate() {
   const { hasPartnerAccess, isLoading: subscriptionLoading } = useSubscription();
 
   // Fetch user's profile with referral code
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
       if (!user) return null;
@@ -22,14 +22,14 @@ export default function Affiliate() {
         .from('profiles')
         .select('referral_code')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!user,
   });
 
   // Fetch affiliate stats
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['affiliate-stats', user?.id],
     queryFn: async () => {
       if (!user) return null;
@@ -37,7 +37,7 @@ export default function Affiliate() {
         .from('affiliate_stats')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!user,
@@ -80,9 +80,17 @@ export default function Affiliate() {
     );
   }
 
+  if (profileLoading || statsLoading) {
+    return (
+      <div className="max-w-6xl mx-auto animate-fade-in text-center py-12">
+        <p className="text-muted-foreground">Loading your affiliate dashboard...</p>
+      </div>
+    );
+  }
+
   const referralLink = profile?.referral_code 
     ? `${window.location.origin}/?ref=${profile.referral_code}`
-    : "Loading...";
+    : "Setting up your account...";
   
   const statsDisplay = [
     { label: "Total Referrals", value: stats?.total_referrals?.toString() || "0", icon: Users, color: "text-category-content" },
