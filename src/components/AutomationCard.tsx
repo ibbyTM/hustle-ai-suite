@@ -9,17 +9,13 @@ interface AutomationCardProps {
 }
 
 export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps) => {
-  // Special gradient for BookForge
   const isBookForge = tool.id === "bookforge";
-  const cardClassName = isBookForge 
-    ? "bg-gradient-to-br from-zinc-800 to-zinc-600" 
-    : "bg-gradient-card";
   
   return (
     <button
       onClick={onClick}
       disabled={isLocked}
-      className={`group relative ${cardClassName} border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 ${
+      className={`group relative bg-gradient-card border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 ${
         isLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
       }`}
       title={isBookForge ? "Creates a full 10K+ word ebook chapter-by-chapter, formatted and export-ready." : undefined}
