@@ -77,6 +77,51 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_bases: {
+        Row: {
+          audience: Json | null
+          brand_voice: Json | null
+          created_at: string
+          description: string | null
+          faqs: Json | null
+          id: string
+          name: string
+          offers: Json | null
+          products: Json | null
+          tags: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audience?: Json | null
+          brand_voice?: Json | null
+          created_at?: string
+          description?: string | null
+          faqs?: Json | null
+          id?: string
+          name: string
+          offers?: Json | null
+          products?: Json | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audience?: Json | null
+          brand_voice?: Json | null
+          created_at?: string
+          description?: string | null
+          faqs?: Json | null
+          id?: string
+          name?: string
+          offers?: Json | null
+          products?: Json | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -121,6 +166,38 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      tool_attachments: {
+        Row: {
+          created_at: string
+          id: string
+          knowledge_base_id: string
+          tool_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          knowledge_base_id: string
+          tool_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          knowledge_base_id?: string
+          tool_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_attachments_knowledge_base_id_fkey"
+            columns: ["knowledge_base_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_bases"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
