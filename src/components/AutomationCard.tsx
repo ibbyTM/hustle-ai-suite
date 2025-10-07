@@ -22,9 +22,10 @@ export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps)
     >
       {isLocked && (
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
-          <div className="text-center">
+          <div className="text-center px-4">
             <Lock className="h-8 w-8 text-primary mx-auto mb-2" />
-            <p className="text-sm font-semibold text-primary">Pro Feature</p>
+            <p className="text-sm font-semibold text-primary mb-1">Upgrade to unlock</p>
+            <p className="text-xs text-muted-foreground">Click to view pricing</p>
           </div>
         </div>
       )}

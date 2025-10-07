@@ -45,26 +45,28 @@ export default function Pricing() {
       tierKey: "free" as const,
       price: "£0",
       period: "forever",
-      description: "Get started with basic tools",
+      description: "Start Exploring",
       features: [
-        "Access to Trend Finder 2.0",
-        "Access to Biz-Idea Reactor",
-        "Save up to 5 hustles",
-        "Community support",
+        "Biz-Idea Reactor",
+        "Hook Factory (Lite)",
+        "Trend Finder 2.0 (Preview)",
+        "Inbox Influence Newsletter",
+        "3 generations per day",
       ],
       priceId: undefined,
     },
     {
-      name: "Pro",
+      name: "Plus",
       tierKey: "pro" as const,
       price: "£20",
       period: "per month",
-      description: "Unlock all the tools you need",
+      description: "Get All The Tools",
       features: [
-        "All 12 automation tools",
-        "Unlimited saved hustles",
+        "All 12+ automation agents",
+        "Unlimited generations",
+        "Save & export features",
         "Priority support",
-        "Export to Notion",
+        "Monthly bonus drops",
         "Early access to new tools",
       ],
       priceId: TIER_CONFIG.pro.priceId,
@@ -75,13 +77,14 @@ export default function Pricing() {
       tierKey: "partner" as const,
       price: "£49",
       period: "per month",
-      description: "Pro + earn commissions",
+      description: "Earn While You Hustle",
       features: [
-        "Everything in Pro",
-        "40% affiliate commissions",
-        "Custom affiliate dashboard",
-        "Exclusive partner community",
-        "Monthly bonus contests",
+        "Everything in Plus",
+        "Affiliate dashboard access",
+        "40% commission on referrals",
+        "Partner badge & recognition",
+        "Early beta access",
+        "Co-creation opportunities",
       ],
       priceId: TIER_CONFIG.partner.priceId,
     },
@@ -91,10 +94,10 @@ export default function Pricing() {
     <div className="max-w-7xl mx-auto animate-fade-in">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-          Choose Your Hustle Tier
+          Choose Your Plan
         </h1>
         <p className="text-xl text-muted-foreground">
-          Start free. Scale when you're ready. Stack commissions as a partner.
+          Free to explore. Plus to unlock everything. Partner to earn while you build.
         </p>
       </div>
 
@@ -158,7 +161,7 @@ export default function Pricing() {
                   onClick={() => handleUpgrade(tierData.priceId)}
                   disabled={isLoading || isCurrentPlan}
                 >
-                  {isCurrentPlan ? "Current Plan" : tierData.priceId ? `Upgrade to ${tierData.name}` : "Free Forever"}
+                  {isCurrentPlan ? "Current Plan" : tierData.priceId ? `Get ${tierData.name}` : "Free Forever"}
                 </Button>
               )}
             </div>
@@ -169,10 +172,10 @@ export default function Pricing() {
       <div className="bg-gradient-card border border-border rounded-2xl p-8 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Zap className="h-8 w-8 text-primary" />
-          <h2 className="text-3xl font-bold">Ready to level up?</h2>
+          <h2 className="text-3xl font-bold">Ready to unlock everything?</h2>
         </div>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Join thousands of hustlers automating their way to £10K months. No fluff, just tools that actually work.
+          Join thousands of creators automating their hustle. No fluff, just tools that work.
         </p>
         <Button 
           variant="gradient" 
@@ -180,7 +183,7 @@ export default function Pricing() {
           onClick={() => user ? handleUpgrade(TIER_CONFIG.pro.priceId) : navigate("/auth")}
           disabled={isLoading}
         >
-          {user ? "Upgrade Now" : "Get Started Free"}
+          {user ? "Get Plus Now" : "Start Free"}
         </Button>
       </div>
     </div>

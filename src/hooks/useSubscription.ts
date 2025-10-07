@@ -15,7 +15,7 @@ export const TIER_CONFIG = {
   pro: {
     priceId: "price_1SFhXkJLDxMViooDs9zF3WaE",
     productId: "prod_TC5jlebGbWYcBN",
-    name: "Pro",
+    name: "Plus",
     price: "£20",
   },
   partner: {

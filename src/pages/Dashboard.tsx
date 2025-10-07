@@ -3,18 +3,30 @@ import { AutomationCard } from "@/components/AutomationCard";
 import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
 import { AutomationTool } from "@/types/automation";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useNavigate } from "react-router-dom";
+
+const FREE_TIER_TOOLS = ["bizidea", "hookfactory", "trendfinder", "newsletter"];
 
 export default function Dashboard() {
   const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userTier] = useState<"Free" | "Pro" | "Partner">("Free");
+  const { tier } = useSubscription();
+  const navigate = useNavigate();
+
+  const isToolAccessible = (tool: AutomationTool) => {
+    if (tier === "partner" || tier === "pro") return true;
+    if (tier === "free") return FREE_TIER_TOOLS.includes(tool.id);
+    return false;
+  };
 
   const handleToolClick = (tool: AutomationTool) => {
-    const isLocked = tool.isPro && userTier === "Free";
-    if (!isLocked) {
-      setSelectedTool(tool);
-      setIsModalOpen(true);
+    if (!isToolAccessible(tool)) {
+      navigate("/pricing");
+      return;
     }
+    setSelectedTool(tool);
+    setIsModalOpen(true);
   };
 
   return (
@@ -34,7 +46,7 @@ export default function Dashboard() {
             key={tool.id}
             tool={tool}
             onClick={() => handleToolClick(tool)}
-            isLocked={tool.isPro && userTier === "Free"}
+            isLocked={!isToolAccessible(tool)}
           />
         ))}
       </div>
