@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AutomationCard } from "@/components/AutomationCard";
 import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
 import { AutomationTool } from "@/types/automation";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const FREE_TIER_TOOLS = ["bizidea", "hookfactory", "trendfinder", "newsletter"];
@@ -12,7 +13,14 @@ export default function Dashboard() {
   const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { tier } = useSubscription();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const isToolAccessible = (tool: AutomationTool) => {
     if (tier === "partner" || tier === "pro") return true;
