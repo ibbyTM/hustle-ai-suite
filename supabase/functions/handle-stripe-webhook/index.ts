@@ -88,8 +88,13 @@ serve(async (req) => {
           cancel_at_period_end: false,
         });
 
-        // Assign role
-        await supabaseAdmin.from("user_roles").upsert({
+        // Assign role - delete old roles first to prevent privilege escalation
+        await supabaseAdmin.from("user_roles")
+          .delete()
+          .eq("user_id", user.id)
+          .neq("role", "free");
+        
+        await supabaseAdmin.from("user_roles").insert({
           user_id: user.id,
           role: tier,
         });
@@ -198,9 +203,16 @@ serve(async (req) => {
             cancel_at_period_end: subscription.cancel_at_period_end,
           }).eq("stripe_subscription_id", subscription.id);
 
-          // Update role
+          // Update role - properly handle tier changes to prevent privilege escalation
           if (subscription.status === "active") {
-            await supabaseAdmin.from("user_roles").upsert({
+            // Delete all paid roles first
+            await supabaseAdmin.from("user_roles")
+              .delete()
+              .eq("user_id", existingSub.user_id)
+              .neq("role", "free");
+            
+            // Add new tier role
+            await supabaseAdmin.from("user_roles").insert({
               user_id: existingSub.user_id,
               role: tier,
             });

@@ -50,20 +50,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const referralCode = localStorage.getItem('referralCode');
       
       if (referralCode) {
-        // Validate referral code using secure edge function
-        const { data: validationResult } = await supabase.functions.invoke('validate-referral-code', {
-          body: { referralCode }
-        });
-
-        if (validationResult?.valid) {
-          // Store referral code in user metadata for webhook to process
-          await supabase.auth.updateUser({
-            data: { referral_code: referralCode }
+        try {
+          // Validate referral code using secure edge function with comprehensive checks
+          const { data: validationResult, error: validationError } = await supabase.functions.invoke('validate-referral-code', {
+            body: { 
+              referralCode,
+              userId: data.user.id // Pass user ID to prevent self-referrals
+            }
           });
-        }
 
-        // Clear referral code from localStorage
-        localStorage.removeItem('referralCode');
+          if (validationError) {
+            console.error('Referral validation error:', validationError);
+          } else if (validationResult?.valid) {
+            // Store referral code in user metadata for webhook to process
+            // Include timestamp to prevent retroactive claims
+            await supabase.auth.updateUser({
+              data: { 
+                referral_code: referralCode,
+                referral_timestamp: new Date().toISOString()
+              }
+            });
+          }
+        } catch (err) {
+          console.error('Failed to validate referral code:', err);
+        } finally {
+          // Always clear referral code from localStorage
+          localStorage.removeItem('referralCode');
+        }
       }
     }
     

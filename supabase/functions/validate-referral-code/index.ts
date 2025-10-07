@@ -19,7 +19,7 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { referralCode } = await req.json();
+    const { referralCode, userId } = await req.json();
     
     if (!referralCode || typeof referralCode !== 'string') {
       logStep("Invalid input", { referralCode });
@@ -52,6 +52,54 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
+
+    // Rate limiting check - allow max 10 attempts per IP in last hour
+    const clientIP = req.headers.get("x-forwarded-for") || "unknown";
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    
+    const { count } = await supabaseClient
+      .from("referral_validation_attempts")
+      .select("*", { count: "exact", head: true })
+      .eq("ip_address", clientIP)
+      .gte("created_at", oneHourAgo);
+
+    if (count && count >= 10) {
+      logStep("Rate limit exceeded", { ip: clientIP });
+      return new Response(JSON.stringify({ 
+        valid: false,
+        error: "Too many validation attempts. Please try again later." 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 429,
+      });
+    }
+
+    // Check if user is trying to use their own referral code (self-referral)
+    if (userId) {
+      const { data: userProfile } = await supabaseClient
+        .from("profiles")
+        .select("referral_code")
+        .eq("user_id", userId)
+        .single();
+
+      if (userProfile?.referral_code === sanitized) {
+        logStep("Self-referral attempt blocked", { userId });
+        return new Response(JSON.stringify({ 
+          valid: false,
+          error: "You cannot use your own referral code" 
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        });
+      }
+    }
+
+    // Log validation attempt
+    await supabaseClient.from("referral_validation_attempts").insert({
+      user_id: userId || null,
+      ip_address: clientIP,
+      referral_code: sanitized,
+    });
 
     // Use the security definer function to check if code exists
     const { data, error } = await supabaseClient.rpc('validate_referral_code_exists', {

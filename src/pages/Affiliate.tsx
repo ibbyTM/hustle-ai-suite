@@ -43,13 +43,13 @@ export default function Affiliate() {
     enabled: !!user,
   });
 
-  // Fetch leaderboard
+  // Fetch leaderboard - anonymized to protect privacy
   const { data: leaderboard } = useQuery({
     queryKey: ['affiliate-leaderboard'],
     queryFn: async () => {
       const { data } = await supabase
         .from('affiliate_stats')
-        .select('user_id, lifetime_earnings, total_referrals')
+        .select('lifetime_earnings, total_referrals')
         .order('lifetime_earnings', { ascending: false })
         .limit(10);
       return data || [];
@@ -153,7 +153,7 @@ export default function Affiliate() {
           <div className="space-y-4">
             {leaderboard.map((person, index) => (
               <div
-                key={person.user_id}
+                key={index}
                 className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl border border-border"
               >
                 <div className="flex items-center gap-4">
@@ -163,7 +163,7 @@ export default function Affiliate() {
                     {index + 1}
                   </div>
                   <div>
-                    <p className="font-semibold">User {person.user_id.slice(0, 8)}</p>
+                    <p className="font-semibold">Rank #{index + 1}</p>
                     <p className="text-sm text-muted-foreground">{person.total_referrals} referrals</p>
                   </div>
                 </div>

@@ -170,12 +170,37 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_validation_attempts: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          referral_code: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          referral_code: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          referral_code?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           created_at: string
           id: string
           referred_id: string
           referrer_id: string
+          signup_timestamp: string | null
           status: string
           subscription_id: string | null
         }
@@ -184,6 +209,7 @@ export type Database = {
           id?: string
           referred_id: string
           referrer_id: string
+          signup_timestamp?: string | null
           status?: string
           subscription_id?: string | null
         }
@@ -192,6 +218,7 @@ export type Database = {
           id?: string
           referred_id?: string
           referrer_id?: string
+          signup_timestamp?: string | null
           status?: string
           subscription_id?: string | null
         }

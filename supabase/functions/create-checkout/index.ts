@@ -38,11 +38,24 @@ serve(async (req) => {
 
     const { priceId, referralCode } = await req.json();
     
-    if (!priceId) {
-      throw new Error("Price ID is required");
+    // Validate priceId
+    if (!priceId || typeof priceId !== 'string' || !priceId.startsWith('price_')) {
+      throw new Error("Invalid price ID format");
     }
 
-    logStep("Creating checkout session", { priceId, referralCode });
+    // Sanitize referralCode if provided
+    let sanitizedReferralCode;
+    if (referralCode) {
+      if (typeof referralCode !== 'string' || referralCode.length > 20) {
+        throw new Error("Invalid referral code format");
+      }
+      sanitizedReferralCode = referralCode.trim().toUpperCase();
+      if (!/^[A-Z0-9]+$/.test(sanitizedReferralCode)) {
+        throw new Error("Referral code contains invalid characters");
+      }
+    }
+
+    logStep("Creating checkout session", { priceId, referralCode: sanitizedReferralCode });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
@@ -60,7 +73,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
-      client_reference_id: referralCode || undefined,
+      client_reference_id: sanitizedReferralCode || undefined,
       line_items: [
         {
           price: priceId,
