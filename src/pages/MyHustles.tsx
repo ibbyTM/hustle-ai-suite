@@ -231,6 +231,7 @@ export default function MyHustles() {
               output={selectedGeneration.output}
               onCopy={handleCopy}
               onDelete={handleDelete}
+              toolId={selectedGeneration.tool_id}
             />
           )}
         </>
