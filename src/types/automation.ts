@@ -2,6 +2,8 @@ export type CategoryType = "Content" | "Ads" | "Hustle" | "Brand" | "Store" | "P
 
 export type TierType = "Free" | "Pro" | "Partner";
 
+export type KBRequirement = "required" | "recommended" | "optional" | "none";
+
 export interface AutomationTool {
   id: string;
   title: string;
@@ -9,6 +11,7 @@ export interface AutomationTool {
   category: CategoryType;
   description: string;
   isPro: boolean;
+  kbRequirement: KBRequirement;
   inputs: InputField[];
   promptTemplate: string;
 }
@@ -16,9 +19,13 @@ export interface AutomationTool {
 export interface InputField {
   id: string;
   label: string;
-  type: "text" | "select" | "textarea";
+  type: "text" | "select" | "textarea" | "number" | "toggle" | "multiselect" | "date" | "url" | "file";
   placeholder?: string;
   options?: string[];
+  defaultValue?: string | number | boolean;
+  required?: boolean;
+  min?: number;
+  max?: number;
 }
 
 export interface SavedHustle {

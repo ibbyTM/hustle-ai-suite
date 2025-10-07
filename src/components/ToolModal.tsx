@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { X, Copy, Sparkles, Link2, ExternalLink, Download } from "lucide-react";
+import { X, Copy, Sparkles, Link2, ExternalLink, Download, Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AutomationTool } from "@/types/automation";
 import { CategoryBadge } from "./CategoryBadge";
 import { toast } from "sonner";
@@ -15,6 +19,8 @@ import { KnowledgeBase } from "@/types/knowledgeBase";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { AuthorityBuilderModal } from "./AuthorityBuilderModal";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface ToolModalProps {
   tool: AutomationTool | null;
@@ -28,7 +34,7 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
   }
 
-  const [inputs, setInputs] = useState<Record<string, string>>({});
+  const [inputs, setInputs] = useState<Record<string, any>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
@@ -249,16 +255,7 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     toast.success(`Downloaded as ${format.toUpperCase()}!`);
   };
 
-  // Tools that don't benefit from KB context (discovery/research tools)
-  const toolsWithoutKB = [
-    'trend-finder',
-    'biz-idea',
-    'dropship-goldmine',
-    'content-to-cash',
-    'daily-planner'
-  ];
-  
-  const needsKB = !tool || !toolsWithoutKB.includes(tool.id);
+  const needsKB = tool && tool.kbRequirement !== "none";
   const isDownloadableTool = tool?.id === 'bookforge' || tool?.id === 'hustle-sprint';
 
 
@@ -286,14 +283,30 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
 
         {needsKB && (
           <div className="mb-4 p-4 border border-border rounded-lg bg-secondary/30">
-            <Label className="text-sm font-medium mb-2 block">Knowledge Base</Label>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-sm font-medium">
+                Knowledge Base
+                {tool.kbRequirement === "required" && (
+                  <Badge variant="destructive" className="ml-2 text-xs">Required</Badge>
+                )}
+                {tool.kbRequirement === "recommended" && (
+                  <Badge variant="secondary" className="ml-2 text-xs">Recommended</Badge>
+                )}
+              </Label>
+            </div>
             <div className="flex flex-col gap-2">
               <Select
                 value={selectedKB || "none"}
-                onValueChange={(value) => handleAttachKB(value === "none" ? null : value)}
+                onValueChange={(value) => {
+                  if (value === "create-new") {
+                    navigate("/knowledge-bases/new");
+                  } else {
+                    handleAttachKB(value === "none" ? null : value);
+                  }
+                }}
               >
                 <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Use without KB" />
+                  <SelectValue placeholder="Select knowledge base" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Use without KB</SelectItem>
@@ -302,6 +315,12 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
                       {kb.name}
                     </SelectItem>
                   ))}
+                  <SelectItem value="create-new" className="text-primary font-medium">
+                    <div className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Create new KB
+                    </div>
+                  </SelectItem>
                 </SelectContent>
               </Select>
               
@@ -322,17 +341,6 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
                   </Button>
                 </div>
               )}
-              
-              {!knowledgeBases.length && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate("/knowledge-bases/new")}
-                  className="w-full"
-                >
-                  Create Knowledge Base
-                </Button>
-              )}
             </div>
           </div>
         )}
@@ -346,7 +354,11 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
             ) : (
               tool.inputs.map((field) => (
                 <div key={field.id} className="space-y-2">
-                  <Label htmlFor={field.id}>{field.label}</Label>
+                  <Label htmlFor={field.id}>
+                    {field.label}
+                    {field.required && <span className="text-destructive ml-1">*</span>}
+                  </Label>
+                  
                   {field.type === "text" && (
                     <Input
                       id={field.id}
@@ -356,9 +368,34 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
                       className="bg-secondary border-border"
                     />
                   )}
+                  
+                  {field.type === "number" && (
+                    <Input
+                      id={field.id}
+                      type="number"
+                      placeholder={field.placeholder}
+                      value={inputs[field.id] || ""}
+                      onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
+                      className="bg-secondary border-border"
+                      min={field.min}
+                      max={field.max}
+                    />
+                  )}
+                  
+                  {field.type === "url" && (
+                    <Input
+                      id={field.id}
+                      type="url"
+                      placeholder={field.placeholder}
+                      value={inputs[field.id] || ""}
+                      onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
+                      className="bg-secondary border-border"
+                    />
+                  )}
+                  
                   {field.type === "select" && (
                     <Select
-                      value={inputs[field.id] || ""}
+                      value={inputs[field.id] || field.defaultValue || ""}
                       onValueChange={(value) => setInputs({ ...inputs, [field.id]: value })}
                     >
                       <SelectTrigger className="bg-secondary border-border">
@@ -373,6 +410,75 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
                       </SelectContent>
                     </Select>
                   )}
+                  
+                  {field.type === "multiselect" && (
+                    <div className="space-y-2">
+                      {field.options?.map((option) => (
+                        <div key={option} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`${field.id}-${option}`}
+                            checked={inputs[field.id]?.includes(option) || false}
+                            onCheckedChange={(checked) => {
+                              const current = inputs[field.id] || [];
+                              const updated = checked
+                                ? [...current, option]
+                                : current.filter((v: string) => v !== option);
+                              setInputs({ ...inputs, [field.id]: updated });
+                            }}
+                          />
+                          <label
+                            htmlFor={`${field.id}-${option}`}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {field.type === "toggle" && (
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id={field.id}
+                        checked={inputs[field.id] !== undefined ? inputs[field.id] : field.defaultValue}
+                        onCheckedChange={(checked) => setInputs({ ...inputs, [field.id]: checked })}
+                      />
+                      <Label htmlFor={field.id} className="text-sm text-muted-foreground">
+                        {inputs[field.id] !== undefined ? inputs[field.id] : field.defaultValue ? "On" : "Off"}
+                      </Label>
+                    </div>
+                  )}
+                  
+                  {field.type === "date" && (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal bg-secondary",
+                            !inputs[field.id] && "text-muted-foreground"
+                          )}
+                        >
+                          {inputs[field.id] ? (
+                            format(new Date(inputs[field.id]), "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={inputs[field.id] ? new Date(inputs[field.id]) : undefined}
+                          onSelect={(date) => setInputs({ ...inputs, [field.id]: date?.toISOString() })}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                  
                   {field.type === "textarea" && (
                     <Textarea
                       id={field.id}
@@ -380,6 +486,20 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
                       value={inputs[field.id] || ""}
                       onChange={(e) => setInputs({ ...inputs, [field.id]: e.target.value })}
                       className="bg-secondary border-border min-h-[100px]"
+                    />
+                  )}
+                  
+                  {field.type === "file" && (
+                    <Input
+                      id={field.id}
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setInputs({ ...inputs, [field.id]: file });
+                        }
+                      }}
+                      className="bg-secondary border-border"
                     />
                   )}
                 </div>
