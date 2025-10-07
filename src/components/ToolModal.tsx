@@ -32,6 +32,9 @@ import { PageBuilderPanel } from "./agent/PageBuilderPanel";
 import { NameForgePanel } from "./agent/NameForgePanel";
 import { ContentToCashPanel } from "./agent/ContentToCashPanel";
 import { DailyPlannerPanel } from "./agent/DailyPlannerPanel";
+import { BookForgePanel } from "./agent/BookForgePanel";
+import { PropertyProfiteerPanel } from "./agent/PropertyProfiteerPanel";
+import { HustleSprintPanel } from "./agent/HustleSprintPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +47,18 @@ interface ToolModalProps {
 export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   // Use specialized modals for special tools - MUST BE BEFORE ANY HOOKS
   if (tool?.id === "bookforge") {
+    return <BookForgePanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "property-profiteer") {
+    return <PropertyProfiteerPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "hustle-sprint") {
+    return <HustleSprintPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "authority-builder") {
     return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
   }
 
