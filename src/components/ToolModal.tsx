@@ -23,8 +23,8 @@ interface ToolModalProps {
 }
 
 export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
-  // Use specialized modal for Authority Builder - check BEFORE any hooks
-  if (tool?.id === "authority-builder") {
+  // Use specialized modal for BookForge - check BEFORE any hooks
+  if (tool?.id === "bookforge") {
     return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
   }
 
@@ -259,7 +259,7 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
   ];
   
   const needsKB = !tool || !toolsWithoutKB.includes(tool.id);
-  const isDownloadableTool = tool?.id === 'authority-builder' || tool?.id === 'hustle-sprint';
+  const isDownloadableTool = tool?.id === 'bookforge' || tool?.id === 'hustle-sprint';
 
 
   const handleClose = () => {

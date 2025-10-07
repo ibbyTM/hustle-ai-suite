@@ -9,13 +9,20 @@ interface AutomationCardProps {
 }
 
 export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps) => {
+  // Special gradient for BookForge
+  const isBookForge = tool.id === "bookforge";
+  const cardClassName = isBookForge 
+    ? "bg-gradient-to-br from-zinc-800 to-zinc-600" 
+    : "bg-gradient-card";
+  
   return (
     <button
       onClick={onClick}
       disabled={isLocked}
-      className={`group relative bg-gradient-card border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 ${
+      className={`group relative ${cardClassName} border border-border rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 ${
         isLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
       }`}
+      title={isBookForge ? "Creates a full 10K+ word ebook chapter-by-chapter, formatted and export-ready." : undefined}
     >
       {isLocked && (
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
@@ -32,7 +39,14 @@ export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps)
       </div>
       
       <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-        {tool.title}
+        {tool.id === "bookforge" ? (
+          <>
+            {tool.title}
+            <span className="ml-2 text-lg opacity-70">✨</span>
+          </>
+        ) : (
+          tool.title
+        )}
       </h3>
       
       <p className="text-muted-foreground text-sm">

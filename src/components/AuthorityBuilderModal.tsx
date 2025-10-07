@@ -70,7 +70,7 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       const { data, error } = await supabase.functions.invoke('generate-hustle', {
         body: { 
           prompt,
-          toolTitle: "Authority Builder"
+          toolTitle: "BookForge"
         }
       });
 
@@ -157,9 +157,9 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       const fullEbook = generatedSections.map(s => s.content).join("\n\n---\n\n");
       await supabase.from("generations").insert({
         user_id: user.id,
-        tool_id: "authority-builder",
-        tool_title: "Authority Builder",
-        tool_emoji: "📚",
+        tool_id: "bookforge",
+        tool_title: "BookForge",
+        tool_emoji: "📖",
         inputs: { topic, audience, voice, includeCTA },
         output: fullEbook,
       });
@@ -341,10 +341,10 @@ KNOWLEDGE BASE CONTEXT (if applicable): Use brand-specific information to enhanc
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-card border-border">
         <DialogHeader>
           <div className="flex items-center gap-4">
-            <span className="text-5xl">📚</span>
+            <span className="text-5xl">📖</span>
             <div>
-              <DialogTitle className="text-2xl font-bold">Authority Builder</DialogTitle>
-              <p className="text-sm text-muted-foreground">Generate 10,000+ word ebooks automatically</p>
+              <DialogTitle className="text-2xl font-bold">BookForge</DialogTitle>
+              <p className="text-sm text-muted-foreground">Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by HustleHub AI.</p>
             </div>
           </div>
         </DialogHeader>

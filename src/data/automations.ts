@@ -199,11 +199,11 @@ export const automations: AutomationTool[] = [
     promptTemplate: "Here's a complete newsletter draft about {topic}, written for {audience} with the goal to {goal}, using a {tone} tone.\n\nUse this exact structure:\n\n**📬 Subject Line**\nWrite 3 compelling subject line options (under 50 characters each).\n\n**🪝 Hook Line**\nProvide a 1-2 sentence opening that immediately grabs attention.\n\n**📖 Opening**\nWrite a 2-3 paragraph intro that connects with the reader and sets up the topic.\n\n**💡 Main Section**\nDeliver the core content in 3-5 structured points, tips, or insights. Keep it scannable with subheadings and short paragraphs.\n\n**🎯 Call to Action**\nWrite a persuasive CTA that directs readers to {ctaLink}. Keep it natural and benefit-focused.\n\n**✨ P.S.**\nAdd a personal touch or bonus insight that leaves a lasting impression.\n\nDo not use excessive emojis within the body text. Keep the writing tight, engaging, and formatted for email—think newsletter pro, not blog post. Use clear sections with spacing for readability."
   },
   {
-    id: "authority-builder",
-    title: "Authority Builder",
-    emoji: "📚",
+    id: "bookforge",
+    title: "BookForge",
+    emoji: "📖",
     category: "Brand",
-    description: "Generate 10,000+ word ebooks automatically",
+    description: "Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by HustleHub AI.",
     isPro: false,
     inputs: [
       { id: "topic", label: "Ebook Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses" },
