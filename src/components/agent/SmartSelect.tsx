@@ -37,7 +37,7 @@ export function SmartSelect({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <Label htmlFor={id}>
+        <Label htmlFor={id} className="text-sm sm:text-base">
           {label} {required && <span className="text-destructive">*</span>}
         </Label>
         {tooltip && (
@@ -47,22 +47,22 @@ export function SmartSelect({
                 <Info className="h-4 w-4 text-muted-foreground cursor-help" />
               </TooltipTrigger>
               <TooltipContent>
-                <p className="max-w-xs">{tooltip}</p>
+                <p className="max-w-xs text-sm">{tooltip}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
       </div>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger id={id} aria-label={label}>
+        <SelectTrigger id={id} aria-label={label} className="min-h-[44px] text-base">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-card z-50">
           {normalizedOptions.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
+            <SelectItem key={opt.value} value={opt.value} className="min-h-[44px]">
               {opt.description ? (
                 <div>
-                  <div className="font-medium">{opt.label}</div>
+                  <div className="font-medium text-sm">{opt.label}</div>
                   <div className="text-xs text-muted-foreground">{opt.description}</div>
                 </div>
               ) : (

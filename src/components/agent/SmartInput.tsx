@@ -29,7 +29,7 @@ export function SmartInput({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <Label htmlFor={id}>
+        <Label htmlFor={id} className="text-sm sm:text-base">
           {label} {required && <span className="text-destructive">*</span>}
         </Label>
         {tooltip && (
@@ -39,7 +39,7 @@ export function SmartInput({
                 <Info className="h-4 w-4 text-muted-foreground cursor-help" />
               </TooltipTrigger>
               <TooltipContent>
-                <p className="max-w-xs">{tooltip}</p>
+                <p className="max-w-xs text-sm">{tooltip}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -53,6 +53,7 @@ export function SmartInput({
         placeholder={placeholder}
         maxLength={maxLength}
         aria-label={label}
+        className="min-h-[44px] text-base"
       />
       {maxLength && (
         <p className="text-xs text-muted-foreground">

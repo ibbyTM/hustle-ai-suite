@@ -20,19 +20,19 @@ export function AgentPanelLayout({
 }: AgentPanelLayoutProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-full sm:max-w-[95vw] lg:max-w-7xl h-[95vh] sm:h-[90vh] overflow-hidden flex flex-col p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle>
-            {emoji} {title}
+          <DialogTitle className="text-lg sm:text-xl md:text-2xl">
+            <span className="text-2xl sm:text-3xl">{emoji}</span> {title}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col md:flex-row gap-6">
-          {/* Input Panel - Left */}
-          <div className="flex-1 overflow-y-auto pr-4">{inputPanel}</div>
+        <div className="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 sm:gap-6">
+          {/* Input Panel */}
+          <div className="flex-1 overflow-y-auto pr-0 lg:pr-4">{inputPanel}</div>
 
-          {/* Output Panel - Right */}
-          <div className="flex-1 overflow-y-auto border-l border-border pl-6">{outputPanel}</div>
+          {/* Output Panel */}
+          <div className="flex-1 overflow-y-auto border-t lg:border-t-0 lg:border-l border-border pt-4 lg:pt-0 lg:pl-6">{outputPanel}</div>
         </div>
       </DialogContent>
     </Dialog>

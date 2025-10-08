@@ -92,24 +92,24 @@ export default function Pricing() {
 
   return (
     <div className="max-w-7xl mx-auto animate-fade-in">
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
+      <div className="text-center mb-8 sm:mb-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-primary bg-clip-text text-transparent">
           Choose Your Plan
         </h1>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-4">
           Free to explore. Plus to unlock everything. Partner to earn while you build.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
         {tiers.map((tierData) => {
           const isCurrentPlan = tier === tierData.tierKey;
           
           return (
             <div
               key={tierData.name}
-              className={`relative bg-gradient-card border rounded-2xl p-8 ${
-                tierData.popular ? "border-primary shadow-glow scale-105" : "border-border"
+              className={`relative bg-gradient-card border rounded-2xl p-6 sm:p-8 ${
+                tierData.popular ? "border-primary shadow-glow md:scale-105" : "border-border"
               } ${isCurrentPlan ? "ring-2 ring-primary" : ""}`}
             >
               {tierData.popular && (
@@ -128,10 +128,10 @@ export default function Pricing() {
               )}
 
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold mb-2">{tierData.name}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">{tierData.name}</h3>
                 <div className="flex items-baseline justify-center gap-1 mb-2">
-                  <span className="text-5xl font-bold">{tierData.price}</span>
-                  <span className="text-muted-foreground">/{tierData.period}</span>
+                  <span className="text-4xl sm:text-5xl font-bold">{tierData.price}</span>
+                  <span className="text-muted-foreground text-sm">/{tierData.period}</span>
                 </div>
                 <p className="text-muted-foreground text-sm">{tierData.description}</p>
               </div>
@@ -169,12 +169,12 @@ export default function Pricing() {
         })}
       </div>
 
-      <div className="bg-gradient-card border border-border rounded-2xl p-8 text-center">
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Zap className="h-8 w-8 text-primary" />
-          <h2 className="text-3xl font-bold">Ready to unlock everything?</h2>
+      <div className="bg-gradient-card border border-border rounded-2xl p-6 sm:p-8 text-center">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
+          <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Ready to unlock everything?</h2>
         </div>
-        <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+        <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-2xl mx-auto px-4">
           Join thousands of creators automating their hustle. No fluff, just tools that work.
         </p>
         <Button 
@@ -182,6 +182,7 @@ export default function Pricing() {
           size="lg"
           onClick={() => user ? handleUpgrade(TIER_CONFIG.pro.priceId) : navigate("/auth")}
           disabled={isLoading}
+          className="min-h-[44px]"
         >
           {user ? "Get Plus Now" : "Start Free"}
         </Button>

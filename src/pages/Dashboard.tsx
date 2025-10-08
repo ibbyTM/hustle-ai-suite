@@ -39,16 +39,16 @@ export default function Dashboard() {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
           Automate your hustle. Don't overthink it.
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-muted-foreground text-base sm:text-lg">
           Pick a tool, hit generate, and watch the magic happen ✨
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {automations.map((tool) => (
           <AutomationCard
             key={tool.id}

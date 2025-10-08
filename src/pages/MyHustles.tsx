@@ -158,9 +158,9 @@ export default function MyHustles() {
 
   return (
     <div className="max-w-5xl mx-auto animate-fade-in">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">My Hustles</h1>
-        <p className="text-muted-foreground text-lg">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">My Hustles</h1>
+        <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
           All your saved outputs in one place. Copy, share, or export.
         </p>
       </div>
@@ -201,7 +201,7 @@ export default function MyHustles() {
                         </span>
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {toolGens.map((gen) => (
                           <GenerationCard
                             key={gen.id}
