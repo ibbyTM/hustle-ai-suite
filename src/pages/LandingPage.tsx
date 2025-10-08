@@ -3,20 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { automations } from "@/data/automations";
+import { AutomationCard } from "@/components/AutomationCard";
+import { CategoryType } from "@/types/automation";
 import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import {
   Sparkles, 
   Zap, 
   Target, 
-  TrendingUp, 
-  Film, 
-  Megaphone, 
-  Package, 
-  Calendar,
   CheckCircle2,
   ArrowRight,
-  Users,
-  Lightbulb
+  Users
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -29,44 +26,12 @@ export default function LandingPage() {
     return null;
   }
 
-  const features = [
-    {
-      icon: TrendingUp,
-      title: "Trend Finder 2.0",
-      description: "Discover viral trends before they peak. AI-powered insights for content that converts.",
-      color: "text-category-content"
-    },
-    {
-      icon: Film,
-      title: "Faceless Script Forge",
-      description: "Generate scroll-stopping scripts for faceless videos. No face, no problem.",
-      color: "text-category-hustle"
-    },
-    {
-      icon: Megaphone,
-      title: "Ad Copy & Funnel Writer",
-      description: "Write high-converting ads and sales funnels in seconds. Tested templates included.",
-      color: "text-category-ads"
-    },
-    {
-      icon: Lightbulb,
-      title: "Offer Builder",
-      description: "Create irresistible offers that sell. Transform ideas into revenue machines.",
-      color: "text-category-brand"
-    },
-    {
-      icon: Package,
-      title: "Dropship Goldmine",
-      description: "Find winning products before your competition. Data-driven product research.",
-      color: "text-category-store"
-    },
-    {
-      icon: Calendar,
-      title: "Daily Hustle Planner",
-      description: "Stay organized and productive. Your AI-powered business command center.",
-      color: "text-category-productivity"
-    }
-  ];
+  // Group automations by category
+  const categories: CategoryType[] = ["Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
+  
+  const getToolsByCategory = (category: CategoryType) => {
+    return automations.filter(tool => tool.category === category);
+  };
 
   const steps = [
     {
@@ -194,7 +159,7 @@ export default function LandingPage() {
           <div className="text-center animate-fade-in">
             <Badge className="mb-6 bg-primary/20 text-primary border-primary/30" variant="outline">
               <Sparkles className="w-3 h-3 mr-1" />
-              12 AI Tools • Built for Hustlers
+              16 AI Tools • Built for Hustlers
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent leading-tight">
@@ -202,7 +167,7 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-              Hustle Lab gives you ready-to-use automations and AI tools to grow faster — without code.
+              Hustle Lab gives you 16 ready-to-use automations and AI tools to grow faster — without code.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -284,42 +249,48 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" className="px-4 py-20">
-        <div className="max-w-6xl mx-auto">
+      {/* All Automation Tools Section */}
+      <section id="features" className="px-4 py-20 bg-background/50">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <Badge className="mb-4" variant="outline">
               <Target className="w-3 h-3 mr-1" />
-              Powerful Tools
+              All Automation Tools
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Everything You Need to Win
+              All Your Tools in <span className="bg-gradient-primary bg-clip-text text-transparent">One Place</span>
             </h2>
             <p className="text-xl text-muted-foreground">
-              Professional tools built for the next generation of entrepreneurs
+              16 AI-powered agents designed to save you time and make you money
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <Card 
-                key={index}
-                className="bg-gradient-card border-primary/20 hover:border-primary/40 transition-all hover:shadow-glow hover:-translate-y-1 group cursor-pointer"
-              >
-                <CardContent className="p-8">
-                  <div className={`${feature.color} mb-4 group-hover:scale-110 transition-transform`}>
-                    <feature.icon className="w-12 h-12" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          {categories.map((category) => {
+            const tools = getToolsByCategory(category);
+            if (tools.length === 0) return null;
+            
+            return (
+              <div key={category} className="mb-20 last:mb-0">
+                <div className="flex items-center gap-3 mb-8">
+                  <h3 className="text-2xl md:text-3xl font-bold">{category} Tools</h3>
+                  <Badge variant="outline" className="text-sm">
+                    {tools.length} {tools.length === 1 ? 'tool' : 'tools'}
+                  </Badge>
+                </div>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {tools.map((tool) => (
+                    <AutomationCard
+                      key={tool.id}
+                      tool={tool}
+                      onClick={() => navigate("/auth")}
+                      isLocked={false}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
