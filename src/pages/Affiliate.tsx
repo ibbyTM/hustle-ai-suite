@@ -11,7 +11,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 export default function Affiliate() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { hasPartnerAccess, isLoading: subscriptionLoading } = useSubscription();
+  const { hasPartnerAccess, tier, isLoading: subscriptionLoading } = useSubscription();
 
   // Fetch user's profile with referral code
   const { data: profile, isLoading: profileLoading } = useQuery({
@@ -66,12 +66,19 @@ export default function Affiliate() {
   }
 
   if (!subscriptionLoading && !hasPartnerAccess) {
+    const isPlusTier = tier === "pro";
+    
     return (
       <div className="max-w-6xl mx-auto animate-fade-in text-center py-12">
         <Lock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-4">Partner Tier Required</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {isPlusTier ? "Upgrade to Partner" : "Partner Tier Required"}
+        </h2>
         <p className="text-muted-foreground mb-6">
-          The affiliate program is exclusive to Partner tier members. Upgrade to start earning 35% commissions!
+          {isPlusTier 
+            ? "You're on the Plus plan! Upgrade to Partner (£49) to unlock affiliate access and earn 35% commissions on every referral."
+            : "The affiliate program is exclusive to Partner tier members. Upgrade to start earning 35% commissions!"
+          }
         </p>
         <Button onClick={() => navigate('/pricing')} variant="gradient">
           Upgrade to Partner

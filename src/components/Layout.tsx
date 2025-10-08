@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,7 +12,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { tier } = useSubscription();
   const [sheetOpen, setSheetOpen] = useState(false);
+  
+  const showUpgrade = tier === "free";
 
   const handleSignOut = async () => {
     await signOut();
@@ -79,20 +83,24 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 )}
 
-                <Link to="/pricing">
-                  <Button variant="gradient" className="font-semibold" size="sm">
-                    Upgrade
-                  </Button>
-                </Link>
+                {showUpgrade && (
+                  <Link to="/pricing">
+                    <Button variant="gradient" className="font-semibold" size="sm">
+                      Upgrade
+                    </Button>
+                  </Link>
+                )}
               </nav>
 
               {/* Mobile Navigation */}
               <div className="flex lg:hidden items-center gap-2">
-                <Link to="/pricing">
-                  <Button variant="gradient" size="sm" className="text-xs px-3">
-                    Upgrade
-                  </Button>
-                </Link>
+                {showUpgrade && (
+                  <Link to="/pricing">
+                    <Button variant="gradient" size="sm" className="text-xs px-3">
+                      Upgrade
+                    </Button>
+                  </Link>
+                )}
                 <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
