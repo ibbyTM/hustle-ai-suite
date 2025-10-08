@@ -183,16 +183,6 @@ export default function Affiliate() {
           </div>
         )}
       </div>
-
-      <div className="mt-8 bg-gradient-primary rounded-2xl p-8 text-center text-white">
-        <h2 className="text-3xl font-bold mb-2">Want to earn even more?</h2>
-        <p className="mb-6 opacity-90">
-          Upgrade to Partner tier for exclusive bonuses and monthly contests.
-        </p>
-        <Button className="bg-white text-primary hover:bg-white/90">
-          Upgrade to Partner
-        </Button>
-      </div>
     </div>
   );
 }
