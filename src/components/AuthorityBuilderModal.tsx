@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Sparkles, Download, FileText, ChevronDown, ChevronUp } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -23,12 +23,21 @@ interface Section {
 interface AuthorityBuilderModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialTopic?: string;
+  initialAudience?: string;
+  initialVoice?: string;
 }
 
-export const AuthorityBuilderModal = ({ isOpen, onClose }: AuthorityBuilderModalProps) => {
-  const [topic, setTopic] = useState("");
-  const [audience, setAudience] = useState("");
-  const [voice, setVoice] = useState("Authoritative");
+export const AuthorityBuilderModal = ({ 
+  isOpen, 
+  onClose, 
+  initialTopic = "", 
+  initialAudience = "", 
+  initialVoice = "Authoritative" 
+}: AuthorityBuilderModalProps) => {
+  const [topic, setTopic] = useState(initialTopic);
+  const [audience, setAudience] = useState(initialAudience);
+  const [voice, setVoice] = useState(initialVoice);
   const [includeCTA, setIncludeCTA] = useState("Yes");
   const [isGenerating, setIsGenerating] = useState(false);
   const [sections, setSections] = useState<Section[]>([]);
@@ -38,6 +47,15 @@ export const AuthorityBuilderModal = ({ isOpen, onClose }: AuthorityBuilderModal
   const { user } = useAuth();
 
   const totalSections = 12; // Title+Intro + 10 chapters + Conclusion
+
+  // Update state when modal opens with pre-filled data
+  useEffect(() => {
+    if (isOpen) {
+      setTopic(initialTopic);
+      setAudience(initialAudience);
+      setVoice(initialVoice);
+    }
+  }, [isOpen, initialTopic, initialAudience, initialVoice]);
 
   const getSectionInstructions = (sectionType: string, sectionNumber: number) => {
     switch (sectionType) {

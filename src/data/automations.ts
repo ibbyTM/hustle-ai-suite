@@ -3,10 +3,10 @@ import { AutomationTool } from "@/types/automation";
 export const automations: AutomationTool[] = [
   {
     id: "bookforge",
-    title: "BookForge (Authority Builder)",
+    title: "BookForge Outline",
     emoji: "📖",
     category: "Brand",
-    description: "Forge your expertise into a full, 10,000-word ebook — strategy, structure, and execution handled by Hustle Lab AI.",
+    description: "Generate a strategic ebook outline + cover image to guide your content creation",
     isPro: false,
     kbRequirement: "recommended",
     inputs: [
@@ -21,6 +21,22 @@ export const automations: AutomationTool[] = [
       { id: "includeCaseStudies", label: "Include case studies?", type: "toggle", defaultValue: false, required: false }
     ],
     promptTemplate: "SECTION_TYPE: {sectionType}\n\nGenerate {sectionType} for an ebook about {topic}, targeting {audience}, in a {voice} tone.\n\n{sectionInstructions}"
+  },
+  {
+    id: "authority-builder",
+    title: "Authority Builder Pro",
+    emoji: "📚",
+    category: "Brand",
+    description: "Transform your outline into a complete 10,000-word ebook with intro, 10 chapters, and conclusion",
+    isPro: false,
+    kbRequirement: "optional",
+    inputs: [
+      { id: "topic", label: "Ebook Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses", required: true },
+      { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., small business owners, freelancers", required: true },
+      { id: "voice", label: "Tone / Voice", type: "select", options: ["Authoritative", "Conversational", "Educational", "Inspirational"], defaultValue: "Authoritative", required: true },
+      { id: "includeCTA", label: "Include CTA", type: "toggle", defaultValue: true, required: false }
+    ],
+    promptTemplate: "Generate full ebook content for {topic}, targeting {audience}, in a {voice} tone."
   },
   {
     id: "trend-finder",

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Download, Sparkles } from "lucide-react";
 import { AgentPanelLayout } from "./AgentPanelLayout";
 import { SmartInput } from "./SmartInput";
 import { SmartSelect } from "./SmartSelect";
@@ -11,7 +11,7 @@ import { useAgentGeneration } from "@/hooks/useAgentGeneration";
 import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Download } from "lucide-react";
+import { AuthorityBuilderModal } from "../AuthorityBuilderModal";
 
 interface BookForgePanelProps {
   isOpen: boolean;
@@ -30,10 +30,11 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
   const [includeCaseStudies, setIncludeCaseStudies] = useState(false);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [showAuthorityBuilder, setShowAuthorityBuilder] = useState(false);
 
   const { generate, isGenerating, output } = useAgentGeneration({
     toolId: "bookforge",
-    toolTitle: "BookForge (Authority Builder)",
+    toolTitle: "BookForge Outline",
     toolEmoji: "📖",
   });
 
@@ -284,9 +285,24 @@ Ultra high resolution, 16:9 aspect ratio.`;
       )}
       
       {output ? (
-        <div>
-          <h3 className="font-semibold text-lg mb-3">Ebook Outline</h3>
+        <div className="space-y-4">
+          <h3 className="font-semibold text-lg">Ebook Outline</h3>
           <OutputPreview content={output} />
+          
+          <div className="pt-4 border-t border-border">
+            <Button
+              onClick={() => setShowAuthorityBuilder(true)}
+              className="w-full"
+              size="lg"
+              variant="gradient"
+            >
+              <Sparkles className="mr-2 h-4 w-4" />
+              Generate Full Ebook from This Outline
+            </Button>
+            <p className="text-sm text-muted-foreground text-center mt-2">
+              Transform this outline into a complete 10,000-word ebook
+            </p>
+          </div>
         </div>
       ) : (
         <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -297,13 +313,23 @@ Ultra high resolution, 16:9 aspect ratio.`;
   );
 
   return (
-    <AgentPanelLayout
-      isOpen={isOpen}
-      onClose={onClose}
-      title="BookForge (Authority Builder)"
-      emoji="📖"
-      inputPanel={inputPanel}
-      outputPanel={outputPanel}
-    />
+    <>
+      <AgentPanelLayout
+        isOpen={isOpen}
+        onClose={onClose}
+        title="BookForge Outline"
+        emoji="📖"
+        inputPanel={inputPanel}
+        outputPanel={outputPanel}
+      />
+      
+      <AuthorityBuilderModal
+        isOpen={showAuthorityBuilder}
+        onClose={() => setShowAuthorityBuilder(false)}
+        initialTopic={topic}
+        initialAudience={audience}
+        initialVoice={voice}
+      />
+    </>
   );
 }
