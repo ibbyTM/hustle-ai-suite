@@ -109,40 +109,43 @@ export default function LandingPage() {
 
   const pricingTiers = [
     {
-      name: "Starter",
-      price: "£9",
-      period: "/month",
+      name: "Free",
+      price: "£0",
+      period: "/forever",
       features: [
-        "3 AI Tools Access",
-        "100 Generations/month",
-        "Basic Templates",
-        "Community Support"
+        "Biz-Idea Reactor",
+        "Hook Factory (Lite)",
+        "Trend Finder 2.0 (Preview)",
+        "Inbox Influence Newsletter",
+        "3 generations per day"
       ],
       popular: false
     },
     {
-      name: "Growth",
-      price: "£29",
+      name: "Plus",
+      price: "£20",
       period: "/month",
       features: [
-        "All 12 AI Tools",
-        "Unlimited Generations",
-        "Premium Templates",
-        "Priority Support",
-        "Advanced Analytics"
+        "All 12+ automation agents",
+        "Unlimited generations",
+        "Save & export features",
+        "Priority support",
+        "Monthly bonus drops",
+        "Early access to new tools"
       ],
       popular: true
     },
     {
-      name: "Premium",
-      price: "£99",
+      name: "Partner",
+      price: "£49",
       period: "/month",
       features: [
-        "Everything in Growth",
-        "White-label Options",
-        "Custom Automations",
-        "1-on-1 Strategy Calls",
-        "Affiliate Program Access"
+        "Everything in Plus",
+        "Affiliate dashboard access",
+        "35% commission on referrals",
+        "Partner badge & recognition",
+        "Early beta access",
+        "Co-creation opportunities"
       ],
       popular: false
     }
