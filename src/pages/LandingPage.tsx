@@ -30,7 +30,7 @@ export default function LandingPage() {
 
   // Featured tools and expandable state
   const [showAllTools, setShowAllTools] = useState(false);
-  const featuredToolIds = ["bizhustle", "hookfactory", "adcopy", "bookforge", "trendfinder", "offerbuilder"];
+  const featuredToolIds = ["biz-idea", "hook-factory", "ad-copy-lab", "bookforge", "trend-finder", "offer-builder"];
   const featuredTools = automations.filter(tool => featuredToolIds.includes(tool.id));
   const displayedTools = showAllTools ? automations : featuredTools;
 
