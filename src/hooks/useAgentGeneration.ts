@@ -24,12 +24,12 @@ export function useAgentGeneration({ toolId, toolTitle, toolEmoji }: UseAgentGen
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase.functions.invoke("generate-hustle", {
-        body: { prompt, tool_id: toolId },
+        body: { prompt, toolTitle: toolTitle },
       });
 
       if (error) throw error;
 
-      const generatedOutput = data.output;
+      const generatedOutput = data.generatedText;
       setOutput(generatedOutput);
 
       // Save to database
