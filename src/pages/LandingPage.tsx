@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,7 +6,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { automations } from "@/data/automations";
 import { AutomationCard } from "@/components/AutomationCard";
-import { CategoryType } from "@/types/automation";
 import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import {
   Sparkles, 
@@ -13,6 +13,8 @@ import {
   Target, 
   CheckCircle2,
   ArrowRight,
+  ArrowDown,
+  ArrowUp,
   Users
 } from "lucide-react";
 
@@ -26,12 +28,11 @@ export default function LandingPage() {
     return null;
   }
 
-  // Group automations by category
-  const categories: CategoryType[] = ["Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
-  
-  const getToolsByCategory = (category: CategoryType) => {
-    return automations.filter(tool => tool.category === category);
-  };
+  // Featured tools and expandable state
+  const [showAllTools, setShowAllTools] = useState(false);
+  const featuredToolIds = ["bizhustle", "hookfactory", "adcopy", "bookforge", "trendfinder", "offerbuilder"];
+  const featuredTools = automations.filter(tool => featuredToolIds.includes(tool.id));
+  const displayedTools = showAllTools ? automations : featuredTools;
 
   const steps = [
     {
@@ -265,32 +266,37 @@ export default function LandingPage() {
             </p>
           </div>
           
-          {categories.map((category) => {
-            const tools = getToolsByCategory(category);
-            if (tools.length === 0) return null;
-            
-            return (
-              <div key={category} className="mb-20 last:mb-0">
-                <div className="flex items-center gap-3 mb-8">
-                  <h3 className="text-2xl md:text-3xl font-bold">{category} Tools</h3>
-                  <Badge variant="outline" className="text-sm">
-                    {tools.length} {tools.length === 1 ? 'tool' : 'tools'}
-                  </Badge>
-                </div>
-                
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {tools.map((tool) => (
-                    <AutomationCard
-                      key={tool.id}
-                      tool={tool}
-                      onClick={() => navigate("/auth")}
-                      isLocked={false}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+            {displayedTools.map((tool) => (
+              <AutomationCard
+                key={tool.id}
+                tool={tool}
+                onClick={() => navigate("/auth")}
+                isLocked={false}
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-center mt-12">
+            <Button
+              onClick={() => setShowAllTools(!showAllTools)}
+              variant="gradient"
+              size="lg"
+              className="group"
+            >
+              {showAllTools ? (
+                <>
+                  Show Less
+                  <ArrowUp className="ml-2 h-5 w-5 group-hover:-translate-y-1 transition-transform" />
+                </>
+              ) : (
+                <>
+                  View All 16 Tools
+                  <ArrowDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </section>
 
