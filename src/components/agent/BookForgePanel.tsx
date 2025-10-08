@@ -9,6 +9,9 @@ import { OutputPreview } from "./OutputPreview";
 import { Button } from "@/components/ui/button";
 import { useAgentGeneration } from "@/hooks/useAgentGeneration";
 import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Download } from "lucide-react";
 
 interface BookForgePanelProps {
   isOpen: boolean;
@@ -25,6 +28,8 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
   const [coverTitle, setCoverTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [includeCaseStudies, setIncludeCaseStudies] = useState(false);
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
 
   const { generate, isGenerating, output } = useAgentGeneration({
     toolId: "bookforge",
@@ -36,6 +41,8 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
     "bookforge",
     isOpen
   );
+
+  const { toast } = useToast();
 
   const handleGenerate = async () => {
     const kbContext = await buildKBContext();
@@ -70,6 +77,61 @@ Format with clear headings and structure.`;
       author,
       includeCaseStudies,
     });
+  };
+
+  const handleGenerateCoverImage = async () => {
+    if (!topic) {
+      toast({
+        title: "Topic required",
+        description: "Please enter an ebook topic first",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    try {
+      const imagePrompt = `Create a professional ebook cover design for "${coverTitle || topic}". 
+${voice} tone, targeting ${audience || "general audience"}. 
+Modern, clean design with high-quality imagery. 
+Include the title text prominently. 
+Professional typography and color scheme suitable for ${topic}.
+Ultra high resolution, 16:9 aspect ratio.`;
+
+      const { data, error } = await supabase.functions.invoke('generate-cover-image', {
+        body: { prompt: imagePrompt }
+      });
+
+      if (error) throw error;
+
+      if (data?.imageUrl) {
+        setCoverImage(data.imageUrl);
+        toast({
+          title: "Cover generated!",
+          description: "Your ebook cover image is ready"
+        });
+      }
+    } catch (error) {
+      console.error('Error generating cover:', error);
+      toast({
+        title: "Generation failed",
+        description: "Could not generate cover image. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
+  const handleDownloadCover = () => {
+    if (!coverImage) return;
+    
+    const link = document.createElement('a');
+    link.href = coverImage;
+    link.download = `${(coverTitle || topic).replace(/\s+/g, '-').toLowerCase()}-cover.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const inputPanel = (
@@ -178,14 +240,59 @@ Format with clear headings and structure.`;
           "Generate Ebook Outline"
         )}
       </Button>
+
+      <Button
+        onClick={handleGenerateCoverImage}
+        disabled={isGeneratingImage || !topic}
+        className="w-full"
+        size="lg"
+        variant="outline"
+      >
+        {isGeneratingImage ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Generating Cover...
+          </>
+        ) : (
+          "Generate Cover Image"
+        )}
+      </Button>
     </div>
   );
 
-  const outputPanel = output ? (
-    <OutputPreview content={output} />
-  ) : (
-    <div className="flex items-center justify-center h-full text-muted-foreground">
-      Your ebook outline will appear here
+  const outputPanel = (
+    <div className="space-y-6">
+      {coverImage && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-lg">Generated Cover</h3>
+            <Button
+              onClick={handleDownloadCover}
+              variant="outline"
+              size="sm"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </Button>
+          </div>
+          <img 
+            src={coverImage} 
+            alt="Generated ebook cover" 
+            className="w-full rounded-lg shadow-lg border"
+          />
+        </div>
+      )}
+      
+      {output ? (
+        <div>
+          <h3 className="font-semibold text-lg mb-3">Ebook Outline</h3>
+          <OutputPreview content={output} />
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          Your ebook outline will appear here
+        </div>
+      )}
     </div>
   );
 
