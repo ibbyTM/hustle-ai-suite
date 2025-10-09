@@ -13,8 +13,8 @@ const logStep = (step: string, details?: any) => {
 };
 
 // Price IDs for standard and discounted Pro tier
-const PRO_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE";
-const PRO_DISCOUNTED_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE"; // User needs to create this at £20/month
+const PRO_PRICE_ID = "price_1SGR9aJLDxMViooDsH1mtAKY"; // £40/month standard price
+const PRO_DISCOUNTED_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE"; // £20/month for Partner referrals (50% off)
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {

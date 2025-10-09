@@ -13,16 +13,16 @@ export interface Subscription {
 
 export const TIER_CONFIG = {
   pro: {
-    priceId: "price_1SFhXkJLDxMViooDs9zF3WaE",
-    discountedPriceId: "price_1SFhXkJLDxMViooDs9zF3WaE", // Will be updated with 50% off price
-    productId: "prod_TC5jlebGbWYcBN",
+    priceId: "price_1SGR9aJLDxMViooDsH1mtAKY", // £40/month standard price
+    discountedPriceId: "price_1SFhXkJLDxMViooDs9zF3WaE", // £20/month for Partner referrals
+    productId: "prod_TCqrdvyJQk9Vjn",
     name: "Plus",
     price: "£40",
     discountedPrice: "£20",
   },
   partner: {
-    priceId: "price_1SFhXvJLDxMViooD1uJAZJl4",
-    productId: "prod_TC5jETrgpY2aBY",
+    priceId: "price_1SGRCIJLDxMViooDnuKa1vFm", // £75/month
+    productId: "prod_TCqumNy7jI9JpT",
     name: "Partner",
     price: "£75",
   },

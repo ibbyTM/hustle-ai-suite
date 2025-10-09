@@ -89,10 +89,10 @@ export default function LandingPage() {
     },
     {
       name: "Plus",
-      price: "£20",
+      price: "£40",
       period: "/month",
       features: [
-        "All 12+ automation agents",
+        "All 16+ automation agents",
         "Unlimited generations",
         "Save & export features",
         "Priority support",
@@ -103,12 +103,13 @@ export default function LandingPage() {
     },
     {
       name: "Partner",
-      price: "£49",
+      price: "£75",
       period: "/month",
       features: [
         "Everything in Plus",
         "Affiliate dashboard access",
         "35% commission on referrals",
+        "Give 50% off Plus to your referrals",
         "Partner badge & recognition",
         "Early beta access",
         "Co-creation opportunities"
