@@ -376,5 +376,171 @@ If KB not attached and critical facts missing, use {{{{placeholder}}}} tokens an
       { id: "kpi3", label: "KPI 3", type: "text", placeholder: "Third key metric", required: false }
     ],
     promptTemplate: "30-Day Hustle Sprint plan for {goalProject}, skill: {skillLevel}, {hoursPerDay} hours/day, focus: {primaryFocus}, start: {startDate}, KPIs: {kpi1}, {kpi2}, {kpi3}.\n\nProvide:\n- Week 1 Plan (Days 1-7)\n- Week 2 Plan (Days 8-14)\n- Week 3 Plan (Days 15-21)\n- Week 4 Plan (Days 22-30)\n- Milestones & Check-ins\n- Resources Needed\n\nFormat as a structured action plan with daily/weekly tasks."
+  },
+  {
+    id: "social-post-crafter",
+    title: "Social Media Post Crafter",
+    emoji: "📱",
+    category: "Content",
+    description: "Turn any idea into a scroll-stopping post — in seconds",
+    isPro: false,
+    kbRequirement: "optional",
+    inputs: [
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Twitter/X", "LinkedIn", "Facebook"], required: true },
+      { id: "topic", label: "Topic or Offer", type: "text", placeholder: "What's the post about?", required: true },
+      { id: "tone", label: "Tone", type: "select", options: ["Casual", "Professional", "Storytelling", "Bold"], defaultValue: "Casual", required: true },
+    ],
+    promptTemplate: `Create a high-performing post for {platform} about {topic}, written in a {tone} voice.
+
+Use this exact structure:
+
+**Hustle Breakdown**
+Explain the post strategy in 2-3 sentences. What makes this work for {platform}? What's the psychology behind it?
+
+**The Formula**
+Break down the post components:
+- Hook Pattern: [Describe the hook type and why it grabs attention]
+- Caption Structure: [Explain the flow: problem/benefit/CTA]
+- Engagement Tactic: [How this drives comments/saves/shares]
+
+**Your Output**
+
+**Hook Line:**
+[Write the opening line — designed to stop the scroll in under 3 seconds]
+
+**Caption Copy:**
+[Write the full caption with natural line breaks, no fluff, strategic pauses, and authentic voice]
+
+**Creative Concept Idea:**
+[Describe the visual/video idea in 1-2 sentences — what should the viewer see?]
+
+**Call-to-Action (3 options):**
+1. [CTA option 1]
+2. [CTA option 2]
+3. [CTA option 3]
+
+**Suggested Hashtags:**
+[List 5-8 relevant hashtags for reach and discoverability]
+
+**Next Play**
+Provide 3 actionable next steps:
+1. [Implementation tip]
+2. [Testing suggestion]
+3. [Optimization move]
+
+Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-focused.`
+  },
+  {
+    id: "comment-dm-engager",
+    title: "Comment & DM Engager",
+    emoji: "💬",
+    category: "Hustle",
+    description: "Reply smarter, close faster — every lead, every time",
+    isPro: false,
+    kbRequirement: "optional",
+    inputs: [
+      { id: "messageText", label: "Comment or DM Text", type: "textarea", placeholder: "Paste the comment or message you received", required: true },
+      { id: "goal", label: "Goal", type: "select", options: ["Engage", "Nurture", "Sell"], defaultValue: "Engage", required: true },
+      { id: "replyTone", label: "Tone", type: "select", options: ["Friendly", "Authoritative", "Persuasive"], defaultValue: "Friendly", required: true },
+    ],
+    promptTemplate: `Craft a strategic reply to this message: "{messageText}"
+
+Goal: {goal}
+Tone: {replyTone}
+
+Use this exact structure:
+
+**Hustle Breakdown**
+Analyze the message in 2-3 sentences: What's the intent? What does the person need? What's the best play here?
+
+**The Formula**
+Break down the reply strategy:
+- Response Pattern: [Explain the psychological approach]
+- Value Hook: [What keeps them engaged or curious]
+- Conversion Bridge: [How this moves them closer to the goal]
+
+**Your Output**
+
+**Primary Reply (aligned with goal: {goal}):**
+[Write a natural, engaging reply that matches the {replyTone} tone — no fluff, just value and direction]
+
+**Secondary Variation (different angle):**
+[Write an alternative reply with a slightly different tone or approach]
+
+**Optional DM Template** (if goal = Nurture or Sell):
+[Provide a follow-up DM template if the conversation should continue privately]
+
+**CTA Line or Follow-Up Question:**
+[Write 1-2 lines designed to drive a response, build rapport, or move toward the goal]
+
+**Next Play**
+Provide 3 tactical moves:
+1. [Engagement tactic]
+2. [Follow-up timing]
+3. [Conversion nudge]
+
+Do not use emojis in the output. Keep replies authentic, confident, and conversion-ready.`
+  },
+  {
+    id: "viral-analytics-decoder",
+    title: "Viral Analytics Decoder",
+    emoji: "📈",
+    category: "Productivity",
+    description: "Drop a viral post — get its blueprint",
+    isPro: false,
+    kbRequirement: "optional",
+    inputs: [
+      { id: "postContent", label: "Post URL or Caption/Text", type: "textarea", placeholder: "Paste the viral post URL or full caption text", required: true },
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Twitter", "YouTube"], required: true },
+      { id: "objective", label: "Objective", type: "select", options: ["Learn", "Recreate", "Adapt to my brand"], defaultValue: "Learn", required: true },
+    ],
+    promptTemplate: `Analyze this viral post from {platform}: "{postContent}"
+
+Objective: {objective}
+
+Use this exact structure:
+
+**Hustle Breakdown**
+Summarize why this post went viral in 3-4 sentences. What's the emotional trigger? What's the pattern? What made people engage?
+
+**The Formula**
+
+**Virality Breakdown:**
+- Psychology: [What emotion or pain point does this tap into?]
+- Pattern: [Describe the content structure or format]
+- Emotional Triggers: [List 2-3 triggers: curiosity, FOMO, relatability, etc.]
+
+**Hook Formula Extracted:**
+[Write the hook pattern as a template that can be reused]
+Example: "You're doing [X] wrong — here's what actually works"
+
+**Story or Structure Analysis:**
+Break down the flow:
+- Opening: [How does it start?]
+- Build: [How does it create tension or curiosity?]
+- Payoff: [How does it deliver value or resolution?]
+- CTA: [What action does it drive?]
+
+**Your Output**
+
+**Actionable Template (ready to reuse):**
+[Provide a plug-and-play template based on this viral post's structure]
+
+Hook Template:
+[Reusable hook format]
+
+Body Template:
+[Reusable content structure]
+
+CTA Template:
+[Reusable call-to-action format]
+
+**Next Play**
+Provide 3 implementation ideas:
+1. [How to use this format for your next 3 posts]
+2. [What metrics to track: saves, shares, comments]
+3. [Optimization move to test]
+
+Do not use emojis in the output. Keep the analysis strategic, tactical, and actionable.`
   }
 ];

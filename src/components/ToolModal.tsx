@@ -35,6 +35,9 @@ import { DailyPlannerPanel } from "./agent/DailyPlannerPanel";
 import { BookForgePanel } from "./agent/BookForgePanel";
 import { PropertyProfiteerPanel } from "./agent/PropertyProfiteerPanel";
 import { HustleSprintPanel } from "./agent/HustleSprintPanel";
+import { SocialPostCrafterPanel } from "./agent/SocialPostCrafterPanel";
+import { CommentDMEngagerPanel } from "./agent/CommentDMEngagerPanel";
+import { ViralAnalyticsDecoderPanel } from "./agent/ViralAnalyticsDecoderPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -113,6 +116,18 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
 
   if (tool?.id === "daily-planner") {
     return <DailyPlannerPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "social-post-crafter") {
+    return <SocialPostCrafterPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "comment-dm-engager") {
+    return <CommentDMEngagerPanel isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (tool?.id === "viral-analytics-decoder") {
+    return <ViralAnalyticsDecoderPanel isOpen={isOpen} onClose={onClose} />;
   }
 
   // Now safe to use hooks
