@@ -12,6 +12,10 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
 };
 
+// Price IDs for standard and discounted Pro tier
+const PRO_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE";
+const PRO_DISCOUNTED_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE"; // User needs to create this at £20/month
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -19,7 +23,8 @@ serve(async (req) => {
 
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    { auth: { persistSession: false } }
   );
 
   try {
@@ -43,8 +48,10 @@ serve(async (req) => {
       throw new Error("Invalid price ID format");
     }
 
-    // Sanitize referralCode - use from request OR from user metadata (signup referral)
+    let finalPriceId = priceId;
     let sanitizedReferralCode;
+
+    // Sanitize referralCode - use from request OR from user metadata (signup referral)
     if (referralCode) {
       if (typeof referralCode !== 'string' || referralCode.length > 20) {
         throw new Error("Invalid referral code format");
@@ -59,7 +66,41 @@ serve(async (req) => {
       logStep("Using referral code from user metadata", { referralCode: sanitizedReferralCode });
     }
 
-    logStep("Creating checkout session", { priceId, referralCode: sanitizedReferralCode });
+    // Check if user is signing up for Pro with a Partner referral code
+    if (sanitizedReferralCode && priceId === PRO_PRICE_ID) {
+      logStep("Checking if referral code belongs to Partner tier user", { referralCode: sanitizedReferralCode });
+      
+      // Find the referrer profile
+      const { data: referrerProfile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('user_id')
+        .eq('referral_code', sanitizedReferralCode)
+        .maybeSingle();
+
+      if (profileError) {
+        logStep("Error fetching referrer profile", { error: profileError });
+      } else if (referrerProfile) {
+        // Check if referrer has Partner tier subscription
+        const { data: referrerSubscription, error: subError } = await supabaseClient
+          .from('subscriptions')
+          .select('tier')
+          .eq('user_id', referrerProfile.user_id)
+          .maybeSingle();
+
+        if (subError) {
+          logStep("Error fetching referrer subscription", { error: subError });
+        } else if (referrerSubscription?.tier === 'partner') {
+          // Apply 50% discount - use discounted Pro price
+          finalPriceId = PRO_DISCOUNTED_PRICE_ID;
+          logStep("Partner referral detected - applying 50% discount to Pro", { 
+            originalPrice: PRO_PRICE_ID, 
+            discountedPrice: PRO_DISCOUNTED_PRICE_ID 
+          });
+        }
+      }
+    }
+
+    logStep("Creating checkout session", { priceId: finalPriceId, referralCode: sanitizedReferralCode });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
@@ -80,7 +121,7 @@ serve(async (req) => {
       client_reference_id: sanitizedReferralCode || undefined,
       line_items: [
         {
-          price: priceId,
+          price: finalPriceId,
           quantity: 1,
         },
       ],

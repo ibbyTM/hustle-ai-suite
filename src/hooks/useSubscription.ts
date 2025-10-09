@@ -14,15 +14,17 @@ export interface Subscription {
 export const TIER_CONFIG = {
   pro: {
     priceId: "price_1SFhXkJLDxMViooDs9zF3WaE",
+    discountedPriceId: "price_1SFhXkJLDxMViooDs9zF3WaE", // Will be updated with 50% off price
     productId: "prod_TC5jlebGbWYcBN",
     name: "Plus",
-    price: "£20",
+    price: "£40",
+    discountedPrice: "£20",
   },
   partner: {
     priceId: "price_1SFhXvJLDxMViooD1uJAZJl4",
     productId: "prod_TC5jETrgpY2aBY",
     name: "Partner",
-    price: "£49",
+    price: "£75",
   },
 };
 

@@ -58,11 +58,11 @@ export default function Pricing() {
     {
       name: "Plus",
       tierKey: "pro" as const,
-      price: "£20",
+      price: "£40",
       period: "per month",
       description: "Get All The Tools",
       features: [
-        "All 12+ automation agents",
+        "All 16+ automation agents",
         "Unlimited generations",
         "Save & export features",
         "Priority support",
@@ -75,13 +75,14 @@ export default function Pricing() {
     {
       name: "Partner",
       tierKey: "partner" as const,
-      price: "£49",
+      price: "£75",
       period: "per month",
       description: "Earn While You Hustle",
       features: [
         "Everything in Plus",
         "Affiliate dashboard access",
         "35% commission on referrals",
+        "Give 50% off Plus to your referrals",
         "Partner badge & recognition",
         "Early beta access",
         "Co-creation opportunities",
