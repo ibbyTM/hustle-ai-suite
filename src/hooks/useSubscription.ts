@@ -75,6 +75,16 @@ export function useSubscription() {
     }
   };
 
+  const redeemPromoCode = async (code: string) => {
+    const { data, error } = await supabase.functions.invoke("redeem-promo-code", {
+      body: { code },
+    });
+    
+    if (error) throw error;
+    await refetch();
+    return data;
+  };
+
   return {
     subscription,
     tier,
@@ -83,6 +93,7 @@ export function useSubscription() {
     isLoading,
     createCheckout,
     openCustomerPortal,
+    redeemPromoCode,
     refetch,
   };
 }

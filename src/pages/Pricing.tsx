@@ -4,6 +4,7 @@ import { useSubscription, TIER_CONFIG } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import PromoCodeInput from "@/components/PromoCodeInput";
 
 export default function Pricing() {
   const { user } = useAuth();
@@ -101,6 +102,16 @@ export default function Pricing() {
           Free to explore. Plus to unlock everything. Partner to earn while you build.
         </p>
       </div>
+
+      {user && tier === "free" && (
+        <div className="bg-gradient-card border border-border rounded-2xl p-6 mb-8 max-w-md mx-auto">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-semibold mb-2">Have a promo code?</h3>
+            <p className="text-sm text-muted-foreground">Unlock premium access instantly</p>
+          </div>
+          <PromoCodeInput />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
         {tiers.map((tierData) => {
