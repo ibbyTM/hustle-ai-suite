@@ -36,13 +36,13 @@ const CountdownTimer = ({ targetDate }: { targetDate: Date }) => {
   }, [targetDate]);
 
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-2 sm:gap-4 justify-center">
       {Object.entries(timeLeft).map(([unit, value]) => (
         <div key={unit} className="flex flex-col items-center">
-          <div className="bg-card border border-primary/20 rounded-lg p-4 min-w-[80px]">
-            <span className="text-3xl font-bold text-primary">{value}</span>
+          <div className="bg-card border border-primary/20 rounded-lg p-3 sm:p-4 min-w-[60px] sm:min-w-[80px]">
+            <span className="text-2xl sm:text-3xl font-bold text-primary">{value}</span>
           </div>
-          <span className="text-xs text-muted-foreground mt-2 uppercase">{unit}</span>
+          <span className="text-xs text-muted-foreground mt-1 sm:mt-2 uppercase">{unit}</span>
         </div>
       ))}
     </div>
