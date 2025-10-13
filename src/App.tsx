@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import KnowledgeBases from "./pages/KnowledgeBases";
 import KnowledgeBaseEditor from "./pages/KnowledgeBaseEditor";
+import FounderPass from "./pages/FounderPass";
 
 // Component to handle /ref/:code redirects
 const RefRedirect = () => {
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/knowledge-bases/:id" element={<KnowledgeBaseEditor />} />
               <Route path="/affiliate" element={<Affiliate />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/founder-pass" element={<FounderPass />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/ref/:code" element={<RefRedirect />} />
               <Route path="*" element={<NotFound />} />
