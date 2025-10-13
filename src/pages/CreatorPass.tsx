@@ -85,9 +85,9 @@ const CreatorPass = () => {
         submitted_at: new Date().toISOString(),
       };
 
-      // Send to GHL webhook
+      // Send to n8n webhook
       const response = await fetch(
-        'https://services.leadconnectorhq.com/hooks/QUfszPvQgfmXi21Aql52/webhook-trigger/102ceba2-0b07-4c44-a353-1f8ca17b03ae',
+        'https://nexusedge.app.n8n.cloud/webhook/342f7330-92c6-4d17-9d56-6e54489b8e06',
         {
           method: 'POST',
           headers: {
