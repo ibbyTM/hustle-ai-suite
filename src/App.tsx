@@ -15,6 +15,8 @@ import NotFound from "./pages/NotFound";
 import KnowledgeBases from "./pages/KnowledgeBases";
 import KnowledgeBaseEditor from "./pages/KnowledgeBaseEditor";
 import FounderPass from "./pages/FounderPass";
+import CreatorPass from "./pages/CreatorPass";
+import CreatorPassCheckEmail from "./pages/CreatorPassCheckEmail";
 
 // Component to handle /ref/:code redirects
 const RefRedirect = () => {
@@ -41,6 +43,8 @@ const App = () => (
               <Route path="/affiliate" element={<Affiliate />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/founder-pass" element={<FounderPass />} />
+              <Route path="/creator-pass" element={<CreatorPass />} />
+              <Route path="/creator-pass-check-email" element={<CreatorPassCheckEmail />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/ref/:code" element={<RefRedirect />} />
               <Route path="*" element={<NotFound />} />
