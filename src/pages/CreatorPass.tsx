@@ -22,19 +22,19 @@ const creatorPassSchema = z.object({
     .trim()
     .email("Please enter a valid email address")
     .max(255, "Email must be less than 255 characters"),
-  social_handle: z.string()
-    .trim()
-    .min(3, "Social handle must be at least 3 characters")
-    .max(50, "Social handle must be less than 50 characters"),
-  platform: z.enum(["TikTok", "Instagram", "YouTube", "Other"], {
-    required_error: "Please select a platform"
-  }),
+  tiktok_handle: z.string().trim().max(50, "Handle must be less than 50 characters").optional(),
+  instagram_handle: z.string().trim().max(50, "Handle must be less than 50 characters").optional(),
+  youtube_handle: z.string().trim().max(100, "Channel must be less than 100 characters").optional(),
+  other_handle: z.string().trim().max(100, "Handle must be less than 100 characters").optional(),
   followers: z.enum(["0–5K", "5K–20K", "20K–100K", "100K+"], {
     required_error: "Please select your follower count"
   }),
   agree_to_promote: z.boolean()
     .refine(val => val === true, "You must agree to promote HustleLab")
-});
+}).refine(
+  data => data.tiktok_handle || data.instagram_handle || data.youtube_handle || data.other_handle,
+  { message: "Please provide at least one social media handle", path: ["tiktok_handle"] }
+);
 
 type CreatorPassFormData = z.infer<typeof creatorPassSchema>;
 
@@ -48,7 +48,10 @@ const CreatorPass = () => {
     defaultValues: {
       full_name: "",
       email: "",
-      social_handle: "",
+      tiktok_handle: "",
+      instagram_handle: "",
+      youtube_handle: "",
+      other_handle: "",
       agree_to_promote: false,
     },
   });
@@ -69,8 +72,10 @@ const CreatorPass = () => {
       const payload = {
         full_name: data.full_name,
         email: data.email,
-        social_handle: data.social_handle,
-        platform: data.platform,
+        tiktok_handle: data.tiktok_handle || null,
+        instagram_handle: data.instagram_handle || null,
+        youtube_handle: data.youtube_handle || null,
+        other_handle: data.other_handle || null,
         followers: data.followers,
         agree_to_promote: data.agree_to_promote,
         page_url: window.location.href,
@@ -185,43 +190,67 @@ const CreatorPass = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="social_handle"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Main Social Handle *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="@username" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="platform"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Platform *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Add your social media handles below (at least one required)
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="tiktok_handle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>TikTok Handle</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your platform" />
-                          </SelectTrigger>
+                          <Input placeholder="@username" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="TikTok">TikTok</SelectItem>
-                          <SelectItem value="Instagram">Instagram</SelectItem>
-                          <SelectItem value="YouTube">YouTube</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="instagram_handle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Instagram Handle</FormLabel>
+                        <FormControl>
+                          <Input placeholder="@username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="youtube_handle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>YouTube Channel</FormLabel>
+                        <FormControl>
+                          <Input placeholder="@channelname or channel URL" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="other_handle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Other Platform Handle</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Platform name & handle" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}
