@@ -50,16 +50,10 @@ export function SmartTextarea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        maxLength={maxLength}
         rows={rows}
         aria-label={label}
         className="resize-none text-base"
       />
-      {maxLength && (
-        <p className="text-xs text-muted-foreground">
-          {value.length}/{maxLength}
-        </p>
-      )}
     </div>
   );
 }

@@ -51,15 +51,9 @@ export function SmartInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        maxLength={maxLength}
         aria-label={label}
         className="min-h-[44px] text-base"
       />
-      {maxLength && (
-        <p className="text-xs text-muted-foreground">
-          {value.length}/{maxLength}
-        </p>
-      )}
     </div>
   );
 }
