@@ -87,7 +87,7 @@ const CreatorPass = () => {
 
       // Send to GHL webhook
       const response = await fetch(
-        'https://services.leadconnectorhq.com/hooks/QUfszPvQgfmXi21Aql52/webhook-trigger/438ed7d9-7574-4760-addf-a5beb3436155',
+        'https://services.leadconnectorhq.com/hooks/QUfszPvQgfmXi21Aql52/webhook-trigger/102ceba2-0b07-4c44-a353-1f8ca17b03ae',
         {
           method: 'POST',
           headers: {
