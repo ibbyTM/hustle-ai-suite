@@ -16,6 +16,47 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const formatContent = (text: string) => {
+    const lines = text.split('\n');
+    return lines.map((line, index) => {
+      // Headings
+      if (line.startsWith('### ')) {
+        return <h3 key={index} className="text-base font-bold mt-3 mb-1">{line.replace('### ', '')}</h3>;
+      }
+      if (line.startsWith('## ')) {
+        return <h2 key={index} className="text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
+      }
+      if (line.startsWith('# ')) {
+        return <h1 key={index} className="text-xl font-bold mt-4 mb-2">{line.replace('# ', '')}</h1>;
+      }
+
+      // Bold text
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      const parts = line.split(boldRegex);
+      const formatted = parts.map((part, i) => 
+        i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part
+      );
+
+      // Empty lines
+      if (line.trim() === '') {
+        return <div key={index} className="h-2" />;
+      }
+
+      // Bullet points
+      if (line.trim().startsWith('- ')) {
+        return <li key={index} className="ml-4 list-disc">{formatted}</li>;
+      }
+
+      // Numbered lists
+      if (/^\d+\.\s/.test(line.trim())) {
+        return <li key={index} className="ml-4 list-decimal">{formatted}</li>;
+      }
+
+      // Regular paragraphs
+      return <p key={index} className="leading-relaxed">{formatted}</p>;
+    });
+  };
+
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"} mb-4`}>
       <div
@@ -25,7 +66,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
             : "bg-card border border-border"
         }`}
       >
-        <div className="whitespace-pre-wrap break-words text-sm">{content}</div>
+        <div className="break-words text-sm space-y-2">{formatContent(content)}</div>
         {role === "assistant" && (
           <div className="flex justify-end mt-2">
             <Button
