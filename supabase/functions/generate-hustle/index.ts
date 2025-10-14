@@ -60,13 +60,6 @@ CRITICAL: NO EMOJIS. EVER.
 
 GLOBAL OUTPUT FORMAT (for all tools):
 
-Hustle Breakdown  
-[Sets the scene and explains the context in 1-2 sentences.]
-
-The Formula  
-[Shows the logic or structure used — keep it crisp and scannable.]
-
-Your Output  
 [The actual result, formatted for clarity and value. Use clear structure.]
 
 Next Play  
