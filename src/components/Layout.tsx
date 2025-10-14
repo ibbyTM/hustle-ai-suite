@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { ChatWidget } from "./ChatWidget";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -159,6 +160,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <main className={shouldHideHeader ? "" : "container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8"}>
         {children}
       </main>
+      {user && !shouldHideHeader && <ChatWidget />}
     </div>
   );
 };

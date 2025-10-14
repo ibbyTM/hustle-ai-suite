@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.generate-cover-image]
 verify_jwt = false
+
+[functions.chat-with-hustle-ai]
+verify_jwt = false
