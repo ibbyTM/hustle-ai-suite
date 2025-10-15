@@ -542,5 +542,21 @@ Provide 3 implementation ideas:
 3. [Optimization move to test]
 
 Do not use emojis in the output. Keep the analysis strategic, tactical, and actionable.`
+  },
+  {
+    id: "social-scraper",
+    title: "Hashtag Hunter",
+    emoji: "🔍",
+    category: "Content",
+    description: "Extract creator data & viral content from hashtags (TikTok & Instagram)",
+    isPro: false,
+    kbRequirement: "optional",
+    inputs: [
+      { id: "hashtag", label: "Hashtag", type: "text", placeholder: "e.g., #fitness, #ecommerce", required: true },
+      { id: "platform", label: "Platform", type: "select", options: ["TikTok", "Instagram", "Both"], defaultValue: "TikTok", required: true },
+      { id: "dataPoints", label: "Data to Extract", type: "multiselect", options: ["Creator Names", "Follower Counts", "Video Hooks", "Engagement Metrics", "Content Trends"], required: true },
+      { id: "resultsLimit", label: "Max Results", type: "number", placeholder: "10", defaultValue: 10, required: false, min: 5, max: 30 }
+    ],
+    promptTemplate: "Analyze and extract data for the hashtag '{hashtag}' on {platform}. Focus on: {dataPoints}. Limit: {resultsLimit} results.\n\nUse this exact structure:\n\n**Hashtag Overview**\nSummarize the hashtag's performance and content type.\n\n**Top Creators**\nFor each creator:\n- Username / Name\n- Follower Count (estimated)\n- Content Style\n- Top Performing Video Hook\n- Engagement Pattern\n\n**Content Trends**\nIdentify 3-5 recurring themes, formats, or patterns.\n\n**Hook Examples**\nList 5-10 high-performing opening lines.\n\n**Strategic Insights**\nProvide actionable takeaways for someone wanting to use this hashtag.\n\nDo not use emojis. Present data in a clean, research-style format."
   }
 ];
