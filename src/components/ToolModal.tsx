@@ -38,7 +38,6 @@ import { HustleSprintPanel } from "./agent/HustleSprintPanel";
 import { SocialPostCrafterPanel } from "./agent/SocialPostCrafterPanel";
 import { CommentDMEngagerPanel } from "./agent/CommentDMEngagerPanel";
 import { ViralAnalyticsDecoderPanel } from "./agent/ViralAnalyticsDecoderPanel";
-import { SocialScraperPanel } from "./agent/SocialScraperPanel";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -129,10 +128,6 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
 
   if (tool?.id === "viral-analytics-decoder") {
     return <ViralAnalyticsDecoderPanel isOpen={isOpen} onClose={onClose} />;
-  }
-
-  if (tool?.id === "social-scraper") {
-    return <SocialScraperPanel isOpen={isOpen} onClose={onClose} />;
   }
 
   // Now safe to use hooks
