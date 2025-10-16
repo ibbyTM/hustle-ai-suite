@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Copy, Download, Zap } from "lucide-react";
@@ -13,6 +14,17 @@ interface OutputPreviewProps {
 export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputPreviewProps) {
   const { toast } = useToast();
   const { displayedText, isComplete, skipAnimation } = useTypewriter(content, { speed: 20 });
+  const formattedRef = useRef<HTMLDivElement>(null);
+  const plainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (formattedRef.current) {
+      formattedRef.current.scrollTop = formattedRef.current.scrollHeight;
+    }
+    if (plainRef.current) {
+      plainRef.current.scrollTop = plainRef.current.scrollHeight;
+    }
+  }, [displayedText]);
 
   const handleCopy = () => {
     if (!isComplete) return;
@@ -72,7 +84,7 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
           <TabsTrigger value="plain">Plain Text</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="formatted" className="flex-1 overflow-y-auto">
+        <TabsContent value="formatted" className="flex-1 overflow-y-auto" ref={formattedRef}>
           <div className="bg-muted/30 rounded-lg p-6 prose prose-invert max-w-none">
             <div className="whitespace-pre-wrap">
               {displayedText}
@@ -81,7 +93,7 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
           </div>
         </TabsContent>
 
-        <TabsContent value="plain" className="flex-1 overflow-y-auto">
+        <TabsContent value="plain" className="flex-1 overflow-y-auto" ref={plainRef}>
           <div className="bg-muted/30 rounded-lg p-6">
             <pre className="text-sm whitespace-pre-wrap font-mono">
               {displayedText}
