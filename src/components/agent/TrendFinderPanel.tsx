@@ -37,7 +37,7 @@ export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
   );
 
   const handleGenerate = async () => {
-    const prompt = `List ${inputs.maxResults} trending content ideas for ${inputs.platform} in the ${inputs.niche} niche, region: ${inputs.region}, time range: ${inputs.timeRange}. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Do not use any emojis in the output.${buildKBContext()}`;
+    const prompt = `List ${inputs.maxResults} trending content ideas for ${inputs.platform} in the ${inputs.niche} niche, region: ${inputs.region}, time range: ${inputs.timeRange}. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Separate each trend with a blank line for better readability. Do not use any emojis in the output.${buildKBContext()}`;
 
     const result = await generate(prompt, inputs);
     if (result?.generationId) setGenerationId(result.generationId);
