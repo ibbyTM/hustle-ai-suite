@@ -29,7 +29,7 @@ export function AgentPanelLayout({
 
         <div className="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Input Panel */}
-          <div className="flex-1 overflow-y-auto pr-0 lg:pr-4">{inputPanel}</div>
+          <div className="flex-1 overflow-y-auto pl-1 pr-0 lg:pr-4">{inputPanel}</div>
 
           {/* Output Panel */}
           <div className="flex-1 overflow-y-auto border-t lg:border-t-0 lg:border-l border-border pt-4 lg:pt-0 lg:pl-6">{outputPanel}</div>
