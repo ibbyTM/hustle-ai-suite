@@ -666,7 +666,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
     id: "reviewbooster",
     title: "Review Booster",
     emoji: "⭐",
-    category: "Content",
+    category: "Store",
     description: "Turn customer words into conversion weapons. Collect, organize, and repurpose testimonials into ad copy, landing pages, and social proof.",
     isPro: true,
     kbRequirement: "required",
