@@ -1,12 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, BarChart3 } from "lucide-react";
+import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, BarChart3, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import hustleLabLogo from "@/assets/hustle-lab-logo.png";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChatWidget } from "./ChatWidget";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -15,8 +15,22 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user, signOut } = useAuth();
   const { tier } = useSubscription();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   
   const showUpgrade = tier === "free";
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setShowInstallPrompt(true);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -89,6 +103,15 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   <Link to="/pricing">
                     <Button variant="gradient" className="font-semibold" size="sm">
                       Upgrade
+                    </Button>
+                  </Link>
+                )}
+
+                {showInstallPrompt && (
+                  <Link to="/install">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Download className="h-4 w-4" />
+                      <span className="hidden xl:inline">Install App</span>
                     </Button>
                   </Link>
                 )}
