@@ -7,8 +7,11 @@ import { automations } from "@/data/automations";
 import { CategoryType } from "@/types/automation";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
+import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, Zap, Calendar, Target } from "lucide-react";
+import { startOfDay, subDays, subMonths, isAfter, format } from "date-fns";
 
 interface Generation {
   id: string;
@@ -19,11 +22,11 @@ interface Generation {
 }
 
 export default function Analytics() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [generations, setGenerations] = useState<Generation[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<string>("all");
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
@@ -41,6 +44,7 @@ export default function Analytics() {
       const { data, error } = await supabase
         .from("generations")
         .select("id, tool_id, tool_title, tool_emoji, created_at")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -62,18 +66,20 @@ export default function Analytics() {
   const filteredGenerations = useMemo(() => {
     if (timeRange === "all") return generations;
 
-    const now = new Date();
-    const filterDate = new Date();
+    const now = startOfDay(new Date());
+    let filterDate: Date;
 
     if (timeRange === "week") {
-      filterDate.setDate(now.getDate() - 7);
+      filterDate = subDays(now, 7);
     } else if (timeRange === "month") {
-      filterDate.setMonth(now.getMonth() - 1);
+      filterDate = subDays(now, 30);
     } else if (timeRange === "3months") {
-      filterDate.setMonth(now.getMonth() - 3);
+      filterDate = subMonths(now, 3);
+    } else {
+      return generations;
     }
 
-    return generations.filter((gen) => new Date(gen.created_at) >= filterDate);
+    return generations.filter((gen) => isAfter(new Date(gen.created_at), filterDate));
   }, [generations, timeRange]);
 
   const categoryData = useMemo(() => {
@@ -122,7 +128,7 @@ export default function Analytics() {
     const dailyCounts: Record<string, number> = {};
 
     filteredGenerations.forEach((gen) => {
-      const date = new Date(gen.created_at).toLocaleDateString();
+      const date = format(new Date(gen.created_at), "MMM d");
       dailyCounts[date] = (dailyCounts[date] || 0) + 1;
     });
 
@@ -131,13 +137,39 @@ export default function Analytics() {
       .map(([date, count]) => ({ date, count }));
   }, [filteredGenerations]);
 
-  const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "#8884d8", "#82ca9d", "#ffc658"];
+  const chartConfig: ChartConfig = {
+    count: {
+      label: "Hustles",
+      color: "hsl(var(--primary))",
+    },
+    value: {
+      label: "Count",
+      color: "hsl(var(--primary))",
+    },
+  };
+
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))"];
 
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto animate-fade-in">
-        <div className="text-center py-12">
-          <div className="text-muted-foreground">Loading analytics...</div>
+        <div className="mb-6 sm:mb-8">
+          <Skeleton className="h-10 w-64 mb-2" />
+          <Skeleton className="h-6 w-96" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="p-6">
+              <Skeleton className="h-24 w-full" />
+            </Card>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="p-6">
+              <Skeleton className="h-[300px] w-full" />
+            </Card>
+          ))}
         </div>
       </div>
     );
@@ -237,8 +269,9 @@ export default function Analytics() {
           {/* Category Distribution */}
           <Card className="p-6 bg-gradient-card border-border">
             <h2 className="text-xl font-bold mb-6">Hustles by Category</h2>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={chartConfig} className="h-[300px]">
               <PieChart>
+                <ChartTooltip content={<ChartTooltipContent />} />
                 <Pie
                   data={categoryData}
                   cx="50%"
@@ -246,45 +279,43 @@ export default function Analytics() {
                   labelLine={false}
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
+                  fill="hsl(var(--primary))"
                   dataKey="value"
                 >
                   {categoryData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
               </PieChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </Card>
 
           {/* Top Tools */}
           <Card className="p-6 bg-gradient-card border-border">
             <h2 className="text-xl font-bold mb-6">Top 10 Tools</h2>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={chartConfig} className="h-[300px]">
               <BarChart data={toolData} layout="horizontal">
-                <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={150} fontSize={12} />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis type="number" className="text-xs" />
+                <YAxis dataKey="name" type="category" width={150} className="text-xs" />
+                <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 8, 8, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </Card>
 
           {/* Activity Trend */}
           <Card className="p-6 bg-gradient-card border-border lg:col-span-2">
             <h2 className="text-xl font-bold mb-6">Activity Trend</h2>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={chartConfig} className="h-[300px]">
               <LineChart data={trendData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
-                <XAxis dataKey="date" fontSize={12} />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} name="Hustles Generated" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis dataKey="date" className="text-xs" />
+                <YAxis className="text-xs" />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Line type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} />
               </LineChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </Card>
         </div>
       )}
