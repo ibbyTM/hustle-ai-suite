@@ -285,9 +285,9 @@ export default function Analytics() {
       </div>
 
       {/* Time Range Filter & Export */}
-      <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+      <div className="mb-6 flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
         <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px] h-11">
             <SelectValue placeholder="Time Range" />
           </SelectTrigger>
           <SelectContent>
@@ -300,7 +300,7 @@ export default function Analytics() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2 h-11 w-full sm:w-auto">
               <Download className="h-4 w-4" />
               Export Data
             </Button>

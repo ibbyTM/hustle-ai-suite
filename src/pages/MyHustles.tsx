@@ -11,7 +11,9 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { CategoryType } from "@/types/automation";
 import { GenerationCard } from "@/components/GenerationCard";
 import { GenerationDetailModal } from "@/components/GenerationDetailModal";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Badge } from "@/components/ui/badge";
 
 interface Generation {
   id: string;
@@ -34,6 +36,7 @@ export default function MyHustles() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [toolFilter, setToolFilter] = useState<string>("all");
   const [dateFilter, setDateFilter] = useState<string>("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -120,6 +123,15 @@ export default function MyHustles() {
     });
     return Array.from(tools.values());
   }, [generations]);
+
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (searchQuery) count++;
+    if (categoryFilter !== "all") count++;
+    if (toolFilter !== "all") count++;
+    if (dateFilter !== "all") count++;
+    return count;
+  }, [searchQuery, categoryFilter, toolFilter, dateFilter]);
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -249,84 +261,143 @@ export default function MyHustles() {
       ) : (
         <>
           {/* Search and Filters */}
-          <div className="bg-gradient-card border border-border rounded-2xl p-4 sm:p-6 mb-6 space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Filter className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold">Search & Filter</h2>
-            </div>
+          <div className="bg-gradient-card border border-border rounded-2xl p-4 sm:p-6 mb-6">
+            <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-5 w-5 text-primary" />
+                  <h2 className="text-lg font-semibold">Filters</h2>
+                  {activeFiltersCount > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {activeFiltersCount}
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeFiltersCount > 0 && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="gap-1.5"
+                    >
+                      <X className="h-3 w-3" />
+                      <span className="hidden sm:inline">Clear</span>
+                    </Button>
+                  )}
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-1">
+                      {filtersOpen ? "Hide" : "Show"}
+                      <ChevronDown className={`h-4 w-4 transition-transform ${filtersOpen ? "rotate-180" : ""}`} />
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
+              </div>
 
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by content or tool name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+              <CollapsibleContent className="space-y-4">
+                {/* Search Input */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by content or tool name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-11"
+                  />
+                </div>
 
-            {/* Filter Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Content">Content</SelectItem>
-                  <SelectItem value="Ads">Ads</SelectItem>
-                  <SelectItem value="Hustle">Hustle</SelectItem>
-                  <SelectItem value="Brand">Brand</SelectItem>
-                  <SelectItem value="Store">Store</SelectItem>
-                  <SelectItem value="Productivity">Productivity</SelectItem>
-                </SelectContent>
-              </Select>
+                {/* Filter Grid - Mobile First */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="All Categories" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      <SelectItem value="Content">Content</SelectItem>
+                      <SelectItem value="Ads">Ads</SelectItem>
+                      <SelectItem value="Hustle">Hustle</SelectItem>
+                      <SelectItem value="Brand">Brand</SelectItem>
+                      <SelectItem value="Store">Store</SelectItem>
+                      <SelectItem value="Productivity">Productivity</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-              <Select value={toolFilter} onValueChange={setToolFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Tools" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Tools</SelectItem>
-                  {uniqueTools.map((tool) => (
-                    <SelectItem key={tool.id} value={tool.id}>
-                      {tool.emoji} {tool.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <Select value={toolFilter} onValueChange={setToolFilter}>
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="All Tools" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Tools</SelectItem>
+                      {uniqueTools.map((tool) => (
+                        <SelectItem key={tool.id} value={tool.id}>
+                          {tool.emoji} {tool.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-              <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Time" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="week">Last 7 Days</SelectItem>
-                  <SelectItem value="month">Last 30 Days</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                  <Select value={dateFilter} onValueChange={setDateFilter}>
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="All Time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Time</SelectItem>
+                      <SelectItem value="today">Today</SelectItem>
+                      <SelectItem value="week">Last 7 Days</SelectItem>
+                      <SelectItem value="month">Last 30 Days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            {/* Clear Filters */}
-            {hasActiveFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="w-full sm:w-auto"
-              >
-                <X className="h-4 w-4 mr-2" />
-                Clear Filters
-              </Button>
-            )}
+                {/* Active Filter Chips */}
+                {activeFiltersCount > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {searchQuery && (
+                      <Badge variant="outline" className="gap-1.5">
+                        Search: "{searchQuery.slice(0, 20)}{searchQuery.length > 20 ? "..." : ""}"
+                        <X
+                          className="h-3 w-3 cursor-pointer hover:text-destructive"
+                          onClick={() => setSearchQuery("")}
+                        />
+                      </Badge>
+                    )}
+                    {categoryFilter !== "all" && (
+                      <Badge variant="outline" className="gap-1.5">
+                        {categoryFilter}
+                        <X
+                          className="h-3 w-3 cursor-pointer hover:text-destructive"
+                          onClick={() => setCategoryFilter("all")}
+                        />
+                      </Badge>
+                    )}
+                    {toolFilter !== "all" && (
+                      <Badge variant="outline" className="gap-1.5">
+                        {uniqueTools.find((t) => t.id === toolFilter)?.title}
+                        <X
+                          className="h-3 w-3 cursor-pointer hover:text-destructive"
+                          onClick={() => setToolFilter("all")}
+                        />
+                      </Badge>
+                    )}
+                    {dateFilter !== "all" && (
+                      <Badge variant="outline" className="gap-1.5">
+                        {dateFilter === "today" ? "Today" : dateFilter === "week" ? "Last 7 Days" : "Last 30 Days"}
+                        <X
+                          className="h-3 w-3 cursor-pointer hover:text-destructive"
+                          onClick={() => setDateFilter("all")}
+                        />
+                      </Badge>
+                    )}
+                  </div>
+                )}
 
-            {/* Results Count */}
-            <p className="text-sm text-muted-foreground">
-              Showing {filteredGenerations.length} of {generations.length} hustles
-            </p>
+                {/* Results Count */}
+                <p className="text-sm text-muted-foreground pt-2">
+                  Showing {filteredGenerations.length} of {generations.length} hustles
+                </p>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
 
           {/* Results */}
