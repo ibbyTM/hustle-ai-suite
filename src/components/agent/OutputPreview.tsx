@@ -37,15 +37,13 @@ export function OutputPreview({ content, usedKBFacts, generationNotes, generatio
     const lines = text.split('\n');
     return lines.map((line, i) => {
       // Convert **text** to bold
-      const parts = line.split(/(\*\*.*?\*\*)/g);
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      const parts = line.split(boldRegex);
       return (
         <div key={i}>
-          {parts.map((part, j) => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-              return <strong key={j}>{part.slice(2, -2)}</strong>;
-            }
-            return <span key={j}>{part}</span>;
-          })}
+          {parts.map((part, j) => 
+            j % 2 === 1 ? <strong key={j}>{part}</strong> : <span key={j}>{part}</span>
+          )}
         </div>
       );
     });
