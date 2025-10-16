@@ -37,12 +37,29 @@ export function ChatMessage({ role, content, className = "", style }: ChatMessag
         return <h1 key={index} className="text-xl font-bold mt-4 mb-2">{line.replace('# ', '')}</h1>;
       }
 
-      // Bold text
+      // Bold text - handle incomplete patterns during typewriting
       const boldRegex = /\*\*(.*?)\*\*/g;
       const parts = line.split(boldRegex);
-      const formatted = parts.map((part, i) => 
-        i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part
-      );
+      
+      // If typing is in progress and line contains **, check for incomplete pairs
+      let formatted;
+      if (!isComplete && line.includes('**')) {
+        const asteriskCount = (line.match(/\*\*/g) || []).length;
+        if (asteriskCount % 2 === 1) {
+          // Odd number = incomplete pair, strip all ** for now
+          formatted = [line.replace(/\*\*/g, '')];
+        } else {
+          // Even number = complete pairs, render normally
+          formatted = parts.map((part, i) => 
+            i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part
+          );
+        }
+      } else {
+        // Complete text or no asterisks, render normally
+        formatted = parts.map((part, i) => 
+          i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part
+        );
+      }
 
       // Empty lines
       if (line.trim() === '') {
