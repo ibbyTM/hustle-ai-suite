@@ -66,7 +66,16 @@ export const AuthorityBuilderModal = ({
         return "Write a 600-800 word introduction that establishes credibility, addresses the reader's pain points, and previews what they'll learn. Be engaging and set the tone for the entire ebook.";
       
       case "chapter":
-        return `Write Chapter ${sectionNumber} (1,000-1,200 words). Structure:\n\n**Chapter ${sectionNumber}: [Chapter Title]**\n\n**Opening:** Set context and hook the reader\n\n**Main Content:** Deliver actionable insights, frameworks, or lessons\n\n**Key Takeaways:**\n- Point 1\n- Point 2\n- Point 3\n\n**Transition:** Bridge to the next chapter`;
+        return `Write Chapter ${sectionNumber} (1,000-1,200 words) with natural narrative flow.
+
+Start with **Chapter ${sectionNumber}: [Chapter Title]**
+
+Then write the chapter content as flowing paragraphs with clear spacing between them. Do not use section labels like 'Opening', 'Main Content', or 'Transition'. Write naturally and conversationally, delivering actionable insights and frameworks.
+
+End with a clean **Key Takeaways** section:
+- Point 1
+- Point 2
+- Point 3`;
       
       case "conclusion":
         return `Write a 400-500 word conclusion that summarizes key lessons, reinforces transformation${includeCTA === "Yes" ? ", and includes a compelling call-to-action" : ""}.`;
