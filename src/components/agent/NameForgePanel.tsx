@@ -25,8 +25,9 @@ export function NameForgePanel({ isOpen, onClose }: NameForgePanelProps) {
     avoidWords: "",
     checkDomain: false,
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "name-forge",
     toolTitle: "Name Forge",
     toolEmoji: "⚡",
@@ -40,7 +41,10 @@ export function NameForgePanel({ isOpen, onClose }: NameForgePanelProps) {
   const handleGenerate = async () => {
     const prompt = `Here are 5 brand name ideas for ${inputs.industry}, tone: ${inputs.brandTone}, length: ${inputs.lengthPreference}${inputs.avoidWords ? `, avoid: ${inputs.avoidWords}` : ""}. Each name includes a short explanation and tagline suggestion.\n\nUse this exact structure for each name:\n\n**Name #[number] – [Name]**\n\n**Meaning / Concept:** Write 1-2 sentences explaining the name origin.\n\n**Tagline Suggestion:** Provide one catchy phrase.\n\n**Why It Works:** Write a short reasoning.\n\nDo not use slang or emojis. Write in a confident, brand-consultant style.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -119,7 +123,11 @@ export function NameForgePanel({ isOpen, onClose }: NameForgePanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your brand name ideas will appear here</p>

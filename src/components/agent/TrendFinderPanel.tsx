@@ -23,8 +23,9 @@ export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
     timeRange: "7d",
     maxResults: 10,
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "trend-finder",
     toolTitle: "Trend Finder 2.0",
     toolEmoji: "🔥",
@@ -38,7 +39,8 @@ export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
   const handleGenerate = async () => {
     const prompt = `List ${inputs.maxResults} trending content ideas for ${inputs.platform} in the ${inputs.niche} niche, region: ${inputs.region}, time range: ${inputs.timeRange}. For each trend, include: Trend Name, Why It Works, Example Hook, and Caption Strategy. Format with clear headings and bullet points. Do not use any emojis in the output.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) setGenerationId(result.generationId);
   };
 
   const inputPanel = (
@@ -125,7 +127,7 @@ export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview content={output} generationId={generationId} onContentUpdate={(newContent) => setOutput(newContent)} />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your trends will appear here after generation</p>

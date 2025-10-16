@@ -24,7 +24,9 @@ export function HustleSprintPanel({ isOpen, onClose }: HustleSprintPanelProps) {
   const [kpi2, setKpi2] = useState("");
   const [kpi3, setKpi3] = useState("");
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const [generationId, setGenerationId] = useState<string>();
+
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "hustle-sprint",
     toolTitle: "30-Day Hustle Sprint",
     toolEmoji: "🏃",
@@ -70,7 +72,7 @@ Tools, platforms, and resources required
 
 Format as a structured action plan with clear daily/weekly tasks.`;
 
-    await generate(prompt, {
+    const result = await generate(prompt, {
       goalProject,
       skillLevel,
       hoursPerDay,
@@ -80,6 +82,9 @@ Format as a structured action plan with clear daily/weekly tasks.`;
       kpi2,
       kpi3,
     });
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -185,7 +190,11 @@ Format as a structured action plan with clear daily/weekly tasks.`;
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       Your 30-day hustle plan will appear here

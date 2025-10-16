@@ -33,21 +33,27 @@ export function useAgentGeneration({ toolId, toolTitle, toolEmoji }: UseAgentGen
       setOutput(generatedOutput);
 
       // Save to database
-      await supabase.from("generations").insert({
-        user_id: user.id,
-        tool_id: toolId,
-        tool_title: toolTitle,
-        tool_emoji: toolEmoji,
-        inputs,
-        output: generatedOutput,
-      });
+      const { data: savedGeneration, error: saveError } = await supabase
+        .from("generations")
+        .insert({
+          user_id: user.id,
+          tool_id: toolId,
+          tool_title: toolTitle,
+          tool_emoji: toolEmoji,
+          inputs,
+          output: generatedOutput,
+        })
+        .select()
+        .single();
+
+      if (saveError) throw saveError;
 
       toast({
         title: "Generated Successfully",
         description: "Your content is ready!",
       });
 
-      return generatedOutput;
+      return { generatedOutput, generationId: savedGeneration?.id };
     } catch (error: any) {
       console.error("Generation error:", error);
       toast({

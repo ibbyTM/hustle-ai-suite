@@ -17,8 +17,9 @@ export function SocialPostCrafterPanel({ isOpen, onClose }: SocialPostCrafterPan
   const [platform, setPlatform] = useState("TikTok");
   const [topic, setTopic] = useState("");
   const [tone, setTone] = useState("Casual");
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "social-post-crafter",
     toolTitle: "Social Media Post Crafter",
     toolEmoji: "📱",
@@ -84,7 +85,8 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
       }
     }
 
-    await generate(prompt, { platform, topic, tone });
+    const result = await generate(prompt, { platform, topic, tone });
+    if (result?.generationId) setGenerationId(result.generationId);
   };
 
   const inputPanel = (
@@ -131,7 +133,7 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview content={output} generationId={generationId} onContentUpdate={(newContent) => setOutput(newContent)} />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       Configure your inputs and hit generate

@@ -17,8 +17,9 @@ export function CommentDMEngagerPanel({ isOpen, onClose }: CommentDMEngagerPanel
   const [messageText, setMessageText] = useState("");
   const [goal, setGoal] = useState("Engage");
   const [replyTone, setReplyTone] = useState("Friendly");
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "comment-dm-engager",
     toolTitle: "Comment & DM Engager",
     toolEmoji: "💬",
@@ -83,7 +84,10 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
       }
     }
 
-    await generate(prompt, { messageText, goal, replyTone });
+    const result = await generate(prompt, { messageText, goal, replyTone });
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -130,7 +134,11 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       Paste a comment or DM and hit generate

@@ -23,8 +23,9 @@ export function DropshipPanel({ isOpen, onClose }: DropshipPanelProps) {
     preferredSuppliers: "AliExpress",
     platform: "Shopify",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "dropship-goldmine",
     toolTitle: "Dropship Goldmine",
     toolEmoji: "📦",
@@ -38,7 +39,10 @@ export function DropshipPanel({ isOpen, onClose }: DropshipPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Here are 5 trending products in the ${inputs.category} category, price range: ${inputs.targetPriceRange || "flexible"}, margin goal: ${inputs.marginGoal}%, suppliers: ${inputs.preferredSuppliers}, platform: ${inputs.platform}.\n\nFor each product, use this exact structure:\n\nProduct Name\nWhy it's trending: Provide 2-3 sentences explaining the trend or consumer behaviour driving demand.\nAd Hook Idea: Write 1 short viral-style line suitable for TikTok or Reels.\nContent Angle: Describe in 1-2 sentences what type of video or ad works best for this product.\nPositioning Tip: Write 1 line explaining what emotion or benefit to highlight when selling this product.\n\nKeep each product description under 120 words. Do not use emojis. Do not use casual slang. Keep the tone professional and strategic.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -117,7 +121,11 @@ export function DropshipPanel({ isOpen, onClose }: DropshipPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your trending products will appear here</p>

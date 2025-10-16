@@ -32,7 +32,9 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [showAuthorityBuilder, setShowAuthorityBuilder] = useState(false);
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const [generationId, setGenerationId] = useState<string>();
+
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "bookforge",
     toolTitle: "BookForge Outline",
     toolEmoji: "📖",
@@ -67,7 +69,7 @@ Provide a detailed ebook structure with:
 
 Format with clear headings and structure.`;
 
-    await generate(prompt, {
+    const result = await generate(prompt, {
       topic,
       audience,
       voice,
@@ -78,6 +80,9 @@ Format with clear headings and structure.`;
       author,
       includeCaseStudies,
     });
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const handleGenerateCoverImage = async () => {
@@ -287,7 +292,11 @@ Ultra high resolution, 16:9 aspect ratio.`;
       {output ? (
         <div className="space-y-4">
           <h3 className="font-semibold text-lg">Ebook Outline</h3>
-          <OutputPreview content={output} />
+          <OutputPreview 
+            content={output}
+            generationId={generationId}
+            onContentUpdate={(newContent) => setOutput(newContent)}
+          />
           
           <div className="pt-4 border-t border-border">
             <Button

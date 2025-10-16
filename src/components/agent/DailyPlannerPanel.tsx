@@ -23,8 +23,9 @@ export function DailyPlannerPanel({ isOpen, onClose }: DailyPlannerPanelProps) {
     blockers: "",
     availableTime: "",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "daily-planner",
     toolTitle: "Daily Hustle Planner",
     toolEmoji: "📋",
@@ -38,7 +39,10 @@ export function DailyPlannerPanel({ isOpen, onClose }: DailyPlannerPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Generate 3 daily tasks to level up my hustle based on these priorities:\n1. ${inputs.priority1}\n2. ${inputs.priority2 || "General growth"}\n3. ${inputs.priority3 || "General growth"}${inputs.blockers ? `\n\nBlockers/Challenges: ${inputs.blockers}` : ""}${inputs.availableTime ? `\nAvailable time: ${inputs.availableTime}` : ""}\n\nFor each task, provide:\n- Task name\n- Estimated time\n- Why it matters\n- How to execute\n\nKeep it actionable and specific. No fluff.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -119,7 +123,11 @@ export function DailyPlannerPanel({ isOpen, onClose }: DailyPlannerPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your daily action plan will appear here</p>

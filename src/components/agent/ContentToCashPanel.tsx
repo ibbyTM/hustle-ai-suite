@@ -22,8 +22,9 @@ export function ContentToCashPanel({ isOpen, onClose }: ContentToCashPanelProps)
     audience: "",
     frequency: "Weekly",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "content-to-cash",
     toolTitle: "Content-to-Cash Ideas",
     toolEmoji: "💰",
@@ -37,7 +38,10 @@ export function ContentToCashPanel({ isOpen, onClose }: ContentToCashPanelProps)
   const handleGenerate = async () => {
     const prompt = `Here are 5 content ideas for ${inputs.primaryFormat}, monetization: ${inputs.monetizationPath}, audience: ${inputs.audience}, frequency: ${inputs.frequency}.\n\nFor each content idea, use this exact structure:\n\n**Idea Title**\n**Concept:**\n**Hook Example:**\n**Format Suggestion:**\n**Monetisation Angle:**\n\nDo not use slang or emojis. Keep it creative but professional.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -107,7 +111,11 @@ export function ContentToCashPanel({ isOpen, onClose }: ContentToCashPanelProps)
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your monetizable content ideas will appear here</p>

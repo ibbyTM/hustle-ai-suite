@@ -22,8 +22,9 @@ export function PageBuilderPanel({ isOpen, onClose }: PageBuilderPanelProps) {
     primaryCTA: "",
     mainOffer: "",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "page-builder",
     toolTitle: "Page & Profile Builder",
     toolEmoji: "📱",
@@ -37,7 +38,8 @@ export function PageBuilderPanel({ isOpen, onClose }: PageBuilderPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Here's a full profile setup for a ${inputs.profileType} on ${inputs.platform}, CTA: ${inputs.primaryCTA}, offer: ${inputs.mainOffer}.\n\nUse this exact structure:\n\n**Username Ideas**\nProvide 3-5 relevant and memorable username suggestions.\n\n**Bio Examples**\nWrite 2-3 bio options formatted and optimized for ${inputs.platform}.\n\n**Tone & Personality Notes**\nProvide 1-2 lines describing how the brand should sound.\n\n**Content Pillars**\nList 3 main content categories this brand should focus on.\n\n**Posting Strategy**\nOutline the best posting frequency, content formats, and engagement approach for ${inputs.platform}.\n\nDo not use emojis. Keep the tone simple, confident, and structured.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) setGenerationId(result.generationId);
   };
 
   const inputPanel = (
@@ -110,7 +112,7 @@ export function PageBuilderPanel({ isOpen, onClose }: PageBuilderPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview content={output} generationId={generationId} onContentUpdate={(newContent) => setOutput(newContent)} />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your profile setup will appear here</p>

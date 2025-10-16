@@ -17,8 +17,9 @@ export function ViralAnalyticsDecoderPanel({ isOpen, onClose }: ViralAnalyticsDe
   const [postContent, setPostContent] = useState("");
   const [platform, setPlatform] = useState("TikTok");
   const [objective, setObjective] = useState("Learn");
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "viral-analytics-decoder",
     toolTitle: "Viral Analytics Decoder",
     toolEmoji: "📈",
@@ -94,7 +95,8 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
       }
     }
 
-    await generate(prompt, { postContent, platform, objective });
+    const result = await generate(prompt, { postContent, platform, objective });
+    if (result?.generationId) setGenerationId(result.generationId);
   };
 
   const inputPanel = (
@@ -141,7 +143,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview content={output} generationId={generationId} onContentUpdate={(newContent) => setOutput(newContent)} />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       Paste a viral post and hit decode

@@ -23,8 +23,9 @@ export function BizIdeaPanel({ isOpen, onClose }: BizIdeaPanelProps) {
     preferredMonetization: "Products",
     scaleGoal: "",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "biz-idea",
     toolTitle: "Biz-Idea Reactor",
     toolEmoji: "💡",
@@ -38,7 +39,10 @@ export function BizIdeaPanel({ isOpen, onClose }: BizIdeaPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Generate 3 unique business ideas based on ${inputs.interests}, budget: ${inputs.budgetRange || "flexible"}, launch time: ${inputs.timeToLaunch}, monetization: ${inputs.preferredMonetization}, scale goal: ${inputs.scaleGoal || "sustainable income"}. For each idea, include: Concept, How to Start, Monetisation Path.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const inputPanel = (
@@ -121,7 +125,11 @@ export function BizIdeaPanel({ isOpen, onClose }: BizIdeaPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your business ideas will appear here</p>

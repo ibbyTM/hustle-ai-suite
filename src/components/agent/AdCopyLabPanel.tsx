@@ -24,8 +24,9 @@ export function AdCopyLabPanel({ isOpen, onClose }: AdCopyLabPanelProps) {
     adFormat: "Image",
     characterLimit: "",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "ad-copy-lab",
     toolTitle: "Ad Copy & Creative Lab",
     toolEmoji: "✨",
@@ -39,7 +40,10 @@ export function AdCopyLabPanel({ isOpen, onClose }: AdCopyLabPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Here are 3 ad copy variations for ${inputs.product} (${inputs.primaryBenefit}), objective: ${inputs.objective}, targeting ${inputs.audience || "general audience"}, format: ${inputs.adFormat}${inputs.characterLimit ? `, character limit: ${inputs.characterLimit}` : ""}. Each includes a headline, caption, creative idea, and CTA suggestion.\n\nFor each variation, use this exact structure:\n\nAd Concept Title\nHeadline – Write a direct, catchy headline in 5-8 words.\nCaption – Write 2-3 lines following this flow: problem → solution → benefit.\nCreative Concept – Provide 1-2 sentences describing the visual approach or ad angle.\nCTA Example – Write a single actionable line.\n\nDo not use emojis. Use clear, strategic language—think ad strategist. Format with bold section headers and proper line spacing for readability.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const ctaSuggestions = {
@@ -154,7 +158,11 @@ export function AdCopyLabPanel({ isOpen, onClose }: AdCopyLabPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output} 
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your ad copy variations will appear here</p>

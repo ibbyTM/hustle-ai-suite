@@ -22,8 +22,9 @@ export function HookFactoryPanel({ isOpen, onClose }: HookFactoryPanelProps) {
     maxLength: 10,
     targetPlatform: "TikTok",
   });
+  const [generationId, setGenerationId] = useState<string>();
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "hook-factory",
     toolTitle: "Hook Factory",
     toolEmoji: "🪝",
@@ -37,7 +38,10 @@ export function HookFactoryPanel({ isOpen, onClose }: HookFactoryPanelProps) {
   const handleGenerate = async () => {
     const prompt = `Here are 10 short viral hook ideas for ${inputs.context}, emotion: ${inputs.emotion}, max length: ${inputs.maxLength} words, platform: ${inputs.targetPlatform}, designed to capture attention in under 3 seconds.\n\nFormat as a clean numbered list. Each hook should be ${inputs.maxLength} words maximum.\n\nOptionally, you may divide the hooks into sub-sections such as:\n- Problem Hooks (addressing pain points)\n- Benefit Hooks (highlighting outcomes)\n- Curiosity Hooks (creating intrigue)\n\nDo not use emojis. Do not use casual phrases. Keep the tone concise, persuasive, and ad-style—like a conversion copywriter's deliverable.${buildKBContext()}`;
 
-    await generate(prompt, inputs);
+    const result = await generate(prompt, inputs);
+    if (result?.generationId) {
+      setGenerationId(result.generationId);
+    }
   };
 
   const emotionPreviews = {
@@ -116,7 +120,11 @@ export function HookFactoryPanel({ isOpen, onClose }: HookFactoryPanelProps) {
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview 
+      content={output}
+      generationId={generationId}
+      onContentUpdate={(newContent) => setOutput(newContent)}
+    />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       <p>Your scroll-stopping hooks will appear here</p>

@@ -19,7 +19,9 @@ export function PropertyProfiteerPanel({ isOpen, onClose }: PropertyProfiteerPan
   const [objective, setObjective] = useState("Deal analysis");
   const [propertyType, setPropertyType] = useState("");
 
-  const { generate, isGenerating, output } = useAgentGeneration({
+  const [generationId, setGenerationId] = useState<string>();
+
+  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
     toolId: "property-profiteer",
     toolTitle: "Property Profiteer",
     toolEmoji: "🏠",
@@ -62,11 +64,12 @@ ${objective === "Deal analysis" ? `
 
 Format with clear sections and professional analysis.`;
 
-    await generate(prompt, {
+    const result = await generate(prompt, {
       listingURL,
       objective,
       propertyType,
     });
+    if (result?.generationId) setGenerationId(result.generationId);
   };
 
   const inputPanel = (
@@ -124,7 +127,7 @@ Format with clear sections and professional analysis.`;
   );
 
   const outputPanel = output ? (
-    <OutputPreview content={output} />
+    <OutputPreview content={output} generationId={generationId} onContentUpdate={(newContent) => setOutput(newContent)} />
   ) : (
     <div className="flex items-center justify-center h-full text-muted-foreground">
       Your property analysis will appear here
