@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface UseTypewriterOptions {
   speed?: number;
@@ -40,10 +40,10 @@ export function useTypewriter(fullText: string, options: UseTypewriterOptions = 
     return () => clearInterval(interval);
   }, [fullText, speed, enabled]);
 
-  const skipAnimation = () => {
+  const skipAnimation = useCallback(() => {
     setDisplayedText(fullText);
     setIsComplete(true);
-  };
+  }, [fullText]);
 
   return { displayedText, isComplete, skipAnimation };
 }
