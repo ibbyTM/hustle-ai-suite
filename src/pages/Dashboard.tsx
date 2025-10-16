@@ -6,7 +6,8 @@ import { AutomationTool, CategoryType } from "@/types/automation";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const FREE_TIER_TOOLS = ["bizidea", "hookfactory", "trendfinder", "newsletter"];
 
@@ -56,19 +57,23 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as "All" | CategoryType)} className="mb-6">
-        <TabsList className="w-full justify-start overflow-x-auto flex-nowrap">
-          {categories.map((category) => (
-            <TabsTrigger 
-              key={category} 
-              value={category}
-              className="whitespace-nowrap"
-            >
-              {category}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="mb-6 flex items-center gap-3">
+        <Label htmlFor="category-filter" className="text-sm font-medium whitespace-nowrap">
+          Category:
+        </Label>
+        <Select value={activeCategory} onValueChange={(value) => setActiveCategory(value as "All" | CategoryType)}>
+          <SelectTrigger id="category-filter" className="w-full sm:w-[200px] h-11">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-card z-50">
+            {categories.map((category) => (
+              <SelectItem key={category} value={category} className="min-h-[44px]">
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {filteredTools.map((tool) => (
