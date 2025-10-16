@@ -2,16 +2,20 @@ import { useState, useEffect } from "react";
 import { AutomationCard } from "@/components/AutomationCard";
 import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
-import { AutomationTool } from "@/types/automation";
+import { AutomationTool, CategoryType } from "@/types/automation";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const FREE_TIER_TOOLS = ["bizidea", "hookfactory", "trendfinder", "newsletter"];
+
+const categories: Array<"All" | CategoryType> = ["All", "Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
 
 export default function Dashboard() {
   const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<"All" | CategoryType>("All");
   const { tier } = useSubscription();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -37,6 +41,10 @@ export default function Dashboard() {
     setIsModalOpen(true);
   };
 
+  const filteredTools = automations.filter(tool => 
+    activeCategory === "All" || tool.category === activeCategory
+  );
+
   return (
     <div className="animate-fade-in">
       <div className="mb-6 sm:mb-8">
@@ -48,8 +56,22 @@ export default function Dashboard() {
         </p>
       </div>
 
+      <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as "All" | CategoryType)} className="mb-6">
+        <TabsList className="w-full justify-start overflow-x-auto flex-nowrap">
+          {categories.map((category) => (
+            <TabsTrigger 
+              key={category} 
+              value={category}
+              className="whitespace-nowrap"
+            >
+              {category}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {automations.map((tool) => (
+        {filteredTools.map((tool) => (
           <AutomationCard
             key={tool.id}
             tool={tool}
