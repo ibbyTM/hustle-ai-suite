@@ -1,6 +1,7 @@
 import { Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTypewriter } from "@/hooks/useTypewriter";
 
 interface ChatMessageProps {
   role: "user" | "assistant";
@@ -11,6 +12,10 @@ interface ChatMessageProps {
 
 export function ChatMessage({ role, content, className = "", style }: ChatMessageProps) {
   const [copied, setCopied] = useState(false);
+  const { displayedText, isComplete } = useTypewriter(content, { 
+    speed: 15, 
+    enabled: role === "assistant" 
+  });
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
@@ -68,7 +73,12 @@ export function ChatMessage({ role, content, className = "", style }: ChatMessag
             : "bg-card border border-border"
         }`}
       >
-        <div className="break-words text-sm space-y-2">{formatContent(content)}</div>
+        <div className="break-words text-sm space-y-2">
+          {formatContent(displayedText)}
+          {role === "assistant" && !isComplete && (
+            <span className="animate-pulse ml-0.5 text-primary">|</span>
+          )}
+        </div>
         {role === "assistant" && (
           <div className="flex justify-end mt-2">
             <Button

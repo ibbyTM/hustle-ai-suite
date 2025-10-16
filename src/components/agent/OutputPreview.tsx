@@ -1,7 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTypewriter } from "@/hooks/useTypewriter";
 
 interface OutputPreviewProps {
   content: string;
@@ -11,8 +12,10 @@ interface OutputPreviewProps {
 
 export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputPreviewProps) {
   const { toast } = useToast();
+  const { displayedText, isComplete, skipAnimation } = useTypewriter(content, { speed: 20 });
 
   const handleCopy = () => {
+    if (!isComplete) return;
     navigator.clipboard.writeText(content);
     toast({
       title: "Copied",
@@ -21,6 +24,7 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
   };
 
   const handleDownload = () => {
+    if (!isComplete) return;
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -35,11 +39,27 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Generated Output</h3>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleCopy}>
+          {!isComplete && (
+            <Button variant="secondary" size="sm" onClick={skipAnimation}>
+              <Zap className="h-4 w-4" />
+              Skip
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleCopy}
+            disabled={!isComplete}
+          >
             <Copy className="h-4 w-4" />
             Copy
           </Button>
-          <Button variant="outline" size="sm" onClick={handleDownload}>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleDownload}
+            disabled={!isComplete}
+          >
             <Download className="h-4 w-4" />
             Download
           </Button>
@@ -54,13 +74,19 @@ export function OutputPreview({ content, usedKBFacts, generationNotes }: OutputP
 
         <TabsContent value="formatted" className="flex-1 overflow-y-auto">
           <div className="bg-muted/30 rounded-lg p-6 prose prose-invert max-w-none">
-            <div className="whitespace-pre-wrap">{content}</div>
+            <div className="whitespace-pre-wrap">
+              {displayedText}
+              {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
+            </div>
           </div>
         </TabsContent>
 
         <TabsContent value="plain" className="flex-1 overflow-y-auto">
           <div className="bg-muted/30 rounded-lg p-6">
-            <pre className="text-sm whitespace-pre-wrap font-mono">{content}</pre>
+            <pre className="text-sm whitespace-pre-wrap font-mono">
+              {displayedText}
+              {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
+            </pre>
           </div>
         </TabsContent>
       </Tabs>
