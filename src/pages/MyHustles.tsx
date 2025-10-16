@@ -24,6 +24,8 @@ interface Generation {
 }
 
 export default function MyHustles() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [generations, setGenerations] = useState<Generation[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGeneration, setSelectedGeneration] = useState<Generation | null>(null);
@@ -32,8 +34,6 @@ export default function MyHustles() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [toolFilter, setToolFilter] = useState<string>("all");
   const [dateFilter, setDateFilter] = useState<string>("all");
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
@@ -210,10 +210,6 @@ export default function MyHustles() {
     }
   };
 
-  if (!user) {
-    return null;
-  }
-
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto animate-fade-in">
@@ -222,6 +218,10 @@ export default function MyHustles() {
         </div>
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
