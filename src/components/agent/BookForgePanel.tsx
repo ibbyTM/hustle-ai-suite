@@ -113,8 +113,13 @@ Professional typography and color scheme suitable for ${topic}.
 ${kbContext ? `Brand context: ${kbContext}` : ""}
 Ultra high resolution, portrait orientation, 2:3 aspect ratio (ideal ebook cover dimensions).`;
 
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase.functions.invoke('generate-cover-image', {
-        body: { prompt: imagePrompt }
+        body: { prompt: imagePrompt },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
       });
 
       if (error) throw error;

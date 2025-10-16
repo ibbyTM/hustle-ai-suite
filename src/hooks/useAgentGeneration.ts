@@ -23,8 +23,13 @@ export function useAgentGeneration({ toolId, toolTitle, toolEmoji }: UseAgentGen
       } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase.functions.invoke("generate-hustle", {
         body: { prompt, toolTitle: toolTitle },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
       });
 
       if (error) throw error;
