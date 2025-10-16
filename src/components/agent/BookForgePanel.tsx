@@ -71,12 +71,24 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
     setSelectedEbookId(ebookId);
     const selected = savedGenerations.find(g => g.id === ebookId);
     
-    if (selected?.inputs) {
-      setTopic(selected.inputs.topic || "");
-      setAudience(selected.inputs.audience || "");
-      setVoice(selected.inputs.voice || "Professional");
-      setCoverTitle(selected.inputs.coverTitle || selected.inputs.topic || "");
-      setAuthor(selected.inputs.author || "");
+    if (selected) {
+      // Parse title and subtitle from output
+      const titleMatch = selected.output?.match(/\*\*Title\*\*\s*\n*(.+?)(?:\n|$)/i);
+      const subtitleMatch = selected.output?.match(/\*\*Subtitle\*\*\s*\n*(.+?)(?:\n|$)/i);
+      
+      const extractedTitle = titleMatch ? titleMatch[1].trim() : '';
+      const extractedSubtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
+      
+      // Concatenate subtitle to title if available
+      const fullTitle = extractedSubtitle 
+        ? `${extractedTitle}: ${extractedSubtitle}` 
+        : extractedTitle;
+      
+      setCoverTitle(fullTitle || selected.inputs?.topic || "");
+      setAuthor(selected.inputs?.author || "");
+      setTopic(selected.inputs?.topic || "");
+      setAudience(selected.inputs?.audience || "");
+      setVoice(selected.inputs?.voice || "Professional");
     }
   };
 
