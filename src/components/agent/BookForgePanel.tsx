@@ -111,7 +111,7 @@ Modern, clean design with high-quality imagery.
 Include the title text prominently${author ? ` with author name "${author}"` : ""}. 
 Professional typography and color scheme suitable for ${topic}.
 ${kbContext ? `Brand context: ${kbContext}` : ""}
-Ultra high resolution, 16:9 aspect ratio.`;
+Ultra high resolution, portrait orientation, 2:3 aspect ratio (ideal ebook cover dimensions).`;
 
       const { data, error } = await supabase.functions.invoke('generate-cover-image', {
         body: { prompt: imagePrompt }
