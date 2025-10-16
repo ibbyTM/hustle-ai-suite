@@ -6,7 +6,6 @@ import { Copy, Download, Zap, Edit, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { supabase } from "@/integrations/supabase/client";
-import ReactMarkdown from "react-markdown";
 
 interface OutputPreviewProps {
   content: string;
@@ -33,6 +32,24 @@ export function OutputPreview({ content, usedKBFacts, generationNotes, generatio
       plainRef.current.scrollTop = plainRef.current.scrollHeight;
     }
   }, [displayedText]);
+
+  const formatContent = (text: string) => {
+    const lines = text.split('\n');
+    return lines.map((line, i) => {
+      // Convert **text** to bold
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      return (
+        <div key={i}>
+          {parts.map((part, j) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+              return <strong key={j}>{part.slice(2, -2)}</strong>;
+            }
+            return <span key={j}>{part}</span>;
+          })}
+        </div>
+      );
+    });
+  };
 
   const handleCopy = () => {
     if (!isComplete) return;
@@ -187,10 +204,10 @@ export function OutputPreview({ content, usedKBFacts, generationNotes, generatio
 
           <TabsContent value="formatted" className="flex-1 overflow-y-auto" ref={formattedRef}>
             <div className="bg-muted/30 rounded-lg p-6 prose prose-invert max-w-none">
-              <ReactMarkdown className="whitespace-pre-wrap">
-                {displayedText}
-              </ReactMarkdown>
-              {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
+              <div className="space-y-1">
+                {formatContent(displayedText)}
+                {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
+              </div>
             </div>
           </TabsContent>
 
