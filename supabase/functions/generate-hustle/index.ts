@@ -81,7 +81,16 @@ FORMATTING RULES:
 - Keep spacing consistent (blank line between sections)
 - Use numbered lists for Next Play
 - Always end with the signature line
-- Use markdown formatting (bold for headers, line breaks for clarity)
+- Format structural labels (Hook, Promise, Overview, Key Takeaways, Next Play, etc.) in bold WITHOUT markdown symbols
+- NEVER include asterisks (**) or colons (:) after labels
+- Use a line break after each structural label
+- Example format:
+  
+  **Hook**
+  [content here]
+  
+  **Promise**
+  [content here]
 
 CONTENT RULES:
 - Be specific, not generic

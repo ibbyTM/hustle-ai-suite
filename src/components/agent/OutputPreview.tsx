@@ -6,6 +6,7 @@ import { Copy, Download, Zap, Edit, Save, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { supabase } from "@/integrations/supabase/client";
+import ReactMarkdown from "react-markdown";
 
 interface OutputPreviewProps {
   content: string;
@@ -186,10 +187,10 @@ export function OutputPreview({ content, usedKBFacts, generationNotes, generatio
 
           <TabsContent value="formatted" className="flex-1 overflow-y-auto" ref={formattedRef}>
             <div className="bg-muted/30 rounded-lg p-6 prose prose-invert max-w-none">
-              <div className="whitespace-pre-wrap">
+              <ReactMarkdown className="whitespace-pre-wrap">
                 {displayedText}
-                {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
-              </div>
+              </ReactMarkdown>
+              {!isComplete && <span className="animate-pulse ml-0.5 text-primary">|</span>}
             </div>
           </TabsContent>
 
