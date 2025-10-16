@@ -36,10 +36,20 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-background border-l border-border shadow-2xl z-50 flex flex-col">
+    <>
+      {/* Backdrop */}
+      <div 
+        className={`fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 z-40 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`} 
+        onClick={onClose}
+      />
+      
+      {/* Chat Panel */}
+      <div className={`fixed inset-y-0 right-0 w-full sm:w-[400px] bg-background border-l border-border shadow-2xl z-50 flex flex-col transition-transform duration-300 ease-out ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border bg-gradient-primary">
         <h2 className="text-lg font-bold text-white">Hustle Lab AI</h2>
@@ -76,13 +86,18 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
           </div>
         ) : (
           messages.map((message, index) => (
-            <ChatMessage key={index} role={message.role} content={message.content} />
+            <ChatMessage 
+              key={index} 
+              role={message.role} 
+              content={message.content}
+              style={{ animationDelay: `${index * 50}ms` }}
+            />
           ))
         )}
         {isLoading && messages[messages.length - 1]?.role === "user" && (
-          <div className="flex justify-start mb-4">
-            <div className="bg-card border border-border rounded-lg px-4 py-3 max-w-[80%]">
-              <div className="flex gap-1">
+          <div className="flex justify-start mb-4 animate-fade-in">
+            <div className="bg-card border border-border rounded-lg px-4 py-3 max-w-[80%] animate-pulse">
+              <div className="flex gap-1.5">
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -101,17 +116,19 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
             onKeyPress={handleKeyPress}
             placeholder="Ask your question..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 transition-all duration-200 focus:ring-2 focus:ring-primary/50"
           />
           <Button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
             size="icon"
+            className="transition-all duration-200 hover:scale-105 active:scale-95"
           >
             <Send className="h-4 w-4" />
           </Button>
         </div>
       </div>
     </div>
+    </>
   );
 }

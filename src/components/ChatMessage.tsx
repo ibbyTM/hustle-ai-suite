@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export function ChatMessage({ role, content }: ChatMessageProps) {
+export function ChatMessage({ role, content, className = "", style }: ChatMessageProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -58,7 +60,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
   };
 
   return (
-    <div className={`flex ${role === "user" ? "justify-end" : "justify-start"} mb-4`}>
+    <div className={`flex ${role === "user" ? "justify-end" : "justify-start"} mb-4 animate-fade-in ${className}`} style={style}>
       <div
         className={`max-w-[80%] rounded-lg px-4 py-3 ${
           role === "user"

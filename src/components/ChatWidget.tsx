@@ -10,7 +10,7 @@ export function ChatWidget() {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-primary hover:scale-110 transition-transform z-40"
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-primary hover:scale-110 hover:shadow-[var(--glow-primary)] hover:rotate-12 transition-all duration-300 ease-out animate-pulse z-40"
         size="icon"
       >
         <MessageCircle className="h-6 w-6 text-white" />
