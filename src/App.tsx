@@ -8,6 +8,7 @@ import { Layout } from "./components/Layout";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import MyHustles from "./pages/MyHustles";
+import Analytics from "./pages/Analytics";
 import Affiliate from "./pages/Affiliate";
 import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/" element={<LandingPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/my-hustles" element={<MyHustles />} />
+              <Route path="/analytics" element={<Analytics />} />
               <Route path="/knowledge-bases" element={<KnowledgeBases />} />
               <Route path="/knowledge-bases/:id" element={<KnowledgeBaseEditor />} />
               <Route path="/affiliate" element={<Affiliate />} />
