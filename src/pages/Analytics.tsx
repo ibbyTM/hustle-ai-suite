@@ -10,8 +10,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, Zap, Calendar, Target } from "lucide-react";
+import { TrendingUp, Zap, Calendar, Target, Download, FileText, FileSpreadsheet } from "lucide-react";
 import { startOfDay, subDays, subMonths, isAfter, format } from "date-fns";
+import { jsPDF } from "jspdf";
+import { saveAs } from "file-saver";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface Generation {
   id: string;
@@ -150,6 +154,102 @@ export default function Analytics() {
 
   const COLORS = ["hsl(var(--primary))", "hsl(var(--secondary))", "hsl(var(--accent))", "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))"];
 
+  const exportToCSV = () => {
+    const headers = ["Date", "Tool", "Category", "Emoji"];
+    const rows = filteredGenerations.map((gen) => [
+      format(new Date(gen.created_at), "yyyy-MM-dd HH:mm:ss"),
+      gen.tool_title,
+      getToolCategory(gen.tool_id) || "Unknown",
+      gen.tool_emoji,
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, `analytics-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    toast.success("Analytics exported to CSV");
+  };
+
+  const exportToJSON = () => {
+    const exportData = {
+      exportDate: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+      timeRange,
+      stats: {
+        totalHustles: filteredGenerations.length,
+        toolsUsed: new Set(filteredGenerations.map((g) => g.tool_id)).size,
+        topCategory: categoryData.length > 0 ? categoryData[0].name : "N/A",
+        avgPerDay: trendData.length > 0 ? (filteredGenerations.length / Math.max(trendData.length, 1)).toFixed(1) : "0",
+      },
+      categoryDistribution: categoryData,
+      topTools: toolData,
+      activityTrend: trendData,
+      generations: filteredGenerations.map((gen) => ({
+        date: format(new Date(gen.created_at), "yyyy-MM-dd HH:mm:ss"),
+        tool: gen.tool_title,
+        category: getToolCategory(gen.tool_id),
+        emoji: gen.tool_emoji,
+      })),
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+    saveAs(blob, `analytics-${format(new Date(), "yyyy-MM-dd")}.json`);
+    toast.success("Analytics exported to JSON");
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // Title
+    doc.setFontSize(20);
+    doc.text("Analytics Dashboard", pageWidth / 2, 20, { align: "center" });
+    
+    // Date and Time Range
+    doc.setFontSize(10);
+    doc.text(`Export Date: ${format(new Date(), "yyyy-MM-dd HH:mm:ss")}`, 14, 30);
+    doc.text(`Time Range: ${timeRange === "all" ? "All Time" : timeRange === "week" ? "Last 7 Days" : timeRange === "month" ? "Last 30 Days" : "Last 3 Months"}`, 14, 36);
+    
+    // Stats
+    doc.setFontSize(14);
+    doc.text("Key Statistics", 14, 46);
+    doc.setFontSize(10);
+    doc.text(`Total Hustles: ${filteredGenerations.length}`, 14, 54);
+    doc.text(`Tools Used: ${new Set(filteredGenerations.map((g) => g.tool_id)).size}`, 14, 60);
+    doc.text(`Top Category: ${categoryData.length > 0 ? categoryData[0].name : "N/A"}`, 14, 66);
+    doc.text(`Avg per Day: ${trendData.length > 0 ? (filteredGenerations.length / Math.max(trendData.length, 1)).toFixed(1) : "0"}`, 14, 72);
+    
+    // Category Distribution
+    doc.setFontSize(14);
+    doc.text("Category Distribution", 14, 86);
+    doc.setFontSize(10);
+    let yPos = 94;
+    categoryData.forEach((cat) => {
+      doc.text(`${cat.name}: ${cat.value} (${((cat.value / filteredGenerations.length) * 100).toFixed(1)}%)`, 14, yPos);
+      yPos += 6;
+    });
+    
+    // Top Tools
+    yPos += 8;
+    doc.setFontSize(14);
+    doc.text("Top 10 Tools", 14, yPos);
+    yPos += 8;
+    doc.setFontSize(10);
+    toolData.slice(0, 10).forEach((tool, index) => {
+      doc.text(`${index + 1}. ${tool.name}: ${tool.value}`, 14, yPos);
+      yPos += 6;
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 20;
+      }
+    });
+    
+    doc.save(`analytics-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+    toast.success("Analytics exported to PDF");
+  };
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto animate-fade-in">
@@ -184,8 +284,8 @@ export default function Analytics() {
         </p>
       </div>
 
-      {/* Time Range Filter */}
-      <div className="mb-6">
+      {/* Time Range Filter & Export */}
+      <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Time Range" />
@@ -197,6 +297,29 @@ export default function Analytics() {
             <SelectItem value="3months">Last 3 Months</SelectItem>
           </SelectContent>
         </Select>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="gap-2">
+              <Download className="h-4 w-4" />
+              Export Data
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={exportToCSV} className="gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Export as CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={exportToJSON} className="gap-2">
+              <FileText className="h-4 w-4" />
+              Export as JSON
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={exportToPDF} className="gap-2">
+              <FileText className="h-4 w-4" />
+              Export as PDF
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Stats Cards */}
