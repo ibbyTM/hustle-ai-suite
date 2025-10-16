@@ -242,24 +242,22 @@ export const automations: AutomationTool[] = [
     promptTemplate: "Here's a personalized 3-task plan for today focusing on: {priority1}, {priority2}, {priority3}. Time available: {timeAvailable} hours, focus theme: {focusTheme}.\n\nFor each of the 3 tasks, use this exact structure:\n\n**Task #[number] – [Task Headline]**\n**Objective:**\n**Steps:**\n**Time Required:**\n**Progress Metric:**\n\nAfter all 3 tasks, include:\n\n**Daily Motivation Quote:**\n**Reflection Prompt:**\n\nDo not use emojis or slang. Use short, precise sentences."
   },
   {
-    id: "property-profiteer",
-    title: "Property Profiteer",
-    emoji: "🏠",
+    id: "business-validator",
+    title: "Business Validator",
+    emoji: "✅",
     category: "Hustle",
-    description: "Analyse, pitch, and profit from any property deal",
+    description: "Validate your business idea with expert analysis, next steps, and improvement suggestions",
     isPro: false,
     kbRequirement: "optional",
     inputs: [
-      { id: "listingURL", label: "Listing URL", type: "url", placeholder: "Paste Rightmove / Zoopla / Zillow URL", required: false },
-      { id: "objective", label: "Objective", type: "select", options: ["Deal analysis", "Marketing copy", "Investor summary"], required: true },
-      { id: "propertyType", label: "Property Type", type: "text", placeholder: "e.g., 2-bed flat", required: true },
-      { id: "location", label: "Location", type: "text", placeholder: "Location", required: true },
-      { id: "askingPrice", label: "Asking Price / Guide", type: "text", placeholder: "Price", required: true },
-      { id: "estimatedRent", label: "Estimated Rent", type: "text", placeholder: "Optional", required: false },
-      { id: "targetROI", label: "Target ROI / Yield", type: "text", placeholder: "e.g., 8%", required: false },
-      { id: "refurbEstimate", label: "Refurb Estimate", type: "text", placeholder: "Optional", required: false }
+      { id: "businessIdea", label: "Business Idea", type: "textarea", placeholder: "Describe your business idea in detail", required: true },
+      { id: "targetMarket", label: "Target Market", type: "text", placeholder: "e.g., UK fitness enthusiasts, US small businesses", required: true },
+      { id: "currentStage", label: "Current Stage", type: "select", options: ["Just an idea", "Early research", "MVP ready", "Already launched"], required: true },
+      { id: "budgetRange", label: "Budget Available", type: "text", placeholder: "e.g., £0-£1000", required: false },
+      { id: "timeframe", label: "Launch Timeframe", type: "select", options: ["1 month", "3 months", "6 months", "12+ months"], required: false },
+      { id: "concernsOrChallenges", label: "Main Concerns/Challenges", type: "textarea", placeholder: "What are you worried about or stuck on?", required: false }
     ],
-    promptTemplate: "Property analysis for {propertyType} in {location}, asking price: {askingPrice}, estimated rent: {estimatedRent}, target ROI: {targetROI}, refurb: {refurbEstimate}, objective: {objective}.\n\nProvide a complete analysis including: Deal Summary, Financial Breakdown, Market Insights, Risk Assessment, and Recommendation."
+    promptTemplate: "Validate this business idea: {businessIdea}\n\nTarget Market: {targetMarket}\nCurrent Stage: {currentStage}\nBudget: {budgetRange}\nTimeframe: {timeframe}\nConcerns: {concernsOrChallenges}\n\nProvide a comprehensive validation analysis with the following sections:\n\n**Validation Score (1-10)**\nRate the overall viability of this idea and explain the score.\n\n**Market Opportunity Analysis**\nAssess the target market, competition, and timing.\n\n**Strengths & Opportunities**\nHighlight what's working well and potential opportunities.\n\n**Weaknesses & Risks**\nIdentify gaps, challenges, and potential pitfalls.\n\n**Improvement Suggestions**\nProvide 3-5 specific, actionable ways to strengthen this idea.\n\n**Next Steps (30-90 Days)**\nCreate a prioritized action plan with:\n- Week 1-2 actions\n- Month 1 milestones\n- Months 2-3 goals\n\n**Key Metrics to Track**\nSuggest 3-5 metrics to measure progress and validate assumptions.\n\nKeep the tone constructive, honest, and actionable. Format with clear sections and bullet points."
   },
   {
     id: "inbox-influence",

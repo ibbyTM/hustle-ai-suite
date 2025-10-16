@@ -33,7 +33,7 @@ import { NameForgePanel } from "./agent/NameForgePanel";
 import { ContentToCashPanel } from "./agent/ContentToCashPanel";
 import { DailyPlannerPanel } from "./agent/DailyPlannerPanel";
 import { BookForgePanel } from "./agent/BookForgePanel";
-import { PropertyProfiteerPanel } from "./agent/PropertyProfiteerPanel";
+import { BusinessValidatorPanel } from "./agent/BusinessValidatorPanel";
 import { HustleSprintPanel } from "./agent/HustleSprintPanel";
 import { SocialPostCrafterPanel } from "./agent/SocialPostCrafterPanel";
 import { CommentDMEngagerPanel } from "./agent/CommentDMEngagerPanel";
@@ -53,8 +53,8 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     return <BookForgePanel isOpen={isOpen} onClose={onClose} />;
   }
 
-  if (tool?.id === "property-profiteer") {
-    return <PropertyProfiteerPanel isOpen={isOpen} onClose={onClose} />;
+  if (tool?.id === "business-validator") {
+    return <BusinessValidatorPanel isOpen={isOpen} onClose={onClose} />;
   }
 
   if (tool?.id === "hustle-sprint") {
