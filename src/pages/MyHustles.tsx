@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -9,6 +11,7 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { CategoryType } from "@/types/automation";
 import { GenerationCard } from "@/components/GenerationCard";
 import { GenerationDetailModal } from "@/components/GenerationDetailModal";
+import { Search, Filter, X } from "lucide-react";
 
 interface Generation {
   id: string;
@@ -25,6 +28,10 @@ export default function MyHustles() {
   const [loading, setLoading] = useState(true);
   const [selectedGeneration, setSelectedGeneration] = useState<Generation | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [toolFilter, setToolFilter] = useState<string>("all");
+  const [dateFilter, setDateFilter] = useState<string>("all");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -62,6 +69,67 @@ export default function MyHustles() {
     return tool?.category || null;
   };
 
+  const filteredGenerations = useMemo(() => {
+    let filtered = [...generations];
+
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (gen) =>
+          gen.output.toLowerCase().includes(query) ||
+          gen.tool_title.toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter((gen) => getToolCategory(gen.tool_id) === categoryFilter);
+    }
+
+    // Tool filter
+    if (toolFilter !== "all") {
+      filtered = filtered.filter((gen) => gen.tool_id === toolFilter);
+    }
+
+    // Date filter
+    if (dateFilter !== "all") {
+      const now = new Date();
+      const filterDate = new Date();
+      
+      if (dateFilter === "today") {
+        filterDate.setHours(0, 0, 0, 0);
+      } else if (dateFilter === "week") {
+        filterDate.setDate(now.getDate() - 7);
+      } else if (dateFilter === "month") {
+        filterDate.setMonth(now.getMonth() - 1);
+      }
+      
+      filtered = filtered.filter((gen) => new Date(gen.created_at) >= filterDate);
+    }
+
+    return filtered;
+  }, [generations, searchQuery, categoryFilter, toolFilter, dateFilter]);
+
+  const uniqueTools = useMemo(() => {
+    const tools = new Map();
+    generations.forEach((gen) => {
+      if (!tools.has(gen.tool_id)) {
+        tools.set(gen.tool_id, { id: gen.tool_id, title: gen.tool_title, emoji: gen.tool_emoji });
+      }
+    });
+    return Array.from(tools.values());
+  }, [generations]);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setCategoryFilter("all");
+    setToolFilter("all");
+    setDateFilter("all");
+  };
+
+  const hasActiveFilters = searchQuery || categoryFilter !== "all" || toolFilter !== "all" || dateFilter !== "all";
+
   const groupedGenerations = () => {
     const categoryOrder: CategoryType[] = ["Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
     const grouped: Record<CategoryType, Generation[]> = {
@@ -86,7 +154,7 @@ export default function MyHustles() {
         // Group generations by tool within this category
         const toolGroups: Record<string, Generation[]> = {};
         
-        grouped[category].forEach((gen) => {
+    filteredGenerations.forEach((gen) => {
           if (!toolGroups[gen.tool_id]) {
             toolGroups[gen.tool_id] = [];
           }
@@ -180,7 +248,103 @@ export default function MyHustles() {
         </div>
       ) : (
         <>
-          <div className="space-y-12">
+          {/* Search and Filters */}
+          <div className="bg-gradient-card border border-border rounded-2xl p-4 sm:p-6 mb-6 space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold">Search & Filter</h2>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by content or tool name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Filter Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="Content">Content</SelectItem>
+                  <SelectItem value="Ads">Ads</SelectItem>
+                  <SelectItem value="Hustle">Hustle</SelectItem>
+                  <SelectItem value="Brand">Brand</SelectItem>
+                  <SelectItem value="Store">Store</SelectItem>
+                  <SelectItem value="Productivity">Productivity</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={toolFilter} onValueChange={setToolFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Tools" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Tools</SelectItem>
+                  {uniqueTools.map((tool) => (
+                    <SelectItem key={tool.id} value={tool.id}>
+                      {tool.emoji} {tool.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Time" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="today">Today</SelectItem>
+                  <SelectItem value="week">Last 7 Days</SelectItem>
+                  <SelectItem value="month">Last 30 Days</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="w-full sm:w-auto"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Clear Filters
+              </Button>
+            )}
+
+            {/* Results Count */}
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredGenerations.length} of {generations.length} hustles
+            </p>
+          </div>
+
+          {/* Results */}
+          {filteredGenerations.length === 0 ? (
+            <div className="bg-gradient-card border border-border rounded-2xl p-12 text-center">
+              <div className="max-w-md mx-auto">
+                <div className="text-6xl mb-4">🔍</div>
+                <h2 className="text-2xl font-bold mb-2">No results found</h2>
+                <p className="text-muted-foreground mb-6">
+                  Try adjusting your search or filters
+                </p>
+                <Button variant="outline" onClick={clearFilters}>
+                  Clear Filters
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-12">
             {groupedGenerations().map(({ category, tools, totalCount }) => (
               <div key={category} className="space-y-6">
                 <div className="flex items-center gap-3">
@@ -218,7 +382,8 @@ export default function MyHustles() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
 
           {selectedGeneration && (
             <GenerationDetailModal
