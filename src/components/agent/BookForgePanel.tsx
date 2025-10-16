@@ -1,44 +1,41 @@
-import { useState } from "react";
-import { Loader2, Download, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2, Download } from "lucide-react";
 import { AgentPanelLayout } from "./AgentPanelLayout";
 import { SmartInput } from "./SmartInput";
 import { SmartSelect } from "./SmartSelect";
-import { SmartTextarea } from "./SmartTextarea";
 import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
-import { OutputPreview } from "./OutputPreview";
 import { Button } from "@/components/ui/button";
-import { useAgentGeneration } from "@/hooks/useAgentGeneration";
 import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { AuthorityBuilderModal } from "../AuthorityBuilderModal";
 
 interface BookForgePanelProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface SavedGeneration {
+  id: string;
+  tool_id: string;
+  tool_title: string;
+  tool_emoji: string;
+  output: string;
+  inputs: any;
+  created_at: string;
+}
+
 export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
+  const [ebookSource, setEbookSource] = useState<"new" | "saved">("new");
+  const [savedGenerations, setSavedGenerations] = useState<SavedGeneration[]>([]);
+  const [selectedEbookId, setSelectedEbookId] = useState<string>("");
+  
   const [topic, setTopic] = useState("");
   const [audience, setAudience] = useState("");
-  const [voice, setVoice] = useState("Authoritative");
-  const [desiredLength, setDesiredLength] = useState(10000);
-  const [chapterCount, setChapterCount] = useState(10);
-  const [includeCTA, setIncludeCTA] = useState(true);
+  const [voice, setVoice] = useState("Professional");
   const [coverTitle, setCoverTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [includeCaseStudies, setIncludeCaseStudies] = useState(false);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [showAuthorityBuilder, setShowAuthorityBuilder] = useState(false);
-
-  const [generationId, setGenerationId] = useState<string>();
-
-  const { generate, isGenerating, output, setOutput } = useAgentGeneration({
-    toolId: "bookforge",
-    toolTitle: "BookForge Outline",
-    toolEmoji: "📖",
-  });
 
   const { knowledgeBases, attachedKB, attachKB, buildKBContext } = useKnowledgeBaseAttachment(
     "bookforge",
@@ -47,49 +44,47 @@ export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
 
   const { toast } = useToast();
 
-  const handleGenerate = async () => {
-    const kbContext = await buildKBContext();
-    const prompt = `Generate a comprehensive ebook outline and content about ${topic}, targeting ${audience}, in a ${voice} tone.
+  // Fetch saved ebooks when source is "saved"
+  useEffect(() => {
+    if (isOpen && ebookSource === "saved") {
+      fetchSavedEbooks();
+    }
+  }, [isOpen, ebookSource]);
 
-Target length: ${desiredLength} words
-Chapter count: ${chapterCount}
-Include CTA: ${includeCTA ? "Yes" : "No"}
-${coverTitle ? `Cover Title: ${coverTitle}` : ""}
-${author ? `Author: ${author}` : ""}
-Include case studies: ${includeCaseStudies ? "Yes" : "No"}
+  const fetchSavedEbooks = async () => {
+    const { data, error } = await supabase
+      .from("generations")
+      .select("*")
+      .in("tool_id", ["bookforge", "authority-builder"])
+      .order("created_at", { ascending: false });
+    
+    if (error) {
+      console.error("Error fetching saved ebooks:", error);
+      return;
+    }
+    
+    setSavedGenerations(data || []);
+  };
 
-${kbContext}
-
-Provide a detailed ebook structure with:
-- Title & Subtitle
-- Chapter breakdown with key points
-- Introduction framework
-- Conclusion framework
-- Recommended CTAs (if applicable)
-
-Format with clear headings and structure.`;
-
-    const result = await generate(prompt, {
-      topic,
-      audience,
-      voice,
-      desiredLength,
-      chapterCount,
-      includeCTA,
-      coverTitle,
-      author,
-      includeCaseStudies,
-    });
-    if (result?.generationId) {
-      setGenerationId(result.generationId);
+  // Auto-populate fields when an ebook is selected
+  const handleEbookSelection = (ebookId: string) => {
+    setSelectedEbookId(ebookId);
+    const selected = savedGenerations.find(g => g.id === ebookId);
+    
+    if (selected?.inputs) {
+      setTopic(selected.inputs.topic || "");
+      setAudience(selected.inputs.audience || "");
+      setVoice(selected.inputs.voice || "Professional");
+      setCoverTitle(selected.inputs.coverTitle || selected.inputs.topic || "");
+      setAuthor(selected.inputs.author || "");
     }
   };
 
   const handleGenerateCoverImage = async () => {
-    if (!topic) {
+    if (!topic && !coverTitle) {
       toast({
-        title: "Topic required",
-        description: "Please enter an ebook topic first",
+        title: "Title or topic required",
+        description: "Please enter a cover title or topic first",
         variant: "destructive"
       });
       return;
@@ -97,11 +92,13 @@ Format with clear headings and structure.`;
 
     setIsGeneratingImage(true);
     try {
+      const kbContext = await buildKBContext();
       const imagePrompt = `Create a professional ebook cover design for "${coverTitle || topic}". 
-${voice} tone, targeting ${audience || "general audience"}. 
+${voice} style, targeting ${audience || "general audience"}. 
 Modern, clean design with high-quality imagery. 
-Include the title text prominently. 
+Include the title text prominently${author ? ` with author name "${author}"` : ""}. 
 Professional typography and color scheme suitable for ${topic}.
+${kbContext ? `Brand context: ${kbContext}` : ""}
 Ultra high resolution, 16:9 aspect ratio.`;
 
       const { data, error } = await supabase.functions.invoke('generate-cover-image', {
@@ -142,13 +139,74 @@ Ultra high resolution, 16:9 aspect ratio.`;
 
   const inputPanel = (
     <div className="space-y-4">
-      <SmartTextarea
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Ebook Source</label>
+        <div className="flex gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="ebookSource"
+              value="new"
+              checked={ebookSource === "new"}
+              onChange={() => setEbookSource("new")}
+              className="h-4 w-4"
+            />
+            <span className="text-sm">Create New</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="ebookSource"
+              value="saved"
+              checked={ebookSource === "saved"}
+              onChange={() => setEbookSource("saved")}
+              className="h-4 w-4"
+            />
+            <span className="text-sm">From My Hustles</span>
+          </label>
+        </div>
+      </div>
+
+      {ebookSource === "saved" && (
+        <SmartSelect
+          id="savedEbook"
+          label="Select Saved Ebook"
+          value={selectedEbookId}
+          onChange={handleEbookSelection}
+          options={savedGenerations.map(gen => ({
+            value: gen.id,
+            label: `${gen.tool_emoji} ${gen.tool_title} - ${new Date(gen.created_at).toLocaleDateString()}`
+          }))}
+          required
+        />
+      )}
+
+      <SmartInput
+        id="coverTitle"
+        label="Cover Title"
+        value={coverTitle}
+        onChange={setCoverTitle}
+        placeholder="Your Ebook Title"
+        tooltip="The main title to appear on your cover"
+        required
+      />
+
+      <SmartInput
+        id="author"
+        label="Author Name"
+        value={author}
+        onChange={setAuthor}
+        placeholder="Your Name"
+        tooltip="Author name to display on the cover"
+      />
+
+      <SmartInput
         id="topic"
-        label="Ebook Topic"
+        label="Topic / Theme"
         value={topic}
         onChange={setTopic}
-        placeholder="e.g., Social Media Marketing & Automation for Small Businesses"
-        tooltip="What is the main subject of your ebook?"
+        placeholder="e.g., Social Media Marketing"
+        tooltip="The main subject or theme of your ebook"
         required
       />
 
@@ -157,109 +215,32 @@ Ultra high resolution, 16:9 aspect ratio.`;
         label="Target Audience"
         value={audience}
         onChange={setAudience}
-        placeholder="e.g., small business owners, freelancers"
-        tooltip="Who is this ebook written for?"
-        required
+        placeholder="e.g., entrepreneurs, small business owners"
+        tooltip="Who is this ebook for?"
       />
 
       <SmartSelect
         id="voice"
-        label="Tone / Voice"
+        label="Style"
         value={voice}
         onChange={setVoice}
-        options={["Authoritative", "Conversational", "Educational", "Inspirational"]}
-        tooltip="What writing style should the ebook have?"
+        options={["Professional", "Modern", "Minimalist", "Bold", "Elegant"]}
+        tooltip="The visual style for your cover design"
         required
       />
-
-      <SmartInput
-        id="desiredLength"
-        label="Desired Length (words)"
-        type="number"
-        value={desiredLength.toString()}
-        onChange={(val) => setDesiredLength(Number(val))}
-        placeholder="10000"
-        tooltip="Target word count for the ebook (e.g., 10000)"
-        required
-      />
-
-      <SmartInput
-        id="chapterCount"
-        label="Chapter Count"
-        type="number"
-        value={chapterCount.toString()}
-        onChange={(val) => setChapterCount(Number(val))}
-        placeholder="10"
-        tooltip="How many chapters should the ebook have?"
-      />
-
-      <SmartInput
-        id="coverTitle"
-        label="Cover Title (override)"
-        value={coverTitle}
-        onChange={setCoverTitle}
-        placeholder="Optional custom title"
-        tooltip="Custom title for the cover (overrides topic)"
-      />
-
-      <SmartInput
-        id="author"
-        label="Author Name"
-        value={author}
-        onChange={setAuthor}
-        placeholder="Optional author name"
-        tooltip="Author name to display on the cover"
-      />
-
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium">Include CTA</label>
-        <input
-          type="checkbox"
-          checked={includeCTA}
-          onChange={(e) => setIncludeCTA(e.target.checked)}
-          className="h-4 w-4"
-        />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-medium">Include Case Studies</label>
-        <input
-          type="checkbox"
-          checked={includeCaseStudies}
-          onChange={(e) => setIncludeCaseStudies(e.target.checked)}
-          className="h-4 w-4"
-        />
-      </div>
 
       <KnowledgeBaseSelector
         knowledgeBases={knowledgeBases}
         attachedKB={attachedKB}
         onAttach={attachKB}
-        toolRequirement="recommended"
+        toolRequirement="optional"
       />
 
       <Button
-        onClick={handleGenerate}
-        disabled={isGenerating || !topic || !audience}
-        className="w-full"
-        size="lg"
-      >
-        {isGenerating ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Generating...
-          </>
-        ) : (
-          "Generate Ebook Outline"
-        )}
-      </Button>
-
-      <Button
         onClick={handleGenerateCoverImage}
-        disabled={isGeneratingImage || !topic}
+        disabled={isGeneratingImage || (!topic && !coverTitle)}
         className="w-full"
         size="lg"
-        variant="outline"
       >
         {isGeneratingImage ? (
           <>
@@ -275,7 +256,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
 
   const outputPanel = (
     <div className="space-y-6">
-      {coverImage && (
+      {coverImage ? (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-lg">Generated Cover</h3>
@@ -294,58 +275,22 @@ Ultra high resolution, 16:9 aspect ratio.`;
             className="w-full rounded-lg shadow-lg border"
           />
         </div>
-      )}
-      
-      {output ? (
-        <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Ebook Outline</h3>
-          <OutputPreview 
-            content={output}
-            generationId={generationId}
-            onContentUpdate={(newContent) => setOutput(newContent)}
-          />
-          
-          <div className="pt-4 border-t border-border">
-            <Button
-              onClick={() => setShowAuthorityBuilder(true)}
-              className="w-full"
-              size="lg"
-              variant="gradient"
-            >
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate Full Ebook from This Outline
-            </Button>
-            <p className="text-sm text-muted-foreground text-center mt-2">
-              Transform this outline into a complete 10,000-word ebook
-            </p>
-          </div>
-        </div>
       ) : (
         <div className="flex items-center justify-center h-full text-muted-foreground">
-          Your ebook outline will appear here
+          Your cover image will appear here
         </div>
       )}
     </div>
   );
 
   return (
-    <>
-      <AgentPanelLayout
-        isOpen={isOpen}
-        onClose={onClose}
-        title="BookForge Outline"
-        emoji="📖"
-        inputPanel={inputPanel}
-        outputPanel={outputPanel}
-      />
-      
-      <AuthorityBuilderModal
-        isOpen={showAuthorityBuilder}
-        onClose={() => setShowAuthorityBuilder(false)}
-        initialTopic={topic}
-        initialAudience={audience}
-        initialVoice={voice}
-      />
-    </>
+    <AgentPanelLayout
+      isOpen={isOpen}
+      onClose={onClose}
+      title="BookForge Cover Maker"
+      emoji="📖"
+      inputPanel={inputPanel}
+      outputPanel={outputPanel}
+    />
   );
 }

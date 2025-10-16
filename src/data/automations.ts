@@ -3,24 +3,21 @@ import { AutomationTool } from "@/types/automation";
 export const automations: AutomationTool[] = [
   {
     id: "bookforge",
-    title: "BookForge Outline",
+    title: "BookForge Cover Maker",
     emoji: "📖",
     category: "Brand",
-    description: "Generate a strategic ebook outline + cover image to guide your content creation",
+    description: "Generate professional ebook covers from scratch or for your saved ebooks",
     isPro: false,
-    kbRequirement: "recommended",
+    kbRequirement: "none",
     inputs: [
-      { id: "topic", label: "Ebook Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses", required: true },
-      { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., small business owners, freelancers", required: true },
-      { id: "voice", label: "Tone / Voice", type: "select", options: ["Authoritative", "Conversational", "Educational", "Inspirational"], defaultValue: "Authoritative", required: true },
-      { id: "desiredLength", label: "Desired Length (words)", type: "number", placeholder: "10000", defaultValue: 10000, required: true, min: 1000, max: 50000 },
-      { id: "chapterCount", label: "Chapter Count", type: "number", placeholder: "10", defaultValue: 10, required: false, min: 3, max: 30 },
-      { id: "includeCTA", label: "Include CTA", type: "toggle", defaultValue: true, required: false },
-      { id: "coverTitle", label: "Cover Title (override)", type: "text", placeholder: "Optional custom title", required: false },
-      { id: "author", label: "Author Name", type: "text", placeholder: "Optional author name", required: false },
-      { id: "includeCaseStudies", label: "Include case studies?", type: "toggle", defaultValue: false, required: false }
+      { id: "ebookSource", label: "Ebook Source", type: "select", options: ["Create New", "From My Hustles"], defaultValue: "Create New" },
+      { id: "coverTitle", label: "Cover Title", type: "text", placeholder: "Your Ebook Title", required: true },
+      { id: "author", label: "Author Name", type: "text", placeholder: "Your Name", required: false },
+      { id: "topic", label: "Topic/Theme", type: "text", placeholder: "e.g., Social Media Marketing", required: true },
+      { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., entrepreneurs", required: false },
+      { id: "voice", label: "Style", type: "select", options: ["Professional", "Modern", "Minimalist", "Bold", "Elegant"], defaultValue: "Professional" }
     ],
-    promptTemplate: "SECTION_TYPE: {sectionType}\n\nGenerate {sectionType} for an ebook about {topic}, targeting {audience}, in a {voice} tone.\n\n{sectionInstructions}"
+    promptTemplate: ""
   },
   {
     id: "authority-builder",
