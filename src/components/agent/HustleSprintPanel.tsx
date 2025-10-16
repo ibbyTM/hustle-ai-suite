@@ -95,6 +95,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={goalProject}
         onChange={setGoalProject}
         placeholder="Your 30-day goal"
+        tooltip="What project are you launching in 30 days?"
         required
       />
 
@@ -104,6 +105,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={skillLevel}
         onChange={setSkillLevel}
         options={["Beginner", "Intermediate", "Pro"]}
+        tooltip="Your current experience level in this area"
         required
       />
 
@@ -114,6 +116,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={hoursPerDay.toString()}
         onChange={(val) => setHoursPerDay(Number(val))}
         placeholder="Hours you can commit"
+        tooltip="How many hours can you dedicate daily?"
         required
       />
 
@@ -123,6 +126,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={primaryFocus}
         onChange={setPrimaryFocus}
         options={["Content", "Sales", "Product", "Systems"]}
+        tooltip="What area will you prioritize during the sprint?"
         required
       />
 
@@ -146,6 +150,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={kpi1}
         onChange={setKpi1}
         placeholder="First key metric"
+        tooltip="First key metric to track (optional)"
       />
 
       <SmartInput
@@ -154,6 +159,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={kpi2}
         onChange={setKpi2}
         placeholder="Second key metric"
+        tooltip="Second key metric to track (optional)"
       />
 
       <SmartInput
@@ -162,6 +168,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
         value={kpi3}
         onChange={setKpi3}
         placeholder="Third key metric"
+        tooltip="Third key metric to track (optional)"
       />
 
       <KnowledgeBaseSelector

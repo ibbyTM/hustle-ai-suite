@@ -148,6 +148,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={topic}
         onChange={setTopic}
         placeholder="e.g., Social Media Marketing & Automation for Small Businesses"
+        tooltip="What is the main subject of your ebook?"
         required
       />
 
@@ -157,6 +158,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={audience}
         onChange={setAudience}
         placeholder="e.g., small business owners, freelancers"
+        tooltip="Who is this ebook written for?"
         required
       />
 
@@ -166,6 +168,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={voice}
         onChange={setVoice}
         options={["Authoritative", "Conversational", "Educational", "Inspirational"]}
+        tooltip="What writing style should the ebook have?"
         required
       />
 
@@ -176,6 +179,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={desiredLength.toString()}
         onChange={(val) => setDesiredLength(Number(val))}
         placeholder="10000"
+        tooltip="Target word count for the ebook (e.g., 10000)"
         required
       />
 
@@ -186,6 +190,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={chapterCount.toString()}
         onChange={(val) => setChapterCount(Number(val))}
         placeholder="10"
+        tooltip="How many chapters should the ebook have?"
       />
 
       <SmartInput
@@ -194,6 +199,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={coverTitle}
         onChange={setCoverTitle}
         placeholder="Optional custom title"
+        tooltip="Custom title for the cover (overrides topic)"
       />
 
       <SmartInput
@@ -202,6 +208,7 @@ Ultra high resolution, 16:9 aspect ratio.`;
         value={author}
         onChange={setAuthor}
         placeholder="Optional author name"
+        tooltip="Author name to display on the cover"
       />
 
       <div className="flex items-center justify-between">

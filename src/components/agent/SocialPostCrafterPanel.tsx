@@ -97,6 +97,7 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
         value={platform}
         onChange={setPlatform}
         options={["TikTok", "Instagram", "Twitter/X", "LinkedIn", "Facebook"]}
+        tooltip="Which platform will you post on?"
         required
       />
       <SmartInput
@@ -105,6 +106,7 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
         value={topic}
         onChange={setTopic}
         placeholder="What's the post about?"
+        tooltip="What is the post about?"
         required
       />
       <SmartSelect
@@ -113,6 +115,7 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
         value={tone}
         onChange={setTone}
         options={["Casual", "Professional", "Storytelling", "Bold"]}
+        tooltip="What voice should the post have?"
         required
       />
       <KnowledgeBaseSelector

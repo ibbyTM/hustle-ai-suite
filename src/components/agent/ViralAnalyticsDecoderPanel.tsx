@@ -107,6 +107,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
         value={postContent}
         onChange={setPostContent}
         placeholder="Paste the viral post URL or full caption text"
+        tooltip="Paste the viral post link or full caption"
         required
       />
       <SmartSelect
@@ -115,6 +116,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
         value={platform}
         onChange={setPlatform}
         options={["TikTok", "Instagram", "Twitter", "YouTube"]}
+        tooltip="Which platform is the post from?"
         required
       />
       <SmartSelect
@@ -123,6 +125,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
         value={objective}
         onChange={setObjective}
         options={["Learn", "Recreate", "Adapt to my brand"]}
+        tooltip="What do you want to do with this analysis?"
         required
       />
       <KnowledgeBaseSelector

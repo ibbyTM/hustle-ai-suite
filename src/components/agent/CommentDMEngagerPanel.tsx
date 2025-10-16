@@ -98,6 +98,7 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
         value={messageText}
         onChange={setMessageText}
         placeholder="Paste the comment or message you received"
+        tooltip="Paste the exact message you received"
         required
       />
       <SmartSelect
@@ -106,6 +107,7 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
         value={goal}
         onChange={setGoal}
         options={["Engage", "Nurture", "Sell"]}
+        tooltip="What do you want to achieve with your reply?"
         required
       />
       <SmartSelect
@@ -114,6 +116,7 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
         value={replyTone}
         onChange={setReplyTone}
         options={["Friendly", "Authoritative", "Persuasive"]}
+        tooltip="How should your reply sound?"
         required
       />
       <KnowledgeBaseSelector
