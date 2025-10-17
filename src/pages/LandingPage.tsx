@@ -109,7 +109,7 @@ export default function LandingPage() {
         "Everything in Plus",
         "Affiliate dashboard access",
         "35% commission on referrals",
-        "Give 50% off Plus to your referrals",
+        "Give 25% off Plus to your referrals",
         "Partner badge & recognition",
         "Early beta access",
         "Co-creation opportunities"

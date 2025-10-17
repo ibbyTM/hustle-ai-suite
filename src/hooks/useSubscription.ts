@@ -14,11 +14,11 @@ export interface Subscription {
 export const TIER_CONFIG = {
   pro: {
     priceId: "price_1SGR9aJLDxMViooDsH1mtAKY", // £40/month standard price
-    discountedPriceId: "price_1SFhXkJLDxMViooDs9zF3WaE", // £20/month for Partner referrals
+    discountedPriceId: "price_1SJL9jJLDxMViooDnvJet0TH", // £30/month for Partner referrals
     productId: "prod_TCqrdvyJQk9Vjn",
     name: "Plus",
     price: "£40",
-    discountedPrice: "£20",
+    discountedPrice: "£30",
   },
   partner: {
     priceId: "price_1SGRCIJLDxMViooDnuKa1vFm", // £75/month

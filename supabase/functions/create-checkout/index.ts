@@ -14,7 +14,7 @@ const logStep = (step: string, details?: any) => {
 
 // Price IDs for standard and discounted Pro tier
 const PRO_PRICE_ID = "price_1SGR9aJLDxMViooDsH1mtAKY"; // £40/month standard price
-const PRO_DISCOUNTED_PRICE_ID = "price_1SFhXkJLDxMViooDs9zF3WaE"; // £20/month for Partner referrals (50% off)
+const PRO_DISCOUNTED_PRICE_ID = "price_1SJL9jJLDxMViooDnvJet0TH"; // £30/month for Partner referrals (25% off)
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -90,9 +90,9 @@ serve(async (req) => {
         if (subError) {
           logStep("Error fetching referrer subscription", { error: subError });
         } else if (referrerSubscription?.tier === 'partner') {
-          // Apply 50% discount - use discounted Pro price
+          // Apply 25% discount - use discounted Pro price
           finalPriceId = PRO_DISCOUNTED_PRICE_ID;
-          logStep("Partner referral detected - applying 50% discount to Pro", { 
+          logStep("Partner referral detected - applying 25% discount to Pro", { 
             originalPrice: PRO_PRICE_ID, 
             discountedPrice: PRO_DISCOUNTED_PRICE_ID 
           });
