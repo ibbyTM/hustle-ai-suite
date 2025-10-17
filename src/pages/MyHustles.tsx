@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -11,7 +12,7 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { CategoryType } from "@/types/automation";
 import { GenerationCard } from "@/components/GenerationCard";
 import { GenerationDetailModal } from "@/components/GenerationDetailModal";
-import { Search, Filter, X, ChevronDown } from "lucide-react";
+import { Search, Filter, X, ChevronDown, Trash2 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 
@@ -37,6 +38,8 @@ export default function MyHustles() {
   const [toolFilter, setToolFilter] = useState<string>("all");
   const [dateFilter, setDateFilter] = useState<string>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -222,6 +225,45 @@ export default function MyHustles() {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+
+    try {
+      const { error } = await supabase
+        .from("generations")
+        .delete()
+        .in("id", Array.from(selectedIds));
+
+      if (error) throw error;
+
+      setGenerations(generations.filter((gen) => !selectedIds.has(gen.id)));
+      toast.success(`${selectedIds.size} hustle${selectedIds.size === 1 ? '' : 's'} deleted`);
+      setSelectedIds(new Set());
+      setIsSelectionMode(false);
+    } catch (error: any) {
+      console.error("Error deleting generations:", error);
+      toast.error("Failed to delete");
+    }
+  };
+
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === filteredGenerations.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredGenerations.map(gen => gen.id)));
+    }
+  };
+
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto animate-fade-in">
@@ -239,10 +281,51 @@ export default function MyHustles() {
   return (
     <div className="max-w-5xl mx-auto animate-fade-in">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">My Hustles</h1>
-        <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
-          All your saved outputs in one place. Copy, share, or export.
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">My Hustles</h1>
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
+              All your saved outputs in one place. Copy, share, or export.
+            </p>
+          </div>
+          
+          {generations.length > 0 && (
+            <div className="flex items-center gap-2">
+              {isSelectionMode ? (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setIsSelectionMode(false);
+                      setSelectedIds(new Set());
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleBulkDelete}
+                    disabled={selectedIds.size === 0}
+                    className="gap-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete ({selectedIds.size})
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsSelectionMode(true)}
+                >
+                  Select
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {generations.length === 0 ? (
@@ -393,9 +476,27 @@ export default function MyHustles() {
                 )}
 
                 {/* Results Count */}
-                <p className="text-sm text-muted-foreground pt-2">
-                  Showing {filteredGenerations.length} of {generations.length} hustles
-                </p>
+                <div className="flex items-center justify-between pt-2">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {filteredGenerations.length} of {generations.length} hustles
+                  </p>
+                  
+                  {isSelectionMode && filteredGenerations.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="select-all"
+                        checked={selectedIds.size === filteredGenerations.length && filteredGenerations.length > 0}
+                        onCheckedChange={toggleSelectAll}
+                      />
+                      <label
+                        htmlFor="select-all"
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        Select All
+                      </label>
+                    </div>
+                  )}
+                </div>
               </CollapsibleContent>
             </Collapsible>
           </div>
@@ -438,14 +539,25 @@ export default function MyHustles() {
                       
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {toolGens.map((gen) => (
-                          <GenerationCard
-                            key={gen.id}
-                            emoji={gen.tool_emoji}
-                            title={gen.tool_title}
-                            createdAt={gen.created_at}
-                            outputPreview={gen.output}
-                            onClick={() => handleCardClick(gen)}
-                          />
+                          <div key={gen.id} className="relative">
+                            {isSelectionMode && (
+                              <div className="absolute top-2 left-2 z-10">
+                                <Checkbox
+                                  checked={selectedIds.has(gen.id)}
+                                  onCheckedChange={() => toggleSelection(gen.id)}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="bg-background/80 backdrop-blur-sm"
+                                />
+                              </div>
+                            )}
+                            <GenerationCard
+                              emoji={gen.tool_emoji}
+                              title={gen.tool_title}
+                              createdAt={gen.created_at}
+                              outputPreview={gen.output}
+                              onClick={() => !isSelectionMode && handleCardClick(gen)}
+                            />
+                          </div>
                         ))}
                       </div>
                     </div>
