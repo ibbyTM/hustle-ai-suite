@@ -20,20 +20,21 @@ export const automations: AutomationTool[] = [
     promptTemplate: ""
   },
   {
-    id: "authority-builder",
-    title: "Authority Builder Pro",
-    emoji: "📚",
+    id: "digital-product-generator",
+    title: "Digital Product Generator",
+    emoji: "🎓",
     category: "Brand",
-    description: "Transform your outline into a complete 10,000-word ebook with intro, 10 chapters, and conclusion",
-    isPro: false,
+    description: "Generate complete digital products: full ebooks, mini guides, or structured courses with AI",
+    isPro: true,
     kbRequirement: "optional",
     inputs: [
-      { id: "topic", label: "Ebook Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses", required: true },
+      { id: "productType", label: "Product Type", type: "select", options: ["Full Ebook", "Mini Guide", "Online Course"], defaultValue: "Full Ebook", required: true },
+      { id: "topic", label: "Topic", type: "textarea", placeholder: "e.g., Social Media Marketing & Automation for Small Businesses", required: true },
       { id: "audience", label: "Target Audience", type: "text", placeholder: "e.g., small business owners, freelancers", required: true },
       { id: "voice", label: "Tone / Voice", type: "select", options: ["Authoritative", "Conversational", "Educational", "Inspirational"], defaultValue: "Authoritative", required: true },
       { id: "includeCTA", label: "Include CTA", type: "toggle", defaultValue: true, required: false }
     ],
-    promptTemplate: "Generate full ebook content for {topic}, targeting {audience}, in a {voice} tone."
+    promptTemplate: "Generate {productType} content for {topic}, targeting {audience}, in a {voice} tone."
   },
   {
     id: "trend-finder",

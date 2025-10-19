@@ -18,7 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { KnowledgeBase } from "@/types/knowledgeBase";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { AuthorityBuilderModal } from "./AuthorityBuilderModal";
+import { DigitalProductGeneratorModal } from "./DigitalProductGeneratorModal";
 import { NewsletterInputPanel } from "./NewsletterInputPanel";
 import { TrendFinderPanel } from "./agent/TrendFinderPanel";
 import { AdCopyLabPanel } from "./agent/AdCopyLabPanel";
@@ -61,8 +61,8 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     return <HustleSprintPanel isOpen={isOpen} onClose={onClose} />;
   }
 
-  if (tool?.id === "authority-builder") {
-    return <AuthorityBuilderModal isOpen={isOpen} onClose={onClose} />;
+  if (tool?.id === "digital-product-generator") {
+    return <DigitalProductGeneratorModal isOpen={isOpen} onClose={onClose} />;
   }
 
   if (tool?.id === "inbox-influence") {
