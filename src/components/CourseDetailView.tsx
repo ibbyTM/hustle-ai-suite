@@ -5,6 +5,9 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckCircle2, Clock, Lightbulb, Target } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
+import { useState, useEffect } from "react";
 
 interface CourseDetailViewProps {
   course: Course | null;
@@ -25,11 +28,45 @@ const renderContentWithBold = (content: string) => {
 };
 
 export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailViewProps) => {
+  const [completedModules, setCompletedModules] = useState<Record<string, boolean>>({});
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    if (course) {
+      const saved = localStorage.getItem(`course-progress-${course.id}`);
+      if (saved) {
+        setCompletedModules(JSON.parse(saved));
+      } else {
+        setCompletedModules({});
+      }
+    }
+  }, [course]);
+
+  // Save to localStorage on change
+  useEffect(() => {
+    if (course) {
+      localStorage.setItem(`course-progress-${course.id}`, JSON.stringify(completedModules));
+    }
+  }, [completedModules, course]);
+
+  // Toggle handler
+  const toggleModuleCompletion = (moduleId: string) => {
+    setCompletedModules(prev => ({
+      ...prev,
+      [moduleId]: !prev[moduleId]
+    }));
+  };
+
+  // Calculate progress
+  const completedCount = Object.values(completedModules).filter(Boolean).length;
+  const totalModules = course?.modules.length || 0;
+  const progressPercentage = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
+
   if (!course) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh]">
+      <DialogContent className="max-w-6xl max-h-[90vh]">
         <DialogHeader>
           <div className="flex items-start gap-4">
             <span className="text-5xl">{course.emoji}</span>
@@ -43,11 +80,21 @@ export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailVie
                   {course.estimatedTime}
                 </div>
               </div>
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">Course Progress</span>
+                  <span className="font-medium">
+                    {completedCount}/{totalModules} modules
+                    {completedCount === totalModules && totalModules > 0 && " 🎉"}
+                  </span>
+                </div>
+                <Progress value={progressPercentage} className="h-2" />
+              </div>
             </div>
           </div>
         </DialogHeader>
 
-        <ScrollArea className="h-[60vh] pr-4">
+        <ScrollArea className="h-[70vh] pr-4">
           <div className="space-y-6">
             {/* Prerequisites */}
             {course.prerequisites && course.prerequisites.length > 0 && (
@@ -88,9 +135,17 @@ export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailVie
                 {course.modules.map((module, index) => (
                   <AccordionItem key={module.id} value={module.id}>
                     <AccordionTrigger className="text-left">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 w-full">
+                        <Checkbox
+                          checked={completedModules[module.id] || false}
+                          onCheckedChange={() => toggleModuleCompletion(module.id)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="shrink-0"
+                        />
                         <Badge variant="outline" className="shrink-0">Module {index + 1}</Badge>
-                        <span>{module.title}</span>
+                        <span className={completedModules[module.id] ? "line-through opacity-60" : ""}>
+                          {module.title}
+                        </span>
                         {module.duration && (
                           <span className="text-xs text-muted-foreground ml-auto mr-2">
                             {module.duration}
