@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, Download } from "lucide-react";
+import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, Download, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -44,6 +44,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     { path: "/dashboard", icon: Grid3x3, label: "Dashboard" },
     { path: "/my-hustles", icon: TrendingUp, label: "My Hustles" },
     { path: "/knowledge-bases", icon: Database, label: "Knowledge Bases" },
+    { path: "/course-guides", icon: GraduationCap, label: "Course Guides" },
     { path: "/affiliate", icon: DollarSign, label: "Affiliate" },
   ];
 

@@ -19,6 +19,7 @@ import FounderPass from "./pages/FounderPass";
 import CreatorPass from "./pages/CreatorPass";
 import CreatorPassCheckEmail from "./pages/CreatorPassCheckEmail";
 import Install from "./pages/Install";
+import CourseGuides from "./pages/CourseGuides";
 import { useEffect } from "react";
 
 // Component to handle /ref/:code redirects
@@ -61,6 +62,7 @@ const App = () => {
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/knowledge-bases" element={<KnowledgeBases />} />
                 <Route path="/knowledge-bases/:id" element={<KnowledgeBaseEditor />} />
+                <Route path="/course-guides" element={<CourseGuides />} />
                 <Route path="/affiliate" element={<Affiliate />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/founder-pass" element={<FounderPass />} />
