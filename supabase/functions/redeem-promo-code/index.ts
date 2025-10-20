@@ -73,18 +73,8 @@ serve(async (req) => {
       throw new Error("This promo code has reached its maximum number of uses");
     }
 
-    // Check if user already redeemed this code
-    const { data: existingRedemption } = await supabaseClient
-      .from("promo_code_redemptions")
-      .select("id")
-      .eq("promo_code_id", promoCode.id)
-      .eq("user_id", user.id)
-      .single();
-
-    if (existingRedemption) {
-      logStep("User already redeemed this code");
-      throw new Error("You have already redeemed this promo code");
-    }
+    // Note: Duplicate redemption check is now enforced by database unique constraint
+    // This prevents race conditions where multiple concurrent requests could slip through
 
     // Create or update subscription record
     const { data: existingSubscription } = await supabaseClient
@@ -161,7 +151,7 @@ serve(async (req) => {
       logStep("Error incrementing promo code uses", { error: incrementError });
     }
 
-    // Record redemption
+    // Record redemption (protected by unique constraint against race conditions)
     const { error: redemptionError } = await supabaseClient
       .from("promo_code_redemptions")
       .insert({
@@ -171,6 +161,11 @@ serve(async (req) => {
 
     if (redemptionError) {
       logStep("Error recording redemption", { error: redemptionError });
+      // Check if this is a duplicate redemption error (unique constraint violation)
+      if (redemptionError.code === "23505") {
+        throw new Error("You have already redeemed this promo code");
+      }
+      throw new Error("Failed to record promo code redemption");
     }
 
     logStep("Promo code redeemed successfully");
