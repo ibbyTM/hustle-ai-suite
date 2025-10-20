@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-const FREE_TIER_TOOLS = ["bizidea", "hookfactory", "trendfinder", "newsletter"];
+const FREE_TIER_TOOLS = ["biz-idea", "hook-factory", "trend-finder", "inbox-influence"];
 
 const categories: Array<"All" | CategoryType> = ["All", "Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
 
