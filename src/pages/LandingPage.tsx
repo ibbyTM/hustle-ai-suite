@@ -92,7 +92,7 @@ export default function LandingPage() {
       price: "£40",
       period: "/month",
       features: [
-        "All 16+ automation agents",
+        "All 30+ automation agents",
         "Unlimited generations",
         "Save & export features",
         "Priority support",
@@ -161,7 +161,7 @@ export default function LandingPage() {
           <div className="text-center animate-fade-in">
             <Badge className="mb-6 bg-primary/20 text-primary border-primary/30" variant="outline">
               <Sparkles className="w-3 h-3 mr-1" />
-              16 AI Tools • Built for Hustlers
+              30 AI Tools • Built for Hustlers
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent leading-tight">
@@ -169,7 +169,7 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-              Hustle Lab gives you 16 ready-to-use automations and AI tools to grow faster — without code.
+              Hustle Lab gives you 30 ready-to-use automations and AI tools to grow faster — without code.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -263,7 +263,7 @@ export default function LandingPage() {
               All Your Tools in <span className="bg-gradient-primary bg-clip-text text-transparent">One Place</span>
             </h2>
             <p className="text-xl text-muted-foreground">
-              16 AI-powered agents designed to save you time and make you money
+              30 AI-powered agents designed to save you time and make you money
             </p>
           </div>
           
@@ -292,7 +292,7 @@ export default function LandingPage() {
                 </>
               ) : (
                 <>
-                  View All 16 Tools
+                  View All 30 Tools
                   <ArrowDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
                 </>
               )}

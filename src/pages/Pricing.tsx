@@ -63,7 +63,7 @@ export default function Pricing() {
       period: "per month",
       description: "Get All The Tools",
       features: [
-        "All 16+ automation agents",
+        "All 30+ automation agents",
         "Unlimited generations",
         "Save & export features",
         "Priority support",
