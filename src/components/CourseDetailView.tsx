@@ -12,6 +12,18 @@ interface CourseDetailViewProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// Helper function to render content with bold markdown
+const renderContentWithBold = (content: string) => {
+  const parts = content.split('**');
+  return parts.map((part, index) => {
+    // Every odd index is inside ** markers, so make it bold
+    if (index % 2 === 1) {
+      return <strong key={index}>{part}</strong>;
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
 export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailViewProps) => {
   if (!course) return null;
 
@@ -88,7 +100,7 @@ export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailVie
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="pt-4 pl-4 space-y-3">
-                        <p className="text-muted-foreground whitespace-pre-wrap">{module.content}</p>
+                        <p className="text-muted-foreground whitespace-pre-wrap">{renderContentWithBold(module.content)}</p>
                         {module.toolsUsed && module.toolsUsed.length > 0 && (
                           <div>
                             <p className="text-sm font-medium mb-2">Tools Used:</p>
