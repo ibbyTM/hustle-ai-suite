@@ -485,9 +485,9 @@ export default function LandingPage() {
                   </Link>
                 </li>
                 <li>
-                  <span className="text-sm text-muted-foreground/50">
-                    Terms of Service (Coming Soon)
-                  </span>
+                  <Link to="/terms-of-service" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Terms of Service
+                  </Link>
                 </li>
               </ul>
             </div>
