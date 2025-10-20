@@ -1,9 +1,34 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Safe logging utility that masks sensitive data
+const safeLog = (message: string, data?: any) => {
+  if (!data) {
+    console.log(`[CHAT-HUSTLE-AI] ${message}`);
+    return;
+  }
+  
+  const sanitized = JSON.stringify(data).replace(
+    /(email|user_id|userId|referral_code|ip_address)["']?\s*:\s*["']?([^"',}\s]+)/gi,
+    '$1: "***"'
+  );
+  console.log(`[CHAT-HUSTLE-AI] ${message} - ${sanitized}`);
+};
+
+// Input validation schema
+const MessageSchema = z.object({
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string().min(1).max(5000)
+});
+
+const InputSchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(20)
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,7 +36,22 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    const requestBody = await req.json();
+    
+    // Validate input
+    const validationResult = InputSchema.safeParse(requestBody);
+    if (!validationResult.success) {
+      safeLog("Validation error", { error: validationResult.error.issues });
+      return new Response(
+        JSON.stringify({ error: "Invalid input format" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const { messages } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -135,7 +175,7 @@ CRITICAL: Always match user intent to the most relevant agent. When in doubt, re
         );
       }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      safeLog("AI gateway error", { status: response.status, error: errorText });
       return new Response(
         JSON.stringify({ error: "AI gateway error" }),
         {
@@ -149,7 +189,7 @@ CRITICAL: Always match user intent to the most relevant agent. When in doubt, re
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
-    console.error("chat error:", error);
+    safeLog("ERROR", { message: error instanceof Error ? error.message : "Unknown error" });
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       {

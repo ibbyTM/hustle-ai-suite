@@ -6,9 +6,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Safe logging utility that masks sensitive data
 const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[REDEEM-PROMO-CODE] ${step}${detailsStr}`);
+  if (!details) {
+    console.log(`[REDEEM-PROMO-CODE] ${step}`);
+    return;
+  }
+  
+  const sanitized = JSON.stringify(details).replace(
+    /(email|user_id|userId|promo_code|promoCode|code)["']?\s*:\s*["']?([^"',}\s]+)/gi,
+    '$1: "***"'
+  );
+  console.log(`[REDEEM-PROMO-CODE] ${step} - ${sanitized}`);
 };
 
 serve(async (req) => {

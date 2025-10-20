@@ -7,9 +7,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Safe logging utility that masks sensitive data
 const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : "";
-  console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
+  if (!details) {
+    console.log(`[CREATE-CHECKOUT] ${step}`);
+    return;
+  }
+  
+  const sanitized = JSON.stringify(details).replace(
+    /(email|user_id|userId|referral_code|referralCode|customer_id|customerId)["']?\s*:\s*["']?([^"',}\s]+)/gi,
+    '$1: "***"'
+  );
+  console.log(`[CREATE-CHECKOUT] ${step} - ${sanitized}`);
 };
 
 // Price IDs for standard and discounted Pro tier

@@ -16,9 +16,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
 };
 
+// Safe logging utility that masks sensitive data
 const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : "";
-  console.log(`[STRIPE-WEBHOOK] ${step}${detailsStr}`);
+  if (!details) {
+    console.log(`[STRIPE-WEBHOOK] ${step}`);
+    return;
+  }
+  
+  const sanitized = JSON.stringify(details).replace(
+    /(email|user_id|userId|referrer_id|referrerId|referred_id|referredId|commission|earnings|amount)["']?\s*:\s*["']?([^"',}\s]+)/gi,
+    '$1: "***"'
+  );
+  console.log(`[STRIPE-WEBHOOK] ${step} - ${sanitized}`);
 };
 
 // Tier mapping
