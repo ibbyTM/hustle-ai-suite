@@ -484,5 +484,627 @@ Now go build your empire. 💰⚡`
       "Track ROAS daily - pause anything with $10+ spend and no results",
       "Scale winning ads by 20-30% every 2 days"
     ]
+  },
+  {
+    id: "digital-product-empire",
+    title: "The Digital Product Empire: From Idea to Income",
+    emoji: "🚀",
+    shortDescription: "Create and sell your first digital product in one week using AI-powered tools",
+    fullDescription: "A 7-Day HustleLab Course for Digital Creators. Your fast-track blueprint to creating and selling your first digital product in just 7 days. This isn't theory. This isn't \"someday.\" This is your week to build, launch, and start earning. You're going to use HustleLab's AI-powered tools to go from blank page to published product across multiple platforms. No design degree needed. No coding required. Just you, HustleLab, and a commitment to move fast.",
+    difficulty: "Beginner",
+    estimatedTime: "7 days (1-2 hours per day)",
+    toolsUsed: [
+      "biz-idea",
+      "name-forge",
+      "bookforge",
+      "logomaker",
+      "offer-builder",
+      "hook-factory",
+      "page-builder",
+      "inbox-influence"
+    ],
+    prerequisites: [
+      "HustleLab account with access to content creation tools",
+      "Accounts on Gumroad, Etsy, and Whop (or willingness to create them)",
+      "Basic understanding of digital products",
+      "Social media presence (optional but helpful for promotion)"
+    ],
+    expectedOutcomes: [
+      "Launch a complete digital product (ebook/guide) in 7 days",
+      "List your product on 3+ selling platforms (Gumroad, Etsy, Whop)",
+      "Create professional cover and brand assets using AI",
+      "Write high-converting sales copy and landing pages",
+      "Set up automated sales and delivery systems",
+      "Develop a social media and email promotion strategy",
+      "Generate your first sales and collect testimonials",
+      "Build a 30-day growth roadmap for scaling your digital product business"
+    ],
+    proTips: [
+      "Speed beats perfection - launch fast and iterate based on feedback",
+      "Done is better than perfect - ship your first draft and improve later",
+      "Pricing is a test, not a tattoo - you can always adjust after launch",
+      "Design fast, launch faster - don't let perfect design slow you down",
+      "Marketing isn't bragging, it's serving - promote your solution confidently",
+      "Published beats polished - the market rewards action over preparation",
+      "Collect testimonials early - they're your best sales tool",
+      "Small systems = big results - automate early to scale effortlessly",
+      "Repurpose content across platforms - one ebook can become multiple income streams"
+    ],
+    modules: [
+      {
+        id: "day-1-niche",
+        title: "Find Your Profitable Niche",
+        duration: "Day 1 - 30 minutes",
+        toolsUsed: ["biz-idea"],
+        content: `**Today's Goal**
+
+Discover a winning digital product idea that people actually want to buy — and validate it fast.
+
+**Why This Matters**
+
+You can't sell what nobody wants. Day 1 is about smart research, not guessing. We're finding profitable niches where buyers are already spending money.
+
+**Step-by-Step Instructions**
+
+**Step 1: Open Biz-Idea Reactor**
+
+- Launch HustleLab's 💡 Biz-Idea Reactor
+- Enter your interests, skills, or general topics (e.g., "fitness," "productivity," "side hustles," "budgeting")
+- Let the AI generate 10+ validated niche ideas with market demand scores
+
+**Step 2: Filter for Digital Product Fit**
+
+Look for niches that match digital products like:
+- How-to guides
+- Templates and worksheets
+- Checklists and planners
+- Step-by-step tutorials
+- Niche-specific resources
+
+**Step 3: Validate on External Platforms**
+
+Quick-check your top 3 ideas:
+- **Etsy**: Search your niche + "digital download" — are there listings with 100+ sales?
+- **Gumroad**: Browse trending products in your category
+- **Whop**: Check if similar digital products exist and have active communities
+
+**Step 4: Choose Your Niche**
+
+Pick ONE niche you're confident about. Write it down:
+- My Niche: _______________________
+- Target Audience: _______________________
+- Product Type: (ebook/guide/template/planner)
+
+**HustleLab Tools Used**
+
+- 💡 Biz-Idea Reactor — niche discovery and validation
+
+**External Platforms to Research**
+
+- Etsy.com (search trends)
+- Gumroad.com (browse bestsellers)
+- Whop.com (check active marketplaces)
+
+**Quick-Action Challenge**
+
+Set a 20-minute timer. Use Biz-Idea Reactor, pick your niche, and validate it on 2 platforms. No overthinking. If people are buying it, it's viable.
+
+**Motivational Close**
+
+"Your niche doesn't need to be perfect — it needs to be profitable. Pick one and move. Speed = sales."`
+      },
+      {
+        id: "day-2-content",
+        title: "Build Your Ebook Outline & Content",
+        duration: "Day 2 - 1-2 hours",
+        toolsUsed: ["name-forge", "bookforge"],
+        content: `**Today's Goal**
+
+Create a complete, high-value ebook or digital guide using AI — no writer's block, no excuses.
+
+**Why This Matters**
+
+Content is your product. Today, you're going from idea to finished manuscript. HustleLab does the heavy lifting — you just guide it.
+
+**Step-by-Step Instructions**
+
+**Step 1: Craft Your Product Concept**
+
+Answer these quick questions:
+- What problem does my product solve?
+- Who is it for?
+- What outcome will they get?
+
+**Step 2: Use Name Forge to Title Your Product**
+
+- Open ⚡ Name Forge
+- Input your niche and target audience
+- Generate 10+ product name options
+- Choose one that's clear, catchy, and benefit-driven
+
+Example: "The 30-Day Budget Reset" or "Freelancer's First Client Blueprint"
+
+**Step 3: Launch BookForge for Content Creation**
+
+- Open 📚 BookForge
+- Enter your product name and niche
+- Provide a brief outline or let AI generate one (8–12 chapters recommended)
+- Generate your complete ebook or guide content
+
+**Step 4: Review and Customize**
+
+- Read through the AI-generated content
+- Add personal stories, examples, or bonus tips
+- Make it sound like YOU (authenticity sells)
+
+**Step 5: Format for Readability**
+
+- Break content into clear sections
+- Add subheadings, bullet points, and action steps
+- Keep paragraphs short and scannable
+
+**HustleLab Tools Used**
+
+- ⚡ Name Forge — product naming
+- 📚 BookForge — full ebook/guide creation
+
+**External Platforms to Check**
+
+None today — stay focused on creation
+
+**Quick-Action Challenge**
+
+Generate your full ebook draft in one session. Don't edit as you go. Let the AI build it, then refine. Aim to have a complete manuscript by end of day.
+
+**Motivational Close**
+
+"Done is better than perfect. Your first draft is your first step to profit. Write it. Ship it. Improve it later."`
+      },
+      {
+        id: "day-3-design",
+        title: "Design Your Cover & Brand Assets",
+        duration: "Day 3 - 30 minutes",
+        toolsUsed: ["bookforge", "logomaker"],
+        content: `**Today's Goal**
+
+Create a professional, eye-catching cover and branding that makes your product look premium.
+
+**Why This Matters**
+
+People judge digital products by their covers. A strong visual = higher perceived value = more sales.
+
+**Step-by-Step Instructions**
+
+**Step 1: Generate Your Ebook Cover**
+
+- Open 📖 BookForge Cover Maker
+- Input your product name and niche
+- Choose a style: modern, minimalist, bold, elegant
+- Generate 5+ cover options
+- Select your favorite and download in high resolution
+
+**Step 2: Create Supporting Brand Assets**
+
+- Open 🎨 Logo Maker
+- Design a simple logo or brand mark for your product line
+- Use consistent colors and fonts across all assets
+
+**Step 3: Design Interior Graphics (Optional)**
+
+If your guide includes worksheets or planners:
+- Use BookForge or Logo Maker to create section headers
+- Keep design clean and print-friendly
+
+**Step 4: Package Your Product**
+
+Create your final files:
+- PDF format (standard for ebooks/guides)
+- EPUB format (optional, for wider compatibility)
+- Name your file professionally: ProductName_v1.pdf
+
+**Step 5: Create a Mockup**
+
+- Use free tools like Canva or Placeit to create a 3D mockup of your ebook
+- This will be used in your sales listings and promotions
+
+**HustleLab Tools Used**
+
+- 📖 BookForge Cover Maker — professional cover design
+- 🎨 Logo Maker — branding assets
+
+**External Platforms to Use**
+
+- Canva.com (optional mockups)
+- Placeit.net (optional 3D product mockups)
+
+**Quick-Action Challenge**
+
+Design and finalize your cover in 30 minutes. Pick one, commit, and move on. Remember: a published product with a "good enough" cover beats a perfect cover that never launches.
+
+**Motivational Close**
+
+"Your cover is your first impression. Make it count, but don't let it slow you down. Design fast. Launch faster."`
+      },
+      {
+        id: "day-4-pricing",
+        title: "Create Your Irresistible Offer & Pricing",
+        duration: "Day 4 - 1 hour",
+        toolsUsed: ["offer-builder"],
+        content: `**Today's Goal**
+
+Position your product as a no-brainer purchase with the right price, bonuses, and messaging.
+
+**Why This Matters**
+
+Pricing isn't random — it's psychology. Today you'll craft an offer so compelling that buyers can't say no.
+
+**Step-by-Step Instructions**
+
+**Step 1: Research Competitor Pricing**
+
+Quick scan on your target platforms:
+- **Etsy**: What are similar digital products priced at?
+- **Gumroad**: Check the $7–$27 sweet spot for guides
+- **Whop**: Look at premium digital products ($19–$49)
+
+**Step 2: Use Offer Builder to Structure Your Offer**
+
+- Open 🎁 Offer Builder
+- Input your product details and target audience
+- Generate multiple offer variations with:
+  - Core product
+  - Bonus materials (checklists, templates, email swipes)
+  - Limited-time pricing or early-bird discounts
+  - Money-back guarantee language
+
+**Step 3: Choose Your Pricing Strategy**
+
+Pick one based on your niche and audience:
+
+**Budget-Friendly ($7–$15):**
+- High volume, impulse buy
+- Great for broad niches
+
+**Mid-Tier ($17–$27):**
+- Best for how-to guides and actionable content
+- Perceived as premium but accessible
+
+**Premium ($37–$49):**
+- For in-depth guides with templates, bonuses, or community access
+- Requires strong positioning
+
+**Step 4: Create Your Product Description**
+
+Use Offer Builder output to write:
+- A compelling headline (what they'll achieve)
+- 3–5 bullet points (key benefits)
+- Social proof or credibility statement
+- Clear call-to-action
+
+**Step 5: Add Bonuses (Even Small Ones)**
+
+Examples:
+- Printable checklist
+- Email template pack
+- Quick-start guide
+- Access to a private community (Whop exclusive)
+
+**HustleLab Tools Used**
+
+- 🎁 Offer Builder — pricing, positioning, and bonuses
+
+**External Platforms to Research**
+
+- Etsy, Gumroad, Whop (competitor pricing research)
+
+**Quick-Action Challenge**
+
+Set your price and lock it in. Don't second-guess. You can always test and adjust after launch. Pick a number and commit.
+
+**Motivational Close**
+
+"Pricing is a test, not a tattoo. Set it, launch it, learn from it. The market will tell you what works — but only if you publish."`
+      },
+      {
+        id: "day-5-launch",
+        title: "Build Your Sales Page & Upload Listings",
+        duration: "Day 5 - 2 hours",
+        toolsUsed: ["hook-factory", "page-builder"],
+        content: `**Today's Goal**
+
+Create high-converting sales pages and upload your product to at least 3 platforms.
+
+**Why This Matters**
+
+You can't make money if no one can buy. Today is about visibility and access — getting your product in front of buyers.
+
+**Step-by-Step Instructions**
+
+**Step 1: Write Your Sales Copy**
+
+- Open 🪝 Hook Factory
+- Generate 10+ headline options for your sales page
+- Choose the most compelling hook
+- Use Offer Builder output for body copy
+
+**Step 2: Build Your Sales Page (Choose One Path)**
+
+**Option A: Use HustleLab's Page & Profile Builder**
+- Open 📱 Page & Profile Builder
+- Select "Sales Page" template
+- Input your product name, description, pricing, and bonuses
+- Customize colors and layout
+- Publish your page and copy the link
+
+**Option B: Create a Standalone Landing Page**
+
+Use tools like:
+- Stan Store (easiest for creators)
+- Carrd.co (simple, clean pages)
+- Beacons.ai (link-in-bio with sales functionality)
+
+**Step 3: Upload to Platform #1 — Gumroad**
+
+- Go to Gumroad.com and create a free account
+- Click "New Product" → Upload your PDF
+- Add product name, description, cover image, and price
+- Enable "Pay What You Want" (optional for higher conversions)
+- Publish your listing
+
+**Step 4: Upload to Platform #2 — Etsy**
+
+- Create an Etsy seller account (if you don't have one)
+- List your product under "Digital Downloads"
+- Upload your PDF and cover mockup
+- Write SEO-friendly title and tags (use your niche keywords)
+- Set your price and enable instant download
+- Publish
+
+**Step 5: Upload to Platform #3 — Whop**
+
+- Sign up as a creator on Whop.com
+- Create a new product or "experience"
+- Upload your ebook as a digital download
+- Add product description and pricing
+- Enable affiliate commission options (to let others promote you)
+- Launch
+
+**Step 6: Optional Platform — Stan Store or Shopify**
+
+If you want a branded experience:
+- Stan Store: Great for creators with social followings
+- Shopify Digital Downloads: Best if you want full control and branding
+
+**HustleLab Tools Used**
+
+- 🪝 Hook Factory — sales page headlines
+- 📱 Page & Profile Builder — landing page creation
+
+**External Platforms to Upload**
+
+- Gumroad.com ✅
+- Etsy.com ✅
+- Whop.com ✅
+- Stan Store (optional)
+- Shopify (optional)
+
+**Quick-Action Challenge**
+
+Launch on all 3 platforms today. No delays. Upload, publish, and go live. Speed = momentum.
+
+**Motivational Close**
+
+"Your product is live. You're officially in business. Now it's time to let the world know."`
+      },
+      {
+        id: "day-6-promote",
+        title: "Promote Across Social & Email",
+        duration: "Day 6 - 1 hour",
+        toolsUsed: ["hook-factory", "inbox-influence", "logomaker"],
+        content: `**Today's Goal**
+
+Drive traffic to your product using organic promotion, social content, and email outreach.
+
+**Why This Matters**
+
+Listings don't sell themselves. Today you become your own best marketer — using AI to make it easy.
+
+**Step-by-Step Instructions**
+
+**Step 1: Create Social Media Content**
+
+- Open 🪝 Hook Factory
+- Generate 10+ social media hooks and captions for:
+  - Instagram posts/reels
+  - TikTok videos
+  - Twitter/X threads
+  - LinkedIn posts (if B2B niche)
+
+**Content Ideas:**
+- Behind-the-scenes: "I just launched my first ebook in 6 days"
+- Transformation post: "Before I had this guide, I struggled with [problem]"
+- Value teaser: "Here are 3 tips from my new guide (link in bio)"
+- Launch announcement: "It's live! My [product name] is officially available"
+
+**Step 2: Design Promo Graphics**
+
+Use Logo Maker or Canva to create:
+- Instagram story templates
+- Carousel posts
+- Pinterest pins (great for Etsy traffic)
+
+**Step 3: Write Your Email Promotion**
+
+- Open 📧 Inbox Influence
+- Generate email copy for:
+  - Launch announcement (to your email list)
+  - Friend/family outreach (personal ask for support)
+  - Cold outreach to influencers or affiliates (if applicable)
+
+**Email Structure:**
+- Subject line: Use Hook Factory outputs
+- Body: Short, benefit-driven, with clear CTA
+- Link: Direct to your sales page or Gumroad link
+
+**Step 4: Post Daily for 7 Days**
+
+Create a simple promotion calendar:
+- Day 1: Launch announcement
+- Day 2: Testimonial or personal story
+- Day 3: Share a free tip from the guide
+- Day 4: Behind-the-scenes or creation process
+- Day 5: User benefit or transformation
+- Day 6: Limited-time bonus or discount
+- Day 7: Final call to action
+
+**Step 5: Leverage Platform-Specific Traffic**
+
+- **Etsy**: Optimize your SEO with keywords in title, tags, and description
+- **Gumroad**: Share on Twitter and tag @gumroad for potential feature
+- **Whop**: Enable affiliates so others can promote your product for commission
+- **Pinterest**: Pin your product with high-value keywords
+
+**HustleLab Tools Used**
+
+- 🪝 Hook Factory — social media captions and hooks
+- 📧 Inbox Influence — email promotion copy
+- 🎨 Logo Maker — promo graphics
+
+**External Platforms to Promote On**
+
+- Instagram, TikTok, Twitter/X, LinkedIn
+- Pinterest (huge for Etsy traffic)
+- Email list or personal contacts
+- Facebook groups or Reddit (if niche-appropriate)
+
+**Quick-Action Challenge**
+
+Post about your product on 3 platforms today. Don't wait for the perfect post. Share your link, tell your story, and invite people to buy.
+
+**Motivational Close**
+
+"Marketing isn't bragging — it's serving. Your product solves a problem. Share it loud, share it proud."`
+      },
+      {
+        id: "day-7-automate",
+        title: "Automate Your Sales + Next Steps",
+        duration: "Day 7 - 1 hour",
+        toolsUsed: ["inbox-influence", "biz-idea", "offer-builder"],
+        content: `**Today's Goal**
+
+Set up systems to automate your sales, track performance, and scale your digital product empire.
+
+**Why This Matters**
+
+You've launched. Now it's time to optimize, automate, and multiply. Today you build a system that works while you sleep.
+
+**Step-by-Step Instructions**
+
+**Step 1: Set Up Sales Automation**
+
+**On Gumroad:**
+- Enable automated delivery (already built-in)
+- Set up email sequences for buyers (upsells, testimonials, referrals)
+
+**On Etsy:**
+- Use automated thank-you messages
+- Enable auto-renewal for listings
+
+**On Whop:**
+- Enable affiliate program so others can sell for you
+- Set up automated welcome messages for buyers
+
+**Step 2: Track Your Sales & Analytics**
+
+Create a simple tracker (Google Sheets or Notion):
+- Platform name
+- Number of sales
+- Revenue
+- Traffic sources
+- Conversion rate
+
+Check daily for the first 2 weeks, then weekly.
+
+**Step 3: Collect Testimonials**
+
+- Send a follow-up email to buyers asking for feedback
+- Use Inbox Influence to craft the outreach
+- Post testimonials on social and in your listings
+
+**Step 4: Plan Your First Upsell**
+
+Now that you have a product, create complementary offers:
+- **Upsell**: Premium version with templates or coaching
+- **Cross-sell**: Related guide in a similar niche
+- **Bundle**: Package 2–3 products at a discount
+
+Use Biz-Idea Reactor and Offer Builder to plan your next product.
+
+**Step 5: Scale Your Traffic**
+
+Advanced moves for growth:
+- Run low-cost ads (Facebook, Pinterest, TikTok)
+- Partner with affiliates on Whop
+- Guest post or collaborate with creators in your niche
+- Repurpose your ebook into a mini-course (list on Whop or Gumroad)
+
+**Step 6: Celebrate & Commit**
+
+You did it. You went from idea to income in 7 days.
+
+Now commit to the next 30 days:
+- Promote daily
+- Iterate based on feedback
+- Launch your next product
+
+**Course Summary**
+
+**What You Accomplished:**
+
+✅ Day 1: Found a profitable niche with Biz-Idea Reactor
+✅ Day 2: Created a complete ebook with BookForge
+✅ Day 3: Designed a professional cover with BookForge
+✅ Day 4: Built an irresistible offer with Offer Builder
+✅ Day 5: Launched on Gumroad, Etsy, and Whop
+✅ Day 6: Promoted across social and email using Hook Factory & Inbox Influence
+✅ Day 7: Automated your sales and planned your next move
+
+**The HustleLab Advantage:**
+
+From idea to creation to sales to automation — HustleLab powered every step. No guesswork. No writer's block. No design bottlenecks. Just fast, focused action and real results.
+
+**What's Next?**
+
+- Launch your next product (go deeper in your niche or explore a new one)
+- Build a product suite (bundles = bigger sales)
+- Scale with ads, affiliates, and automation
+- Join the HustleLab community and share your wins
+
+**Remember:**
+
+Speed beats perfection. Action beats planning. Published beats polished. You're not just building products — you're building an empire.
+
+**HustleLab Tools Used**
+
+- 📧 Inbox Influence — follow-up and upsell emails
+- 💡 Biz-Idea Reactor — next product ideation
+- 🎁 Offer Builder — upsell and bundle creation
+
+**External Platforms to Optimize**
+
+- Gumroad (automated emails, upsells)
+- Etsy (SEO optimization, reviews)
+- Whop (affiliate activation)
+- Google Sheets or Notion (sales tracking)
+
+**Quick-Action Challenge**
+
+Set up ONE automation today — whether it's an email sequence, affiliate link, or sales tracker. Small systems = big results.
+
+**Motivational Close**
+
+"You're not just a creator anymore — you're a digital entrepreneur. Keep building. Keep launching. The empire starts now."`
+      }
+    ]
   }
 ];
