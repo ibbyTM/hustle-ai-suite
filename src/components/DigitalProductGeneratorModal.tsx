@@ -68,75 +68,69 @@ export const DigitalProductGeneratorModal = ({
 
   const getSectionInstructions = (sectionType: string, sectionNumber: number) => {
     if (sectionType === "title") {
-      return `Generate a compelling, authoritative title and supporting subtitle that clarifies the value proposition for a ${productType}. Format:\n\n**Title**\n[Your title here]\n\n**Subtitle**\n[Your subtitle here]`;
+      return `Generate a compelling, authoritative title and supporting subtitle that clarifies the value proposition for a ${productType}. Write them on separate lines without any labels - just the title on the first line and subtitle on the second line.`;
     }
     
     if (sectionType === "introduction") {
       if (productType === "Online Course") {
-        return "Write a 600-800 word course overview that establishes learning objectives, addresses the learner's needs, and previews what they'll learn. Be engaging and set the tone for the entire course.";
+        return "Write a 600-800 word course overview in natural flowing paragraphs. Open with a strong hook about the learner's challenge or goal. Naturally weave in what they'll learn and achieve without using labels. Use short paragraphs (2-3 sentences each) for readability. Include bullet points where it makes sense, but integrate them naturally into the flow - no 'objectives' or 'overview' headers.";
       } else if (productType === "Mini Guide") {
-        return "Write a 400-600 word introduction that quickly establishes the problem, previews the actionable strategies, and sets expectations for immediate value.";
+        return "Write a 500-600 word introduction in natural flowing paragraphs. Start with a compelling hook that speaks to the reader's pain point or aspiration. Use short paragraphs and naturally integrate what they'll discover. Bold key phrases for emphasis. Make it conversational and engaging.";
       }
-      return "Write a 600-800 word introduction that establishes credibility, addresses the reader's pain points, and previews what they'll learn. Be engaging and set the tone.";
+      return "Write a 600-800 word introduction in natural flowing paragraphs. Hook the reader with their challenge or desire. Use short, punchy paragraphs (2-3 sentences each). Naturally weave in what this book will help them achieve. Bold critical insights. Make it feel like a conversation with an expert.";
     }
     
     if (sectionType === "main") {
       if (productType === "Online Course") {
-        return `Write Module ${sectionNumber} (800-1,000 words) with structured learning content.
+        return `Write Module ${sectionNumber} (800-1,000 words) as natural, flowing instructional content.
 
-Start with **Module ${sectionNumber}: [Module Title]**
+Start with a bold module heading that captures the core topic (format: **[Compelling Module Title]**).
 
-**Learning Objectives:**
-- Objective 1
-- Objective 2
-- Objective 3
+Then write engaging educational content using:
+- Short paragraphs (2-4 sentences) for easy reading
+- Bullet points naturally integrated when listing items or steps (not labeled as "objectives" or "concepts")
+- Bold text to emphasize critical insights
+- Real-world examples woven throughout
+- A practical exercise or assignment naturally embedded in the content (not under an "Exercise:" header)
+- 2-3 thought-provoking questions woven into the end to reinforce learning (not labeled as "quiz")
 
-**Lesson Content:**
-[Write engaging, instructional content with clear examples]
-
-**Key Concepts:**
-- Concept 1
-- Concept 2
-- Concept 3
-
-**Practice Exercise:**
-[Provide an actionable assignment or task]
-
-**Knowledge Check:**
-1. [Quiz question 1]
-2. [Quiz question 2]
-3. [Quiz question 3]`;
+The content should read like a professional course module, not a template. Make it conversational yet authoritative.`;
       } else if (productType === "Mini Guide") {
-        return `Write Section ${sectionNumber} (600-800 words) focusing on one specific actionable strategy.
+        return `Write Section ${sectionNumber} (600-800 words) as natural, action-oriented content.
 
-Start with **Section ${sectionNumber}: [Section Title]**
+Start with a bold section heading (format: **[Clear Action-Focused Title]**).
 
-Write content with clear, actionable steps and practical examples.
+Then write practical, actionable content:
+- Short paragraphs that get straight to the point
+- Bullet points integrated naturally to highlight key steps or strategies (no "Quick Tips" label)
+- Bold text for emphasis on crucial actions
+- Real examples to make it concrete
+- Natural flow from concept to application
 
-End with **Quick Tips:**
-- Tip 1
-- Tip 2
-- Tip 3`;
+Make it feel like expert advice, not a checklist.`;
       }
-      return `Write Chapter ${sectionNumber} (1,000-1,200 words) with natural narrative flow.
+      return `Write Chapter ${sectionNumber} (1,000-1,200 words) as natural narrative content.
 
-Start with **Chapter ${sectionNumber}: [Chapter Title]**
+Start with a bold chapter heading (format: **[Engaging Chapter Title]**).
 
-Then write the chapter content as flowing paragraphs with clear spacing between them. Write naturally and conversationally, delivering actionable insights and frameworks.
+Then write in a flowing, conversational style:
+- Short, readable paragraphs (2-4 sentences each)
+- Natural paragraph breaks for easy scanning
+- Bullet points integrated where they naturally fit to highlight frameworks or steps
+- Bold text to emphasize transformative insights
+- Stories, examples, and actionable frameworks woven throughout
+- End with 2-3 powerful bullet points that capture the essence (no labels - just bullets)
 
-End with **Key Takeaways:**
-- Point 1
-- Point 2
-- Point 3`;
+Write like you're having a conversation with an intelligent reader who wants depth and practicality.`;
     }
     
     if (sectionType === "conclusion") {
       if (productType === "Online Course") {
-        return `Write a 400-500 word course summary that reviews key lessons, reinforces transformation${includeCTA === "Yes" ? ", and includes a compelling call-to-action for next steps" : ""}.`;
+        return `Write a 400-500 word course summary in natural flowing paragraphs. Open by acknowledging the learner's progress. Naturally weave in the key transformations or insights they've gained (no labeled list). Use short paragraphs and bold text to emphasize the most important points.${includeCTA === "Yes" ? " End with a compelling, natural call-to-action that feels like encouragement, not a sales pitch." : ""} Make it inspiring and forward-looking.`;
       } else if (productType === "Mini Guide") {
-        return `Write a 200-300 word quick action plan that summarizes the main strategies${includeCTA === "Yes" ? " and includes a clear next step" : ""}.`;
+        return `Write a 300-400 word action plan in natural flowing paragraphs. Remind them of what they've learned and transition smoothly into next steps. Use short paragraphs and bullet points naturally integrated. Bold the most crucial actions.${includeCTA === "Yes" ? " End with an encouraging call-to-action." : ""} Keep it practical and motivating.`;
       }
-      return `Write a 400-500 word conclusion that summarizes key lessons, reinforces transformation${includeCTA === "Yes" ? ", and includes a compelling call-to-action" : ""}.`;
+      return `Write a compelling conclusion (400-600 words) in natural flowing paragraphs. Synthesize the key themes without listing them. Use short paragraphs and bold text for emphasis. Remind readers of their transformation.${includeCTA === "Yes" ? " End with an inspiring call to action that encourages next steps." : ""} Make it memorable and empowering.`;
     }
     
     return "";
