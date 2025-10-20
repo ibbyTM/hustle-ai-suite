@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { KnowledgeBaseCard } from "@/components/KnowledgeBaseCard";
@@ -8,18 +8,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { KnowledgeBase } from "@/types/knowledgeBase";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/hooks/useSubscription";
 
 export default function KnowledgeBases() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { tier, isLoading: subscriptionLoading } = useSubscription();
   const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
   const [attachmentCounts, setAttachmentCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
     fetchKnowledgeBases();
-  }, []);
+  }, [user, navigate]);
 
   const fetchKnowledgeBases = async () => {
     try {
@@ -68,6 +76,30 @@ export default function KnowledgeBases() {
     kb.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     kb.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+
+  // Show upgrade prompt for free users
+  if (!subscriptionLoading && tier === "free") {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto text-center">
+          <Lock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-3xl font-bold mb-4">Pro Access Required</h2>
+          <p className="text-muted-foreground mb-8 text-lg">
+            Knowledge Bases are available on Pro and Partner plans. 
+            Centralize your brand voice, product info, and marketing assets across all Hustle Lab tools.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Button onClick={() => navigate("/pricing")} size="lg" className="gap-2">
+              View Plans
+            </Button>
+            <Button onClick={() => navigate("/dashboard")} variant="outline" size="lg">
+              Back to Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

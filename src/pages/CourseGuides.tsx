@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { courses } from "@/data/courses";
 import { Course } from "@/types/course";
 import { CourseCard } from "@/components/CourseCard";
@@ -6,11 +7,21 @@ import { CourseDetailView } from "@/components/CourseDetailView";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GraduationCap, Search } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CourseGuides = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+  }, [user, navigate]);
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
