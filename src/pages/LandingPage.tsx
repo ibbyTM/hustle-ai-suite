@@ -429,6 +429,101 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-secondary/50 border-t border-border/50 px-4 py-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Branding */}
+            <div className="md:col-span-1">
+              <Link to="/" className="flex items-center gap-3 mb-4">
+                <img 
+                  src={hustleLabLogo} 
+                  alt="Hustle Lab Logo" 
+                  className="h-8 w-auto"
+                />
+              </Link>
+              <p className="text-sm text-muted-foreground">
+                AI-powered tools for modern creators
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Quick Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/pricing" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/course-guides" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Course Guides
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/affiliate" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Affiliate Program
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Legal</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <span className="text-sm text-muted-foreground/50">
+                    Terms of Service (Coming Soon)
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Contact</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a 
+                    href="mailto:ibby@nexusedge.tech" 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    ibby@nexusedge.tech
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="tel:07447187138" 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    07447 187138
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-border/50 text-center">
+            <p className="text-sm text-muted-foreground">
+              © 2025 HustleLab. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

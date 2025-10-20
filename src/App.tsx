@@ -20,6 +20,7 @@ import CreatorPass from "./pages/CreatorPass";
 import CreatorPassCheckEmail from "./pages/CreatorPassCheckEmail";
 import Install from "./pages/Install";
 import CourseGuides from "./pages/CourseGuides";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { useEffect } from "react";
 
 // Component to handle /ref/:code redirects
@@ -70,6 +71,7 @@ const App = () => {
                 <Route path="/creator-pass-check-email" element={<CreatorPassCheckEmail />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/install" element={<Install />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/ref/:code" element={<RefRedirect />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
