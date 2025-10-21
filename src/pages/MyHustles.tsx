@@ -40,6 +40,9 @@ export default function MyHustles() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const ITEMS_PER_PAGE = 30;
 
   useEffect(() => {
     if (!user) {
@@ -50,24 +53,41 @@ export default function MyHustles() {
     fetchGenerations();
   }, [user, navigate]);
 
-  const fetchGenerations = async () => {
+  const fetchGenerations = async (loadMore = false) => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const currentPage = loadMore ? page + 1 : 0;
+      const from = currentPage * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
+      const { data, error, count } = await supabase
         .from("generations")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
 
-      setGenerations(data || []);
+      if (loadMore) {
+        setGenerations([...generations, ...(data || [])]);
+        setPage(currentPage);
+      } else {
+        setGenerations(data || []);
+        setPage(0);
+      }
+
+      setHasMore(data && data.length === ITEMS_PER_PAGE && (count || 0) > (currentPage + 1) * ITEMS_PER_PAGE);
     } catch (error: any) {
       console.error("Error fetching generations:", error);
       toast.error("Failed to load your hustles");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLoadMore = () => {
+    fetchGenerations(true);
   };
 
   const getToolCategory = (toolId: string): CategoryType | null => {
