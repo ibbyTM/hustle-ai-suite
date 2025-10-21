@@ -324,6 +324,16 @@ export default function MyHustles() {
                     Cancel
                   </Button>
                   <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={toggleSelectAll}
+                    className="gap-2"
+                  >
+                    {selectedIds.size === filteredGenerations.length && filteredGenerations.length > 0
+                      ? "Deselect All"
+                      : "Select All"}
+                  </Button>
+                  <Button
                     variant="destructive"
                     size="sm"
                     onClick={handleBulkDelete}
