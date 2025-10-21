@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react";
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [hasReferralCode, setHasReferralCode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,10 +23,18 @@ export default function Auth() {
     const refCode = searchParams.get('ref');
     if (refCode) {
       localStorage.setItem('referralCode', refCode);
-      setIsSignUp(true); // Switch to signup mode if referral code present
-      toast.success("Referral code applied! Sign up to get started.");
+      setHasReferralCode(true);
+      setIsSignUp(true);
     }
   }, [searchParams]);
+
+  // Check localStorage for existing referral code
+  useEffect(() => {
+    const storedRefCode = localStorage.getItem('referralCode');
+    if (storedRefCode) {
+      setHasReferralCode(true);
+    }
+  }, []);
 
   // Redirect if already logged in
   if (user) {
@@ -74,10 +84,31 @@ export default function Auth() {
           </h1>
           <p className="text-muted-foreground">
             {isSignUp 
-              ? "Sign up to start saving your hustles" 
+              ? hasReferralCode 
+                ? "Sign up now to claim your 25% discount" 
+                : "Sign up to start saving your hustles"
               : "Sign in to access your hustles"}
           </p>
         </div>
+
+        {hasReferralCode && (
+          <div className="mb-6 p-4 bg-gradient-primary/10 border-2 border-primary/30 rounded-xl animate-scale-in">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
+                <Sparkles className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="font-bold text-lg">🎉 Exclusive Discount Applied!</p>
+                <p className="text-sm text-muted-foreground">
+                  Get <span className="font-bold text-primary">25% off Plus</span> - just £30/month (normally £40)
+                </p>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Sign up now to lock in this special pricing 🚀
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
