@@ -1,14 +1,23 @@
 import { Lock } from "lucide-react";
 import { AutomationTool } from "@/types/automation";
 import { CategoryBadge } from "./CategoryBadge";
+import { FavoriteButton } from "./dashboard/FavoriteButton";
 
 interface AutomationCardProps {
   tool: AutomationTool;
   onClick: () => void;
   isLocked: boolean;
+  isFavorite?: boolean;
+  onFavoriteToggle?: (e: React.MouseEvent) => void;
 }
 
-export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps) => {
+export const AutomationCard = ({ 
+  tool, 
+  onClick, 
+  isLocked, 
+  isFavorite = false,
+  onFavoriteToggle 
+}: AutomationCardProps) => {
   const isBookForge = tool.id === "bookforge";
   
   return (
@@ -20,6 +29,13 @@ export const AutomationCard = ({ tool, onClick, isLocked }: AutomationCardProps)
       }`}
       title={isBookForge ? "Creates a full 10K+ word ebook chapter-by-chapter, formatted and export-ready." : undefined}
     >
+      {onFavoriteToggle && (
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={onFavoriteToggle}
+        />
+      )}
+      
       {isLocked && (
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
           <div className="text-center px-4">

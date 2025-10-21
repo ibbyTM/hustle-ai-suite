@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { AutomationCard } from "@/components/AutomationCard";
 import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
@@ -6,8 +6,13 @@ import { AutomationTool, CategoryType } from "@/types/automation";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import { QuickStartSection } from "@/components/dashboard/QuickStartSection";
+import { SearchAndFilter } from "@/components/dashboard/SearchAndFilter";
+import { FavoritesSection } from "@/components/dashboard/FavoritesSection";
+import { RecentlyUsedSection } from "@/components/dashboard/RecentlyUsedSection";
+import { CategorySection } from "@/components/dashboard/CategorySection";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useRecentlyUsed } from "@/hooks/useRecentlyUsed";
 
 const FREE_TIER_TOOLS = ["biz-idea", "hook-factory", "trend-finder", "inbox-influence"];
 
@@ -16,10 +21,15 @@ const categories: Array<"All" | CategoryType> = ["All", "Content", "Ads", "Hustl
 export default function Dashboard() {
   const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<"All" | CategoryType>("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<"All" | CategoryType>("All");
+  const [openCategory, setOpenCategory] = useState<CategoryType>("Content");
   const { tier } = useSubscription();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
+  const { recentTools } = useRecentlyUsed(5);
+  const categorySectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -42,12 +52,83 @@ export default function Dashboard() {
     setIsModalOpen(true);
   };
 
-  const filteredTools = automations.filter(tool => 
-    activeCategory === "All" || tool.category === activeCategory
-  );
+  const handleFavoriteToggle = useCallback((e: React.MouseEvent, toolId: string) => {
+    e.stopPropagation();
+    if (isFavorite(toolId)) {
+      removeFavorite(toolId);
+    } else {
+      addFavorite(toolId);
+    }
+  }, [isFavorite, addFavorite, removeFavorite]);
+
+  // Filter and search logic
+  const filteredTools = useMemo(() => {
+    return automations.filter(tool => {
+      const matchesCategory = selectedCategory === "All" || tool.category === selectedCategory;
+      const matchesSearch = !searchQuery || 
+        tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.category.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchQuery]);
+
+  // Group tools by category
+  const toolsByCategory = useMemo(() => {
+    const grouped: Record<CategoryType, AutomationTool[]> = {
+      Content: [],
+      Ads: [],
+      Hustle: [],
+      Brand: [],
+      Store: [],
+      Productivity: [],
+    };
+
+    filteredTools.forEach(tool => {
+      grouped[tool.category].push(tool);
+    });
+
+    return grouped;
+  }, [filteredTools]);
+
+  // Get favorite tools
+  const favoriteTools = useMemo(() => {
+    return automations.filter(tool => favorites.includes(tool.id));
+  }, [favorites]);
+
+  // Get recent tools with full data
+  const recentToolsWithData = useMemo(() => {
+    return recentTools.map(rt => ({
+      tool: automations.find(t => t.id === rt.tool_id)!,
+      timestamp: rt.created_at,
+    })).filter(rt => rt.tool); // Filter out any tools that don't exist
+  }, [recentTools]);
+
+  // Quick start handlers
+  const handleStartNew = useCallback(() => {
+    const firstTool = automations[0];
+    if (firstTool) handleToolClick(firstTool);
+  }, []);
+
+  const handleContinuePrevious = useCallback(() => {
+    if (recentToolsWithData.length > 0) {
+      handleToolClick(recentToolsWithData[0].tool);
+    }
+  }, [recentToolsWithData]);
+
+  const handleExploreTools = useCallback(() => {
+    categorySectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  // Handle category toggle
+  const handleCategoryToggle = useCallback((category: CategoryType) => {
+    setOpenCategory(prev => prev === category ? "Content" : category);
+  }, []);
 
   return (
     <div className="animate-fade-in">
+      {/* Hero Section */}
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
           Automate your hustle. Don't overthink it.
@@ -57,34 +138,71 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <div className="mb-6 flex items-center gap-3">
-        <Label htmlFor="category-filter" className="text-sm font-medium whitespace-nowrap">
-          Category:
-        </Label>
-        <Select value={activeCategory} onValueChange={(value) => setActiveCategory(value as "All" | CategoryType)}>
-          <SelectTrigger id="category-filter" className="w-full sm:w-[200px] h-11">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-card z-50">
-            {categories.map((category) => (
-              <SelectItem key={category} value={category} className="min-h-[44px]">
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Quick Start Section */}
+      <QuickStartSection
+        onStartNew={handleStartNew}
+        onContinuePrevious={handleContinuePrevious}
+        onExploreTools={handleExploreTools}
+        hasPreviousWork={recentToolsWithData.length > 0}
+      />
+
+      {/* Search and Filter */}
+      <SearchAndFilter
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        categories={categories}
+      />
+
+      {/* Favorites Section */}
+      <FavoritesSection
+        favoriteTools={favoriteTools}
+        onToolClick={handleToolClick}
+        isToolAccessible={isToolAccessible}
+        isFavorite={isFavorite}
+        onFavoriteToggle={handleFavoriteToggle}
+      />
+
+      {/* Recently Used Section */}
+      <RecentlyUsedSection
+        recentTools={recentToolsWithData}
+        onToolClick={handleToolClick}
+        isToolAccessible={isToolAccessible}
+        isFavorite={isFavorite}
+        onFavoriteToggle={handleFavoriteToggle}
+      />
+
+      {/* Category Sections */}
+      <div ref={categorySectionRef}>
+        {categories.filter(cat => cat !== "All").map((category) => {
+          const categoryTools = toolsByCategory[category as CategoryType];
+          if (categoryTools.length === 0) return null;
+
+          return (
+            <CategorySection
+              key={category}
+              category={category as CategoryType}
+              tools={categoryTools}
+              onToolClick={handleToolClick}
+              isToolAccessible={isToolAccessible}
+              isOpen={openCategory === category}
+              onToggle={() => handleCategoryToggle(category as CategoryType)}
+              isFavorite={isFavorite}
+              onFavoriteToggle={handleFavoriteToggle}
+            />
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {filteredTools.map((tool) => (
-          <AutomationCard
-            key={tool.id}
-            tool={tool}
-            onClick={() => handleToolClick(tool)}
-            isLocked={!isToolAccessible(tool)}
-          />
-        ))}
-      </div>
+      {/* No Results */}
+      {filteredTools.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground text-lg">
+            No tools found matching your search.
+          </p>
+        </div>
+      )}
 
       <ToolModal
         tool={selectedTool}
