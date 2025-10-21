@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface UseTypewriterOptions {
   speed?: number;
@@ -9,6 +9,7 @@ export function useTypewriter(fullText: string, options: UseTypewriterOptions = 
   const { speed = 20, enabled = true } = options;
   const [displayedText, setDisplayedText] = useState("");
   const [isComplete, setIsComplete] = useState(!enabled);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!enabled) {
@@ -27,20 +28,32 @@ export function useTypewriter(fullText: string, options: UseTypewriterOptions = 
     setIsComplete(false);
 
     let currentIndex = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       if (currentIndex < fullText.length) {
         setDisplayedText(fullText.slice(0, currentIndex + 1));
         currentIndex++;
       } else {
         setIsComplete(true);
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
       }
     }, speed);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, [fullText, speed, enabled]);
 
   const skipAnimation = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
     setDisplayedText(fullText);
     setIsComplete(true);
   }, [fullText]);
