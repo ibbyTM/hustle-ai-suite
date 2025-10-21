@@ -575,6 +575,7 @@ export default function MyHustles() {
                               title={gen.tool_title}
                               createdAt={gen.created_at}
                               outputPreview={gen.output}
+                              inputs={gen.inputs}
                               onClick={() => !isSelectionMode && handleCardClick(gen)}
                             />
                           </div>
@@ -588,23 +589,37 @@ export default function MyHustles() {
             </div>
           )}
 
-          {selectedGeneration && (
-            <GenerationDetailModal
-              isOpen={isDetailModalOpen}
-              onClose={() => setIsDetailModalOpen(false)}
-              emoji={selectedGeneration.tool_emoji}
-              title={selectedGeneration.tool_title}
-              createdAt={selectedGeneration.created_at}
-              inputs={selectedGeneration.inputs}
-              output={selectedGeneration.output}
-              onCopy={handleCopy}
-              onDelete={handleDelete}
-              toolId={selectedGeneration.tool_id}
-              generationId={selectedGeneration.id}
-              onSave={fetchGenerations}
-            />
+          {/* Load More Button */}
+          {hasMore && !hasActiveFilters && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                variant="outline"
+                onClick={handleLoadMore}
+                disabled={loading}
+                className="gap-2"
+              >
+                {loading ? "Loading..." : "Load More"}
+              </Button>
+            </div>
           )}
         </>
+      )}
+
+      {selectedGeneration && (
+        <GenerationDetailModal
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          emoji={selectedGeneration.tool_emoji}
+          title={selectedGeneration.tool_title}
+          createdAt={selectedGeneration.created_at}
+          inputs={selectedGeneration.inputs}
+          output={selectedGeneration.output}
+          onCopy={handleCopy}
+          onDelete={handleDelete}
+          toolId={selectedGeneration.tool_id}
+          generationId={selectedGeneration.id}
+          onSave={fetchGenerations}
+        />
       )}
     </div>
   );
