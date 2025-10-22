@@ -165,8 +165,16 @@ Your brand exists now. It has a name, a face, and a vibe. People will buy from b
         id: "day-3",
         title: "DAY 3: Build Your Store in Under 2 Hours",
         duration: "Day 3 - 2 hours",
-        toolsUsed: ["offer-builder"],
+        toolsUsed: ["page-builder", "offer-builder"],
         agentTriggers: [
+          {
+            agentId: "page-builder",
+            buttonText: "🏗️ Design Store Layout",
+            description: "Generate your homepage structure and layout",
+            context: {
+              platformType: "E-commerce Store"
+            }
+          },
           {
             agentId: "offer-builder",
             buttonText: "🎁 Generate Product Descriptions",
@@ -187,11 +195,14 @@ Your storefront. This is where the magic happens. No fluff, no distractions — 
 - Wix: easier for beginners, decent e-commerce tools
 - Sign up and pick a clean, mobile-friendly theme
 
-**Step 2: Use Store Layout Wizard 🏗️**
-- Open Store Layout Wizard in HustleLab
-- Enter your niche and product types
-- AI generates a homepage structure: hero section, featured products, trust badges, FAQ
-- Follow the layout and replicate it in your Shopify/Wix editor
+**Step 2: Design Your Homepage Structure 🏗️**
+- Open Page & Profile Builder in HustleLab
+- Select "E-commerce Store" as your platform
+- Enter your niche and main products
+- AI generates a homepage layout: hero section, featured products, trust badges, FAQ
+- Follow the structure and customize it in your Shopify/Wix editor
+
+[AGENT:page-builder]
 
 **Step 3: Add Your Products**
 - Upload product photos from your supplier
@@ -216,7 +227,7 @@ Your storefront. This is where the magic happens. No fluff, no distractions — 
 - Live chat widget (Tidio or Gorgias free plan)
 
 **HustleLab Tools Used:**
-- 🏗️ Store Layout Wizard → store structure
+- 🏗️ Page & Profile Builder → store structure
 - 🎁 Offer Builder → product descriptions
 
 **Platform Actions:**
@@ -260,12 +271,12 @@ Profit maximizers. Every customer is valuable — your job is to make the most o
 
 [AGENT:offer-builder]
 
-**Step 2: Add Upsells with Upsell Creator 💰**
-- Open Upsell Creator in HustleLab
-- Input your main product
-- AI suggests complementary upsell/cross-sell items
+**Step 2: Add Strategic Upsells 💰**
+- Use Offer Builder to plan complementary products
+- Think: "What would make this purchase better?"
+- Example: Selling a yoga mat? Upsell yoga blocks, straps, or a carry bag
 - Install a Shopify app like Zipify OCU, UpCart, or Honeycomb
-- Set up post-purchase or cart upsells
+- Set up post-purchase or cart upsells with your complementary products
 
 **Step 3: Create Urgency Without Being Sleazy**
 - Add countdown timers to product pages (use apps like Hurrify)
@@ -278,8 +289,7 @@ Profit maximizers. Every customer is valuable — your job is to make the most o
 - Install an email capture popup (Privy, Klaviyo, or Shopify native)
 
 **HustleLab Tools Used:**
-- 🎁 Offer Builder → bundles and promotions
-- 💰 Upsell Creator → upsell strategy
+- 🎁 Offer Builder → bundles, promotions, and upsell strategy
 
 **Platform Actions:**
 - Install upsell app on Shopify/Wix
@@ -326,13 +336,13 @@ Your customer acquisition engine. Organic is great, but paid ads bring speed. To
 
 [AGENT:ad-copy-lab]
 
-**Step 2: Find Your Audience 🎯**
-- Use Audience Magnet to generate targeting ideas
-- AI suggests:
-  - Interest-based audiences
-  - Lookalike seeds
-  - Demographic breakdowns
-- Write down 3 audience segments to test
+**Step 2: Define Your Target Audience 🎯**
+- Create 3 audience segments to test in Meta Ads Manager:
+  1. **Interest-based:** People interested in your niche (e.g., "yoga," "home fitness," "pet training")
+  2. **Lookalike:** Upload email list or pixel data (if you have 100+ visitors)
+  3. **Demographic:** Age range + location (e.g., 25-45, US/UK/CA)
+- Start broad and narrow based on results
+- Test one audience per ad set with $10-15/day budget each
 
 **Step 3: Create Ad Visuals**
 - Use product photos or lifestyle shots from supplier
@@ -355,7 +365,6 @@ Your customer acquisition engine. Organic is great, but paid ads bring speed. To
 
 **HustleLab Tools Used:**
 - ✨ Ad Copy & Creative Lab → ad scripts
-- 🎯 Audience Magnet → targeting strategy
 
 **Platform Actions:**
 - Meta Ads Manager account created
@@ -390,13 +399,13 @@ If CTR is low: change creative or hook
 If CPC is high: narrow your audience or improve creative
 If no sales yet: check your landing page and offer
 
-**Step 2: Use Budget Booster for Insights 📊**
-- Open Budget Booster in HustleLab
-- Input your spend, clicks, and conversions
-- AI suggests:
-  - Where to reallocate budget
-  - Which audiences to pause
-  - Which creatives to scale
+**Step 2: Analyze & Make Decisions 📊**
+Based on your metrics, take action:
+- **CTR < 1%:** Change your creative or hook — it's not grabbing attention
+- **CPC > $1.50:** Narrow your audience or improve ad relevance score
+- **No conversions after $30 spend:** Check your landing page, offer, or pricing
+- **ROAS 2x+:** Scale by increasing budget 20-30% every 2 days
+- **ROAS < 1x:** Pause and test new creative or audience
 
 **Step 3: Split Test Like a Pro**
 - Duplicate your best-performing ad
@@ -417,7 +426,7 @@ Create a retargeting campaign for:
 - Scale winners by 20–30% every 2 days
 
 **HustleLab Tools Used:**
-- 📊 Budget Booster → ad optimization
+- ✨ Ad Copy & Creative Lab → testing new ad variations
 
 **Platform Actions:**
 - Adjust Meta Ads Manager settings
@@ -1809,8 +1818,10 @@ Add:
 **Step 5: Create a Digital Product to Sell (Optional but Powerful)**
 
 Use HustleLab tools from "Digital Product Empire" course:
-- **Authority Builder Pro:** Write a mini ebook (5,000–10,000 words)
-- **BookForge Cover Maker:** Design the cover
+- **BookForge:** Write and format your mini ebook (5,000–10,000 words)
+
+[AGENT:bookforge]
+
 - **Offer Builder:** Price it ($7–$27)
 - **Page & Profile Builder:** Create a sales page
 
