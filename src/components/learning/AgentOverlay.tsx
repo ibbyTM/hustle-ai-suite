@@ -11,6 +11,7 @@ import { HookFactoryPanel } from "@/components/agent/HookFactoryPanel";
 import { PageBuilderPanel } from "@/components/agent/PageBuilderPanel";
 import { FacelessScriptPanel } from "@/components/agent/FacelessScriptPanel";
 import { ContentToCashPanel } from "@/components/agent/ContentToCashPanel";
+import { LogoMakerPanel } from "@/components/agent/LogoMakerPanel";
 
 interface AgentOverlayProps {
   agentId: string | null;
@@ -48,6 +49,8 @@ export const AgentOverlay = ({ agentId, context, onClose }: AgentOverlayProps) =
         return <FacelessScriptPanel {...commonProps} />;
       case "content-to-cash":
         return <ContentToCashPanel {...commonProps} />;
+      case "logo-maker":
+        return <LogoMakerPanel {...commonProps} />;
       default:
         return null;
     }

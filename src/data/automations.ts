@@ -2,6 +2,24 @@ import { AutomationTool } from "@/types/automation";
 
 export const automations: AutomationTool[] = [
   {
+    id: "logo-maker",
+    title: "Logo Maker",
+    emoji: "🎨",
+    category: "Brand",
+    description: "Generate professional logos instantly with AI",
+    isPro: false,
+    kbRequirement: "none",
+    inputs: [
+      { id: "businessName", label: "Business Name", type: "text", placeholder: "e.g., FitFlow Studio", required: true },
+      { id: "tagline", label: "Tagline (Optional)", type: "text", placeholder: "e.g., Move Better, Feel Better", required: false },
+      { id: "brandStyle", label: "Brand Style", type: "select", options: ["Minimalist", "Modern Tech", "Luxury / Premium", "Bold & Playful", "Clean & Professional"], defaultValue: "Clean & Professional", required: true },
+      { id: "colorPalette", label: "Color Palette (Optional)", type: "text", placeholder: "e.g., blue and white, gold and black", required: false },
+      { id: "iconPreference", label: "Icon Preference (Optional)", type: "text", placeholder: "e.g., lightning bolt, shopping cart, brain", required: false },
+      { id: "outputFormat", label: "Output Format", type: "select", options: ["Square Logo", "Horizontal Logo", "Icon Only"], defaultValue: "Square Logo", required: true }
+    ],
+    promptTemplate: ""
+  },
+  {
     id: "bookforge",
     title: "BookForge Cover Maker",
     emoji: "📖",
