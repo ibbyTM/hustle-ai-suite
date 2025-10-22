@@ -571,7 +571,7 @@ Now go build your empire. 💰⚡`
       "biz-idea",
       "name-forge",
       "bookforge",
-      "logomaker",
+      "logo-maker",
       "offer-builder",
       "hook-factory",
       "page-builder",
@@ -766,7 +766,7 @@ Generate your full ebook draft in one session. Don't edit as you go. Let the AI 
         id: "day-3-design",
         title: "Design Your Cover & Brand Assets",
         duration: "Day 3 - 30 minutes",
-        toolsUsed: ["bookforge", "logomaker"],
+        toolsUsed: ["bookforge", "logo-maker"],
         agentTriggers: [
           {
             agentId: "bookforge",
@@ -1040,7 +1040,7 @@ Launch on all 3 platforms today. No delays. Upload, publish, and go live. Speed 
         id: "day-6-promote",
         title: "Promote Across Social & Email",
         duration: "Day 6 - 1 hour",
-        toolsUsed: ["hook-factory", "inbox-influence", "logomaker"],
+        toolsUsed: ["hook-factory", "inbox-influence", "logo-maker"],
         agentTriggers: [
           {
             agentId: "hook-factory",

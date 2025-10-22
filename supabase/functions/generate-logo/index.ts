@@ -26,13 +26,33 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const basePrompt = `Create a professional ${outputFormat.toLowerCase()} logo for a business called "${businessName}".
-Style: ${brandStyle}.
-${tagline ? `Tagline: "${tagline}".` : ''}
-${colorPalette ? `Use these colors: ${colorPalette}.` : ''}
-${iconPreference ? `Icon inspiration: ${iconPreference}.` : ''}
-Design should be clean, modern, and suitable for ${outputFormat.toLowerCase()} format.
-${variationIndex > 1 ? `This is variation ${variationIndex}, create a unique alternative design.` : ''}`;
+    // Layout-specific instructions
+    let layoutInstruction = '';
+    if (outputFormat === 'Square Logo') {
+      layoutInstruction = 'Use a balanced, square composition with the mark and text arranged symmetrically.';
+    } else if (outputFormat === 'Horizontal Logo') {
+      layoutInstruction = 'Create a horizontal layout with the icon on the left and brand name on the right, emphasizing width over height.';
+    } else if (outputFormat === 'Icon Only') {
+      layoutInstruction = 'Design only the icon/mark without any text - a standalone symbol that represents the brand.';
+    }
+
+    const basePrompt = `Generate a high-resolution 1024×1024 PNG logo with a fully transparent background.
+
+Business Name: "${businessName}"
+${tagline ? `Tagline: "${tagline}"` : ''}
+Style: ${brandStyle}
+${colorPalette ? `Color Palette: ${colorPalette}` : ''}
+${iconPreference ? `Icon Inspiration: ${iconPreference}` : ''}
+
+Layout: ${outputFormat}
+${layoutInstruction}
+
+Requirements:
+- Output MUST be 1024×1024 pixels
+- Background MUST be fully transparent (PNG format)
+- Design should be clean, modern, professional, and brand-ready
+- Suitable for use on both light and dark backgrounds
+${variationIndex > 1 ? `\nThis is variation ${variationIndex} - create a unique alternative design approach.` : ''}`;
 
     console.log(`Generating logo variation ${variationIndex} for: ${businessName}`);
 

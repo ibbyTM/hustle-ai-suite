@@ -131,7 +131,7 @@ export const ToolModal = ({ tool, isOpen, onClose }: ToolModalProps) => {
     return <ViralAnalyticsDecoderPanel isOpen={isOpen} onClose={onClose} />;
   }
 
-  if (tool?.id === "logo-maker") {
+  if (tool?.id === "logo-maker" || tool?.id === "logomaker") {
     return <LogoMakerPanel isOpen={isOpen} onClose={onClose} />;
   }
 

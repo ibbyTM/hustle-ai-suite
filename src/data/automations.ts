@@ -609,23 +609,6 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
     promptTemplate: "Generate 5 unique ad campaign angles for {product} ({uniqueValue}), targeting {targetAudience}, objective: {adObjective}.\n\nCompetitor landscape:\n{competitorAngles}\n\nUse this exact structure:\n\n**Campaign Angles**\n\nFor each angle:\n\n**Angle #[number] – [Angle Name]**\n\n**Core Message:**\nWrite the primary positioning statement in one sentence.\n\n**Hook Strategy:**\nProvide 2-3 scroll-stopping opening lines.\n\n**Messaging Framework:**\n- Problem: [What pain does this address?]\n- Agitation: [Why it matters now]\n- Solution: [How your product solves it]\n- Proof: [What evidence/social proof to use]\n\n**Creative Direction:**\nDescribe the visual approach and content style.\n\n**Target Psychology:**\nWhat emotional trigger does this angle exploit?\n\n**Platform Fit:**\nBest suited for: [Facebook/Instagram/TikTok/YouTube]\n\n**CTA Strategy:**\nRecommended call-to-action approach.\n\n**Why This Angle Works:**\n1-2 sentences on the strategic reasoning.\n\n**Next Play**\n1. [First angle to test]\n2. [Creative brief for design team]\n3. [Scaling strategy if it works]\n\nDo not use emojis. Write like a creative strategist."
   },
   {
-    id: "logomaker",
-    title: "Logo Maker",
-    emoji: "🎨",
-    category: "Brand",
-    description: "Brand identity that looks expensive, minus the agency bill. Generate professional logo concepts and complete brand kits in minutes.",
-    isPro: true,
-    kbRequirement: "recommended",
-    inputs: [
-      { id: "brandName", label: "Brand Name", type: "text", placeholder: "Your brand name", required: true },
-      { id: "industry", label: "Industry / Niche", type: "text", placeholder: "e.g., fitness, SaaS, fashion", required: true },
-      { id: "brandPersonality", label: "Brand Personality", type: "multiselect", options: ["Modern", "Minimalist", "Bold", "Playful", "Premium", "Tech", "Natural"], required: true },
-      { id: "colorPreferences", label: "Color Preferences", type: "text", placeholder: "e.g., blue, green, or 'no preference'", required: false },
-      { id: "logoType", label: "Logo Type", type: "select", options: ["Wordmark", "Icon + Text", "Icon Only", "No Preference"], defaultValue: "No Preference", required: false }
-    ],
-    promptTemplate: "Design a complete brand identity system for {brandName} in the {industry} space, personality: {brandPersonality}, colors: {colorPreferences}, logo type: {logoType}.\n\nUse this exact structure:\n\n**Brand Identity System**\n\n**Logo Concepts (3 options)**\n\nFor each concept:\n\n**Concept #[number] – [Concept Name]**\n\n**Visual Description:**\nDescribe the logo design in detail (shape, style, composition).\n\n**Symbolism:**\nExplain what the design represents and why it works for {brandName}.\n\n**Typography:**\n- Primary font: [Font name or style description]\n- Style notes: [Weight, spacing, character]\n\n**When to Use:**\nBest applications for this concept.\n\n**Color Palette**\n\n**Primary Colors:**\n- Color 1: [Name] – [Hex code] – [Usage: headers, CTAs, etc.]\n- Color 2: [Name] – [Hex code] – [Usage]\n\n**Secondary Colors:**\n- [Supporting colors with hex codes]\n\n**Neutral Colors:**\n- Background, text, borders\n\n**Color Psychology:**\nWhy this palette works for {industry} and {brandPersonality}.\n\n**Typography System**\n\n**Headings:** [Font recommendation]\n**Body Text:** [Font recommendation]\n**Accent/Display:** [Font recommendation]\n\n**Brand Applications**\n\n**Logo Usage Guidelines:**\n- Minimum size\n- Clear space requirements\n- Acceptable backgrounds\n- What NOT to do\n\n**Brand Touchpoints:**\nHow to use this identity across:\n- Website\n- Social media\n- Marketing materials\n- Packaging (if applicable)\n\n**Next Play**\n1. [First step: refine chosen concept]\n2. [Where to create final files]\n3. [How to implement across platforms]\n\nDo not use emojis. Write like a brand designer."
-  },
-  {
     id: "seooptimiser",
     title: "SEO Optimiser",
     emoji: "🔍",

@@ -52,12 +52,17 @@ export function useLogoGeneration({ toolId, toolTitle, toolEmoji }: UseLogoGener
 
       const outputData = JSON.stringify(results.map(r => r.imageUrl));
       
+      // Create a better title with the business name
+      const displayTitle = inputs.businessName 
+        ? `Logo – ${inputs.businessName}`
+        : toolTitle;
+      
       await supabase
         .from("generations")
         .insert({
           user_id: user.id,
           tool_id: toolId,
-          tool_title: toolTitle,
+          tool_title: displayTitle,
           tool_emoji: toolEmoji,
           inputs,
           output: outputData,
