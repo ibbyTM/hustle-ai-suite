@@ -42,6 +42,54 @@ export const LessonViewer = ({
     });
   };
 
+  const renderContentWithInlineAgents = (content: string) => {
+    const agentMarkerRegex = /\[AGENT:([^\]]+)\]/g;
+    const parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+    
+    while ((match = agentMarkerRegex.exec(content)) !== null) {
+      // Add text before the marker
+      if (match.index > lastIndex) {
+        const textBefore = content.slice(lastIndex, match.index);
+        parts.push(
+          <div key={`text-${lastIndex}`}>
+            {renderContentWithFormatting(textBefore)}
+          </div>
+        );
+      }
+      
+      // Add the agent button
+      const agentId = match[1];
+      const trigger = module.agentTriggers?.find(t => t.agentId === agentId);
+      
+      if (trigger) {
+        parts.push(
+          <div key={`agent-${match.index}`} className="my-6">
+            <AgentTriggerButton
+              trigger={trigger}
+              onLaunch={onLaunchAgent}
+            />
+          </div>
+        );
+      }
+      
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining text after last marker
+    if (lastIndex < content.length) {
+      const textAfter = content.slice(lastIndex);
+      parts.push(
+        <div key={`text-${lastIndex}`}>
+          {renderContentWithFormatting(textAfter)}
+        </div>
+      );
+    }
+    
+    return parts.length > 0 ? parts : renderContentWithFormatting(content);
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Video Player */}
@@ -59,27 +107,8 @@ export const LessonViewer = ({
 
       {/* Lesson Content */}
       <div className="prose prose-invert max-w-none mb-8 text-foreground">
-        {renderContentWithFormatting(module.content)}
+        {renderContentWithInlineAgents(module.content)}
       </div>
-
-      {/* Agent Triggers */}
-      {module.agentTriggers && module.agentTriggers.length > 0 && (
-        <div className="mb-8 p-6 bg-card border border-border rounded-xl">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <span className="text-2xl">🚀</span>
-            Action Tools for This Lesson
-          </h3>
-          <div className="space-y-3">
-            {module.agentTriggers.map((trigger, index) => (
-              <AgentTriggerButton
-                key={index}
-                trigger={trigger}
-                onLaunch={onLaunchAgent}
-              />
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Completion Checkbox */}
       <div className="flex items-center space-x-2 p-4 bg-card border border-border rounded-lg">
