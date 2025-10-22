@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, Download, GraduationCap } from "lucide-react";
+import { TrendingUp, DollarSign, Grid3x3, LogOut, Database, Menu, Download, GraduationCap, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -44,7 +44,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     { path: "/dashboard", icon: Grid3x3, label: "Dashboard" },
     { path: "/my-hustles", icon: TrendingUp, label: "My Hustles" },
     { path: "/knowledge-bases", icon: Database, label: "Knowledge Bases" },
-    { path: "/course-guides", icon: GraduationCap, label: "Course Guides" },
+    { path: "/course-guides", icon: GraduationCap, label: "Courses" },
+    { path: "/learn", icon: BookOpen, label: "Learn", hidden: true },
     { path: "/affiliate", icon: DollarSign, label: "Affiliate" },
   ];
 
@@ -66,7 +67,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
               {/* Desktop Navigation */}
               <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
-                {navItems.map((item) => (
+                {navItems.filter(item => !item.hidden).map((item) => (
                   <Link
                     key={item.path}
                     to={item.path}
@@ -135,7 +136,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </SheetTrigger>
                   <SheetContent side="right" className="w-72 bg-card">
                     <nav className="flex flex-col gap-4 mt-8">
-                      {navItems.map((item) => (
+                      {navItems.filter(item => !item.hidden).map((item) => (
                         <Link
                           key={item.path}
                           to={item.path}

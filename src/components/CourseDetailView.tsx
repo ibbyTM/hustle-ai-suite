@@ -1,13 +1,15 @@
 import { Course } from "@/types/course";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CheckCircle2, Clock, Lightbulb, Target } from "lucide-react";
+import { CheckCircle2, Clock, Lightbulb, Target, PlayCircle } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CourseDetailViewProps {
   course: Course | null;
@@ -28,6 +30,7 @@ const renderContentWithBold = (content: string) => {
 };
 
 export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailViewProps) => {
+  const navigate = useNavigate();
   const [completedModules, setCompletedModules] = useState<Record<string, boolean>>({});
 
   // Load from localStorage on mount
@@ -64,6 +67,11 @@ export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailVie
 
   if (!course) return null;
 
+  const handleStartCourse = () => {
+    onOpenChange(false);
+    navigate(`/learn/${course.id}`);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl max-h-[90vh]">
@@ -90,6 +98,13 @@ export const CourseDetailView = ({ course, open, onOpenChange }: CourseDetailVie
                 </div>
                 <Progress value={progressPercentage} className="h-2" />
               </div>
+              <Button 
+                onClick={handleStartCourse}
+                className="w-full mt-4 bg-gradient-primary gap-2"
+              >
+                <PlayCircle className="h-5 w-5" />
+                {completedCount > 0 ? "Continue Course" : "Start Course"}
+              </Button>
             </div>
           </div>
         </DialogHeader>

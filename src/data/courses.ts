@@ -37,6 +37,23 @@ export const courses: Course[] = [
         title: "DAY 1: Find Your Million-Dollar Niche",
         duration: "Day 1 - 30 minutes",
         toolsUsed: ["biz-idea", "dropship-goldmine"],
+        agentTriggers: [
+          {
+            agentId: "biz-idea",
+            buttonText: "🔥 Launch Biz-Idea Reactor",
+            description: "Generate niche ideas based on your interests and budget",
+            context: {
+              budgetRange: "£0-£500",
+              timeToLaunch: "7d"
+            }
+          },
+          {
+            agentId: "dropship-goldmine",
+            buttonText: "📦 Find Trending Products",
+            description: "Discover winning products in your chosen niche",
+            context: {}
+          }
+        ],
         content: `**Today's Goal:**
 Choose a profitable niche and find 3–5 winning products you can sell immediately.
 
@@ -81,6 +98,14 @@ You just did in 30 minutes what most people spend weeks overthinking. You have y
         title: "DAY 2: Build Your Brand Identity",
         duration: "Day 2 - 1-2 hours",
         toolsUsed: ["name-forge"],
+        agentTriggers: [
+          {
+            agentId: "name-forge",
+            buttonText: "⚡ Generate Brand Names",
+            description: "Get catchy, memorable brand name ideas for your store",
+            context: {}
+          }
+        ],
         content: `**Today's Goal:**
 Create a memorable brand name, logo, and visual identity that makes your store look legit from day one.
 
@@ -245,6 +270,16 @@ You're not just selling products anymore. You're building a system that prints p
         title: "DAY 5: Launch Your First Ad Campaign",
         duration: "Day 5 - 1-2 hours",
         toolsUsed: ["ad-copy-lab"],
+        agentTriggers: [
+          {
+            agentId: "ad-copy-lab",
+            buttonText: "✨ Generate Ad Copy",
+            description: "Create scroll-stopping ad copy for Meta ads",
+            context: {
+              objective: "Conversions"
+            }
+          }
+        ],
         content: `**Today's Goal:**
 Create and launch a Meta (Facebook/Instagram) ad campaign with scroll-stopping creative and copy.
 

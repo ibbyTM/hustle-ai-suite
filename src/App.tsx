@@ -20,6 +20,7 @@ import CreatorPass from "./pages/CreatorPass";
 import CreatorPassCheckEmail from "./pages/CreatorPassCheckEmail";
 import Install from "./pages/Install";
 import CourseGuides from "./pages/CourseGuides";
+import LearningDashboard from "./pages/LearningDashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import { useEffect } from "react";
@@ -65,6 +66,9 @@ const App = () => {
                 <Route path="/knowledge-bases" element={<KnowledgeBases />} />
                 <Route path="/knowledge-bases/:id" element={<KnowledgeBaseEditor />} />
                 <Route path="/course-guides" element={<CourseGuides />} />
+                <Route path="/learn" element={<LearningDashboard />} />
+                <Route path="/learn/:courseId" element={<LearningDashboard />} />
+                <Route path="/learn/:courseId/:moduleId" element={<LearningDashboard />} />
                 <Route path="/affiliate" element={<Affiliate />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/founder-pass" element={<FounderPass />} />
