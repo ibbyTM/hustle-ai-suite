@@ -9,6 +9,7 @@ export const courses: Course[] = [
     fullDescription: "Launch Your Store and Make Your First Sale in One Week. This comprehensive 7-day program takes you from zero to your first sale using Hustle Lab's AI-powered tools. No guesswork, no fluff—just a proven system that helps you build, launch, and scale a real dropshipping business.",
     difficulty: "Beginner",
     estimatedTime: "7 days (1-2 hours per day)",
+    tierRequired: "pro",
     toolsUsed: [
       "biz-idea",
       "dropship-goldmine",
@@ -159,6 +160,14 @@ Your brand exists now. It has a name, a face, and a vibe. People will buy from b
         title: "DAY 3: Build Your Store in Under 2 Hours",
         duration: "Day 3 - 2 hours",
         toolsUsed: ["offer-builder"],
+        agentTriggers: [
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Generate Product Descriptions",
+            description: "Create compelling product descriptions with AI",
+            context: {}
+          }
+        ],
         content: `**Today's Goal:**
 Set up a live Shopify or Wix store with your products, branding, and checkout ready to go.
 
@@ -219,6 +228,14 @@ Your store is live. You can send someone a link right now and they can buy from 
         title: "DAY 4: Create Irresistible Offers & Upsells",
         duration: "Day 4 - 1 hour",
         toolsUsed: ["offer-builder"],
+        agentTriggers: [
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Build Bundle Offers",
+            description: "Create compelling bundles and upsell strategies",
+            context: {}
+          }
+        ],
         content: `**Today's Goal:**
 Increase your average order value by 30–50% using smart upsells, bundles, and urgency tactics.
 
@@ -528,6 +545,7 @@ Now go build your empire. 💰⚡`
     fullDescription: "A 7-Day HustleLab Course for Digital Creators. Your fast-track blueprint to creating and selling your first digital product in just 7 days. This isn't theory. This isn't \"someday.\" This is your week to build, launch, and start earning. You're going to use HustleLab's AI-powered tools to go from blank page to published product across multiple platforms. No design degree needed. No coding required. Just you, HustleLab, and a commitment to move fast.",
     difficulty: "Beginner",
     estimatedTime: "7 days (1-2 hours per day)",
+    tierRequired: "free",
     toolsUsed: [
       "biz-idea",
       "name-forge",
@@ -571,6 +589,14 @@ Now go build your empire. 💰⚡`
         title: "Find Your Profitable Niche",
         duration: "Day 1 - 30 minutes",
         toolsUsed: ["biz-idea"],
+        agentTriggers: [
+          {
+            agentId: "biz-idea",
+            buttonText: "💡 Generate Niche Ideas",
+            description: "Discover profitable digital product niches",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Discover a winning digital product idea that people actually want to buy — and validate it fast.
@@ -633,6 +659,20 @@ Set a 20-minute timer. Use Biz-Idea Reactor, pick your niche, and validate it on
         title: "Build Your Ebook Outline & Content",
         duration: "Day 2 - 1-2 hours",
         toolsUsed: ["name-forge", "bookforge"],
+        agentTriggers: [
+          {
+            agentId: "name-forge",
+            buttonText: "⚡ Generate Product Names",
+            description: "Create catchy names for your digital product",
+            context: {}
+          },
+          {
+            agentId: "bookforge",
+            buttonText: "📖 Generate Ebook Content",
+            description: "Create complete ebook with AI-powered content",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Create a complete, high-value ebook or digital guide using AI — no writer's block, no excuses.
@@ -700,6 +740,14 @@ Generate your full ebook draft in one session. Don't edit as you go. Let the AI 
         title: "Design Your Cover & Brand Assets",
         duration: "Day 3 - 30 minutes",
         toolsUsed: ["bookforge", "logomaker"],
+        agentTriggers: [
+          {
+            agentId: "bookforge",
+            buttonText: "📖 Create Ebook Cover",
+            description: "Generate professional cover designs for your product",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Create a professional, eye-catching cover and branding that makes your product look premium.
@@ -765,6 +813,14 @@ Design and finalize your cover in 30 minutes. Pick one, commit, and move on. Rem
         title: "Create Your Irresistible Offer & Pricing",
         duration: "Day 4 - 1 hour",
         toolsUsed: ["offer-builder"],
+        agentTriggers: [
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Build Your Offer",
+            description: "Structure pricing, bonuses, and positioning",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Position your product as a no-brainer purchase with the right price, bonuses, and messaging.
@@ -845,6 +901,20 @@ Set your price and lock it in. Don't second-guess. You can always test and adjus
         title: "Build Your Sales Page & Upload Listings",
         duration: "Day 5 - 2 hours",
         toolsUsed: ["hook-factory", "page-builder"],
+        agentTriggers: [
+          {
+            agentId: "hook-factory",
+            buttonText: "🪝 Generate Sales Headlines",
+            description: "Create scroll-stopping hooks for your sales page",
+            context: {}
+          },
+          {
+            agentId: "page-builder",
+            buttonText: "📱 Build Sales Page",
+            description: "Generate sales page copy and structure",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Create high-converting sales pages and upload your product to at least 3 platforms.
@@ -936,6 +1006,14 @@ Launch on all 3 platforms today. No delays. Upload, publish, and go live. Speed 
         title: "Promote Across Social & Email",
         duration: "Day 6 - 1 hour",
         toolsUsed: ["hook-factory", "inbox-influence", "logomaker"],
+        agentTriggers: [
+          {
+            agentId: "hook-factory",
+            buttonText: "🪝 Generate Social Hooks",
+            description: "Create viral hooks for promoting your product",
+            context: {}
+          }
+        ],
         content: `**Today's Goal**
 
 Drive traffic to your product using organic promotion, social content, and email outreach.
@@ -1150,6 +1228,7 @@ Set up ONE automation today — whether it's an email sequence, affiliate link, 
     fullDescription: "A 7-Module Course for Faceless Content Creators. The no-BS blueprint for building a profitable faceless content brand. Use HustleLab's AI tools to find viral trends, write scroll-stopping scripts, post consistently, and monetize through affiliate offers, digital products, or brand deals — all without ever being on camera.",
     difficulty: "Beginner",
     estimatedTime: "30 days (7 modules, flexible pacing)",
+    tierRequired: "free",
     toolsUsed: [
       "biz-idea",
       "content-to-cash",
@@ -1201,6 +1280,20 @@ Set up ONE automation today — whether it's an email sequence, affiliate link, 
         title: "MODULE 1: The Faceless Creator Model",
         duration: "Module 1 - 1 hour",
         toolsUsed: ["biz-idea", "content-to-cash"],
+        agentTriggers: [
+          {
+            agentId: "biz-idea",
+            buttonText: "💡 Find Your Niche",
+            description: "Discover profitable faceless content niches",
+            context: {}
+          },
+          {
+            agentId: "content-to-cash",
+            buttonText: "💰 Generate Content Ideas",
+            description: "Get monetizable content ideas for your niche",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Understand why faceless content dominates, choose your profitable niche, and map out your content strategy.
@@ -1281,6 +1374,20 @@ Answer these questions:
         title: "MODULE 2: Finding Your Viral Lane",
         duration: "Module 2 - 1-2 hours",
         toolsUsed: ["trend-finder", "viral-analytics"],
+        agentTriggers: [
+          {
+            agentId: "trend-finder",
+            buttonText: "🔥 Find Trending Content",
+            description: "Discover what's currently viral in your niche",
+            context: {}
+          },
+          {
+            agentId: "viral-analytics",
+            buttonText: "📈 Analyze Viral Posts",
+            description: "Decode the structure of viral content",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Discover proven viral formats in your niche and identify the exact content structure that gets views.
@@ -1362,6 +1469,20 @@ Use Trend Finder + Content-to-Cash Ideas to brainstorm:
         title: "MODULE 3: Script Like a Pro",
         duration: "Module 3 - 1-2 hours",
         toolsUsed: ["hook-factory", "faceless-script"],
+        agentTriggers: [
+          {
+            agentId: "hook-factory",
+            buttonText: "🪝 Generate Viral Hooks",
+            description: "Create scroll-stopping first lines for your videos",
+            context: {}
+          },
+          {
+            agentId: "faceless-script",
+            buttonText: "🎬 Write Video Scripts",
+            description: "Generate complete faceless video scripts",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Write viral scripts and hooks that stop the scroll and keep viewers watching until the end.
@@ -1444,6 +1565,14 @@ Don't write one script at a time. Batch create:
         title: "MODULE 4: Create & Post Fast",
         duration: "Module 4 - 2 hours",
         toolsUsed: ["social-post-crafter"],
+        agentTriggers: [
+          {
+            agentId: "social-post-crafter",
+            buttonText: "📱 Format Social Posts",
+            description: "Generate captions and format content for posting",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Turn your scripts into polished videos and publish consistently using a simple, fast workflow.
@@ -1544,6 +1673,20 @@ Remove watermarks between platforms using CapCut's export settings.
         title: "MODULE 5: Monetize Your Audience",
         duration: "Module 5 - 1-2 hours",
         toolsUsed: ["offer-builder", "page-builder", "content-to-cash"],
+        agentTriggers: [
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Build Your Offers",
+            description: "Create monetization offers and pricing",
+            context: {}
+          },
+          {
+            agentId: "page-builder",
+            buttonText: "📱 Create Link-in-Bio Page",
+            description: "Build your monetization landing page",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Turn views into income by promoting affiliate products, digital goods, or services.
@@ -1665,6 +1808,14 @@ Always disclose affiliate links:
         title: "MODULE 6: Automate Engagement",
         duration: "Module 6 - 1 hour",
         toolsUsed: ["comment-dm-engager", "inbox-influence"],
+        agentTriggers: [
+          {
+            agentId: "comment-dm-engager",
+            buttonText: "💬 Generate Auto-Replies",
+            description: "Create automated comment and DM responses",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Use AI to reply to comments, DMs, and leads automatically — building relationships and driving sales on autopilot.
@@ -1775,6 +1926,26 @@ Adjust your automation templates based on what's working.
         title: "MODULE 7: Scale Like a System",
         duration: "Module 7 - 2 hours",
         toolsUsed: ["viral-analytics", "trend-finder", "faceless-script", "social-post-crafter"],
+        agentTriggers: [
+          {
+            agentId: "viral-analytics",
+            buttonText: "📈 Analyze Performance",
+            description: "Decode what's working and optimize your content",
+            context: {}
+          },
+          {
+            agentId: "trend-finder",
+            buttonText: "🔥 Find Trending Topics",
+            description: "Discover what's viral in your niche right now",
+            context: {}
+          },
+          {
+            agentId: "faceless-script",
+            buttonText: "🎬 Batch Script Generation",
+            description: "Generate multiple video scripts at once",
+            context: {}
+          }
+        ],
         content: `**Module Goal**
 
 Analyze what's working, double down on winners, and automate your entire content creation and monetization system.
@@ -1985,6 +2156,7 @@ You're not just a faceless creator — you're a **cashflow machine.**
     fullDescription: "A repeatable influencer marketing machine that brings daily traffic and sales—without spending a dime upfront on shoutouts. Find micro-influencers (5k–100k followers), pitch them commission-only deals, arm them with proven content frameworks, and scale by adding more partners every week.",
     difficulty: "Intermediate",
     estimatedTime: "8 days (1 hour per day)",
+    tierRequired: "pro",
     toolsUsed: [
       "biz-idea",
       "offer-builder",
@@ -2019,6 +2191,20 @@ You're not just a faceless creator — you're a **cashflow machine.**
         title: "Module 1: The Influencer Mindset",
         duration: "Module 1 - 1 hour",
         toolsUsed: ["biz-idea", "offer-builder", "page-builder"],
+        agentTriggers: [
+          {
+            agentId: "biz-idea",
+            buttonText: "💡 Validate Your Product",
+            description: "Check if your product/service is influencer-ready",
+            context: {}
+          },
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Structure Commission Deals",
+            description: "Build irresistible partnership offers",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Understand why commission-based influencer partnerships outperform paid shoutouts, and see the exact 6-stage system you'll use.
 
 **The Reality Check**
@@ -2094,6 +2280,20 @@ You're not "hoping" for sales. You're building a system. Every influencer you ad
         title: "Module 2: Finding Perfect Creators",
         duration: "Module 2 - 2 hours",
         toolsUsed: ["biz-idea", "viral-analytics"],
+        agentTriggers: [
+          {
+            agentId: "biz-idea",
+            buttonText: "💡 Define Target Niche",
+            description: "Identify your perfect influencer niche and audience",
+            context: {}
+          },
+          {
+            agentId: "viral-analytics",
+            buttonText: "📈 Analyze Influencer Metrics",
+            description: "Check engagement rates and authenticity",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Use HustleLab's Biz-Idea Reactor and external tools to identify 300 micro-influencers (5k–100k followers) who match your niche and audience.
 
 **Why Micro-Influencers Win**
@@ -2203,6 +2403,20 @@ Today's mission:
         title: "Module 3: Outreach Strategy—The Monetise Framework",
         duration: "Module 3 - 1 hour",
         toolsUsed: ["hook-factory", "offer-builder", "page-builder"],
+        agentTriggers: [
+          {
+            agentId: "hook-factory",
+            buttonText: "🪝 Write DM Openers",
+            description: "Generate personalized influencer outreach messages",
+            context: {}
+          },
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Build Partnership Offer",
+            description: "Structure your commission proposal",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Master the genuine contact → value offer → commission proposal approach. Write DM scripts that feel human, build trust, and lead to partnerships.
 
 **The Outreach Mistake Everyone Makes**
@@ -2324,6 +2538,14 @@ Every DM is a new pipeline. You're not annoying people—you're offering them a 
         title: "Module 4: Deal Structure & Profit Math",
         duration: "Module 4 - 1 hour",
         toolsUsed: ["offer-builder", "biz-idea", "inbox-influence"],
+        agentTriggers: [
+          {
+            agentId: "offer-builder",
+            buttonText: "🎁 Build Commission Structure",
+            description: "Calculate profitable commission rates and deal terms",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Use HustleLab's Offer Builder to create commission structures, free sample plans, and conversion tracking that make both you and your influencers profitable.
 
 **The Commission Sweet Spot**
@@ -2596,6 +2818,20 @@ Vetting feels slow. But it saves you weeks of wasted effort. You're not building
         title: "Module 6: Campaign Execution—The 3-Story Framework",
         duration: "Module 6 - 1-2 hours",
         toolsUsed: ["ad-copy-lab", "hook-factory", "inbox-influence"],
+        agentTriggers: [
+          {
+            agentId: "ad-copy-lab",
+            buttonText: "✨ Generate Content Templates",
+            description: "Create the 3-story framework templates for influencers",
+            context: {}
+          },
+          {
+            agentId: "hook-factory",
+            buttonText: "🪝 Write Attention Grabbers",
+            description: "Generate scroll-stopping opening hooks",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Teach influencers HustleLab's proven 3-story sequence: Attention Grab → Transformation → Action. Use Ad Copy & Creative Lab to build plug-and-play content templates.
 
 **The Content Problem**
@@ -2747,6 +2983,14 @@ Content is the bridge between your influencer's audience and your bank account. 
         title: "Module 7: Tracking & Optimising",
         duration: "Module 7 - 1 hour",
         toolsUsed: ["viral-analytics", "inbox-influence", "comment-dm-engager", "ad-copy-lab"],
+        agentTriggers: [
+          {
+            agentId: "viral-analytics",
+            buttonText: "📈 Analyze Campaign Performance",
+            description: "Track and optimize influencer ROI",
+            context: {}
+          }
+        ],
         content: `**Lesson Goal:** Build a Notion or Google Sheets dashboard to track conversions, reach, ROI, and influencer performance. Use HustleLab's tools and Inbox Influence for follow-up campaigns.
 
 **Why Most Influencer Campaigns Fail**
