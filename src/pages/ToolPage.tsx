@@ -74,8 +74,8 @@ export default function ToolPage() {
   };
 
   const renderToolPanel = () => {
-    // All panels now render as pages, not modals
-    const pageProps = { isOpen: true, onClose: handleClose };
+    // All panels now render as pages with asPage prop
+    const pageProps = { isOpen: true, onClose: handleClose, asPage: true };
 
     switch (tool.id) {
       case "bookforge":
