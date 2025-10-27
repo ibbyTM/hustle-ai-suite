@@ -11,9 +11,10 @@ import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 interface CommentDMEngagerPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function CommentDMEngagerPanel({ isOpen, onClose }: CommentDMEngagerPanelProps) {
+export function CommentDMEngagerPanel({ isOpen, onClose, asPage }: CommentDMEngagerPanelProps) {
   const [messageText, setMessageText] = useState("");
   const [goal, setGoal] = useState("Engage");
   const [replyTone, setReplyTone] = useState("Friendly");
@@ -156,6 +157,7 @@ Do not use emojis in the output. Keep replies authentic, confident, and conversi
       emoji="💬"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

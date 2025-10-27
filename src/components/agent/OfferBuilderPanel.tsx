@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface OfferBuilderPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function OfferBuilderPanel({ isOpen, onClose }: OfferBuilderPanelProps) {
+export function OfferBuilderPanel({ isOpen, onClose, asPage }: OfferBuilderPanelProps) {
   const [inputs, setInputs] = useState({
     coreProduct: "",
     price: "",
@@ -154,6 +155,7 @@ export function OfferBuilderPanel({ isOpen, onClose }: OfferBuilderPanelProps) {
       emoji="🎁"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

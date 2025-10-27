@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface DropshipPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function DropshipPanel({ isOpen, onClose }: DropshipPanelProps) {
+export function DropshipPanel({ isOpen, onClose, asPage }: DropshipPanelProps) {
   const [inputs, setInputs] = useState({
     category: "",
     targetPriceRange: "",
@@ -140,6 +141,7 @@ export function DropshipPanel({ isOpen, onClose }: DropshipPanelProps) {
       emoji="📦"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

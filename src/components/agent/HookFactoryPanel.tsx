@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface HookFactoryPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function HookFactoryPanel({ isOpen, onClose }: HookFactoryPanelProps) {
+export function HookFactoryPanel({ isOpen, onClose, asPage }: HookFactoryPanelProps) {
   const [inputs, setInputs] = useState({
     context: "",
     emotion: "Curiosity",
@@ -139,6 +140,7 @@ export function HookFactoryPanel({ isOpen, onClose }: HookFactoryPanelProps) {
       emoji="🪝"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

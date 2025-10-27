@@ -11,9 +11,10 @@ import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 interface ViralAnalyticsDecoderPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function ViralAnalyticsDecoderPanel({ isOpen, onClose }: ViralAnalyticsDecoderPanelProps) {
+export function ViralAnalyticsDecoderPanel({ isOpen, onClose, asPage }: ViralAnalyticsDecoderPanelProps) {
   const [postContent, setPostContent] = useState("");
   const [platform, setPlatform] = useState("TikTok");
   const [objective, setObjective] = useState("Learn");
@@ -161,6 +162,7 @@ Do not use emojis in the output. Keep the analysis strategic, tactical, and acti
       emoji="📈"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

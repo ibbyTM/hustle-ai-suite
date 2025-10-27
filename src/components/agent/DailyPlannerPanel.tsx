@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface DailyPlannerPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function DailyPlannerPanel({ isOpen, onClose }: DailyPlannerPanelProps) {
+export function DailyPlannerPanel({ isOpen, onClose, asPage }: DailyPlannerPanelProps) {
   const [inputs, setInputs] = useState({
     priority1: "",
     priority2: "",
@@ -142,6 +143,7 @@ export function DailyPlannerPanel({ isOpen, onClose }: DailyPlannerPanelProps) {
       emoji="📋"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

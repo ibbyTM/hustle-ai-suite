@@ -11,9 +11,10 @@ import { useLogoGeneration } from "@/hooks/useLogoGeneration";
 interface LogoMakerPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function LogoMakerPanel({ isOpen, onClose }: LogoMakerPanelProps) {
+export function LogoMakerPanel({ isOpen, onClose, asPage }: LogoMakerPanelProps) {
   const [inputs, setInputs] = useState({
     businessName: "",
     tagline: "",
@@ -145,6 +146,7 @@ export function LogoMakerPanel({ isOpen, onClose }: LogoMakerPanelProps) {
       emoji="🎨"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

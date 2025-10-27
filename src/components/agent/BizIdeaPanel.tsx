@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface BizIdeaPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function BizIdeaPanel({ isOpen, onClose }: BizIdeaPanelProps) {
+export function BizIdeaPanel({ isOpen, onClose, asPage }: BizIdeaPanelProps) {
   const [inputs, setInputs] = useState({
     interests: "",
     budgetRange: "",
@@ -144,6 +145,7 @@ export function BizIdeaPanel({ isOpen, onClose }: BizIdeaPanelProps) {
       emoji="💡"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

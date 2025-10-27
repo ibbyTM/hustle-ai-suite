@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 interface BookForgePanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
 interface SavedGeneration {
@@ -24,7 +25,7 @@ interface SavedGeneration {
   created_at: string;
 }
 
-export function BookForgePanel({ isOpen, onClose }: BookForgePanelProps) {
+export function BookForgePanel({ isOpen, onClose, asPage }: BookForgePanelProps) {
   const [ebookSource, setEbookSource] = useState<"new" | "saved">("new");
   const [savedGenerations, setSavedGenerations] = useState<SavedGeneration[]>([]);
   const [selectedEbookId, setSelectedEbookId] = useState<string>("");
@@ -308,6 +309,7 @@ Ultra high resolution, portrait orientation, 2:3 aspect ratio (ideal ebook cover
       emoji="📖"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface AdCopyLabPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function AdCopyLabPanel({ isOpen, onClose }: AdCopyLabPanelProps) {
+export function AdCopyLabPanel({ isOpen, onClose, asPage }: AdCopyLabPanelProps) {
   const [inputs, setInputs] = useState({
     objective: "Conversions",
     product: "",
@@ -177,6 +178,7 @@ export function AdCopyLabPanel({ isOpen, onClose }: AdCopyLabPanelProps) {
       emoji="✨"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

@@ -11,9 +11,10 @@ import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 interface SocialPostCrafterPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function SocialPostCrafterPanel({ isOpen, onClose }: SocialPostCrafterPanelProps) {
+export function SocialPostCrafterPanel({ isOpen, onClose, asPage }: SocialPostCrafterPanelProps) {
   const [platform, setPlatform] = useState("TikTok");
   const [topic, setTopic] = useState("");
   const [tone, setTone] = useState("Casual");
@@ -151,6 +152,7 @@ Do not use emojis in the output. Keep the tone sharp, strategic, and conversion-
       emoji="📱"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

@@ -14,9 +14,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface AdFunnelPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function AdFunnelPanel({ isOpen, onClose }: AdFunnelPanelProps) {
+export function AdFunnelPanel({ isOpen, onClose, asPage }: AdFunnelPanelProps) {
   const [inputs, setInputs] = useState({
     funnelType: "Lead magnet → Nurture → Sale",
     topHook: "",
@@ -172,6 +173,7 @@ export function AdFunnelPanel({ isOpen, onClose }: AdFunnelPanelProps) {
       emoji="🚀"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

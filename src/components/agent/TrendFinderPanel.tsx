@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface TrendFinderPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
+export function TrendFinderPanel({ isOpen, onClose, asPage }: TrendFinderPanelProps) {
   const [inputs, setInputs] = useState({
     niche: "",
     region: "Global",
@@ -142,6 +143,7 @@ export function TrendFinderPanel({ isOpen, onClose }: TrendFinderPanelProps) {
       emoji="🔥"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

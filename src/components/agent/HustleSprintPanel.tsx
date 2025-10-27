@@ -12,9 +12,10 @@ import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 interface HustleSprintPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function HustleSprintPanel({ isOpen, onClose }: HustleSprintPanelProps) {
+export function HustleSprintPanel({ isOpen, onClose, asPage }: HustleSprintPanelProps) {
   const [goalProject, setGoalProject] = useState("");
   const [skillLevel, setSkillLevel] = useState("Beginner");
   const [hoursPerDay, setHoursPerDay] = useState(2);
@@ -216,6 +217,7 @@ Format as a structured action plan with clear daily/weekly tasks.`;
       emoji="🏃"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

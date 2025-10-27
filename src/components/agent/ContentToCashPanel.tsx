@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface ContentToCashPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function ContentToCashPanel({ isOpen, onClose }: ContentToCashPanelProps) {
+export function ContentToCashPanel({ isOpen, onClose, asPage }: ContentToCashPanelProps) {
   const [inputs, setInputs] = useState({
     primaryFormat: "Video",
     monetizationPath: "Product",
@@ -130,6 +131,7 @@ export function ContentToCashPanel({ isOpen, onClose }: ContentToCashPanelProps)
       emoji="💰"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

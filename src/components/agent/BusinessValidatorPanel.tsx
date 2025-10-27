@@ -13,9 +13,10 @@ import { useKnowledgeBaseAttachment } from "@/hooks/useKnowledgeBaseAttachment";
 interface BusinessValidatorPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function BusinessValidatorPanel({ isOpen, onClose }: BusinessValidatorPanelProps) {
+export function BusinessValidatorPanel({ isOpen, onClose, asPage }: BusinessValidatorPanelProps) {
   const [businessIdea, setBusinessIdea] = useState("");
   const [targetMarket, setTargetMarket] = useState("");
   const [currentStage, setCurrentStage] = useState("Just an idea");
@@ -183,6 +184,7 @@ Keep the tone constructive, honest, and actionable. Format with clear sections a
       emoji="✅"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

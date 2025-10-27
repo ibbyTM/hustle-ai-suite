@@ -13,9 +13,10 @@ import { KnowledgeBaseSelector } from "./KnowledgeBaseSelector";
 interface PageBuilderPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function PageBuilderPanel({ isOpen, onClose }: PageBuilderPanelProps) {
+export function PageBuilderPanel({ isOpen, onClose, asPage }: PageBuilderPanelProps) {
   const [inputs, setInputs] = useState({
     platform: "Instagram",
     profileType: "Business",
@@ -127,6 +128,7 @@ export function PageBuilderPanel({ isOpen, onClose }: PageBuilderPanelProps) {
       emoji="📱"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

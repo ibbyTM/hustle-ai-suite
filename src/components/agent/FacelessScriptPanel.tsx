@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 interface FacelessScriptPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function FacelessScriptPanel({ isOpen, onClose }: FacelessScriptPanelProps) {
+export function FacelessScriptPanel({ isOpen, onClose, asPage }: FacelessScriptPanelProps) {
   const [inputs, setInputs] = useState({
     objective: "Sales",
     niche: "",
@@ -164,6 +165,7 @@ export function FacelessScriptPanel({ isOpen, onClose }: FacelessScriptPanelProp
       emoji="🎬"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }

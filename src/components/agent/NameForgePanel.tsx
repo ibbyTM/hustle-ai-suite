@@ -15,9 +15,10 @@ import { Label } from "@/components/ui/label";
 interface NameForgePanelProps {
   isOpen: boolean;
   onClose: () => void;
+  asPage?: boolean;
 }
 
-export function NameForgePanel({ isOpen, onClose }: NameForgePanelProps) {
+export function NameForgePanel({ isOpen, onClose, asPage }: NameForgePanelProps) {
   const [inputs, setInputs] = useState({
     industry: "",
     brandTone: "Professional",
@@ -142,6 +143,7 @@ export function NameForgePanel({ isOpen, onClose }: NameForgePanelProps) {
       emoji="⚡"
       inputPanel={inputPanel}
       outputPanel={outputPanel}
+      asPage={asPage}
     />
   );
 }
