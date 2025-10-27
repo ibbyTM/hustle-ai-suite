@@ -20,7 +20,7 @@ const categories: Array<"All" | CategoryType> = ["All", "Content", "Ads", "Hustl
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<"All" | CategoryType>("All");
-  const [openCategory, setOpenCategory] = useState<CategoryType>("Content");
+  const [openCategory, setOpenCategory] = useState<CategoryType | null>("Content");
   const { tier } = useSubscription();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ export default function Dashboard() {
 
   // Handle category toggle
   const handleCategoryToggle = useCallback((category: CategoryType) => {
-    setOpenCategory(prev => prev === category ? "Content" : category);
+    setOpenCategory(prev => prev === category ? null : category);
   }, []);
 
   return (
