@@ -43,6 +43,10 @@ export default function ToolPage() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [toolId]);
+
   if (!tool) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
