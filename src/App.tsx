@@ -23,6 +23,7 @@ import CourseGuides from "./pages/CourseGuides";
 import LearningDashboard from "./pages/LearningDashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import ToolPage from "./pages/ToolPage";
 import { useEffect } from "react";
 
 // Component to handle /ref/:code redirects
@@ -61,6 +62,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/tool/:toolId" element={<ToolPage />} />
                 <Route path="/my-hustles" element={<MyHustles />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/knowledge-bases" element={<KnowledgeBases />} />

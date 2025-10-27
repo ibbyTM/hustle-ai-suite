@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { AutomationCard } from "@/components/AutomationCard";
-import { ToolModal } from "@/components/ToolModal";
 import { automations } from "@/data/automations";
 import { AutomationTool, CategoryType } from "@/types/automation";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -19,8 +18,6 @@ const FREE_TIER_TOOLS = ["biz-idea", "hook-factory", "trend-finder", "inbox-infl
 const categories: Array<"All" | CategoryType> = ["All", "Content", "Ads", "Hustle", "Brand", "Store", "Productivity"];
 
 export default function Dashboard() {
-  const [selectedTool, setSelectedTool] = useState<AutomationTool | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<"All" | CategoryType>("All");
   const [openCategory, setOpenCategory] = useState<CategoryType>("Content");
@@ -48,8 +45,7 @@ export default function Dashboard() {
       navigate("/pricing");
       return;
     }
-    setSelectedTool(tool);
-    setIsModalOpen(true);
+    navigate(`/tool/${tool.id}`);
   };
 
   const handleFavoriteToggle = useCallback((e: React.MouseEvent, toolId: string) => {
@@ -203,12 +199,6 @@ export default function Dashboard() {
           </p>
         </div>
       )}
-
-      <ToolModal
-        tool={selectedTool}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   );
 }
