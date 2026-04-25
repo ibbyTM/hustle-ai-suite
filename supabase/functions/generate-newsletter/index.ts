@@ -41,8 +41,8 @@ serve(async (req) => {
     }
 
     const inputs = validationResult.data;
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
+    if (!OPENROUTER_API_KEY) throw new Error('OPENROUTER_API_KEY is not configured');
 
     const utmParams = `?utm_source=newsletter&utm_medium=email&utm_campaign=${inputs.utm_campaign}`;
     const ctaFullUrl = inputs.cta_url ? `${inputs.cta_url}${inputs.cta_url.includes('?') ? '&' : '?'}utm_source=newsletter&utm_medium=email&utm_campaign=${inputs.utm_campaign}` : '';
@@ -60,10 +60,10 @@ A/B Testing: ${inputs.ab_test_enabled ? 'Yes' : 'No'}
 
 Return valid JSON with: subject_options, preheader, plain_text, html_snippet, cta_button_text_options, cta_full_url, ab_test_pairs, send_time_suggestion, metric_to_track, follow_up_plan, used_kb_facts, generation_notes`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

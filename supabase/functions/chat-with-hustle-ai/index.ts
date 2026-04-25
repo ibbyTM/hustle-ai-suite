@@ -52,10 +52,10 @@ serve(async (req) => {
     }
 
     const { messages } = validationResult.data;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER_API_KEY");
     
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+    if (!OPENROUTER_API_KEY) {
+      throw new Error("OPENROUTER_API_KEY is not configured");
     }
 
     const systemPrompt = `You are Hustle Lab AI — a sharp, strategic business advisor built for hustlers and entrepreneurs.
@@ -139,10 +139,10 @@ The Name Forge agent will generate dozens of creative name options with domain a
 
 CRITICAL: Always match user intent to the most relevant agent. When in doubt, recommend an agent — users want specialized tools, not generic advice.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -167,7 +167,7 @@ CRITICAL: Always match user intent to the most relevant agent. When in doubt, re
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required, please add funds to your Lovable AI workspace." }),
+          JSON.stringify({ error: "Payment required, please add credits to your OpenRouter account." }),
           {
             status: 402,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
